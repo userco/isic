@@ -1,0 +1,3 @@
+isic_homepage:
+    path:     /
+    defaults: { _controller: ISICBundle:Default:index }
