@@ -64,4 +64,38 @@ class SecurityController extends Controller
             array('form' => $form->createView())
         );
     }
+    /**
+     * @Route("/edit_user/{userId}", name="edit_user")
+     */
+    public function editUserAction(Request $request, $userId)
+    {
+        // 1) build the form
+        $user = $this->getDoctrine()->getRepository('ISICBundle:User')->find($userId);
+        $form = $this->createForm(new UserType(), $user);
+
+        // 2) handle the submit (will only happen on POST)
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            // 3) Encode the password (you could also do this via Doctrine listener)
+            $password = $this->get('security.password_encoder')
+                ->encodePassword($user, $user->getPlainPassword());
+            $user->setPassword($password);
+
+            // 4) save the User!
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+
+            // ... do any other work - like sending them an email, etc
+            // maybe set a "flash" success message for the user
+
+            return $this->redirectToRoute('login');
+        }
+
+        return $this->render(
+            'security/edit_user.html.twig',
+            array('form' => $form->createView())
+        );
+    }
 }
