@@ -1,0 +1,10 @@
+ISICBundle\Entity\Role:
+    type: entity
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        name:
+            type: string
+            length: 100
