@@ -1,12 +1,19 @@
 # To get started with security, check out the documentation:
 # https://symfony.com/doc/current/security.html
 security:
+    encoders:
+        ISICBundle\Entity\User:
+            algorithm: bcrypt
 
-    # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
+    # ...
+
     providers:
-        in_memory:
-            memory: ~
-
+        our_db_provider:
+            entity:
+                class: ISICBundle:User
+                property: username
+                # if you're using multiple entity managers
+                # manager_name: customer
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
