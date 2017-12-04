@@ -37,6 +37,7 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(name="is_active", type="boolean")
      */
     private $isActive;
+    private $plainPassword;
 
     public function __construct()
     {
@@ -45,18 +46,30 @@ class User implements UserInterface, \Serializable
         // $this->salt = md5(uniqid('', true));
     }
 
+    public function setUsername($username){
+        $this->username = $username;
+    }
     public function getUsername()
     {
         return $this->username;
     }
 
+    public function setEmail($email){
+        $this->email = $email;
+    }
+    public function getEmail()
+    {
+        return $this->email;
+    }
     public function getSalt()
     {
         // you *may* need a real salt depending on your encoder
         // see section on salt below
         return null;
     }
-
+    public function setPassword($password){
+        $this->password = $password;
+    }
     public function getPassword()
     {
         return $this->password;
@@ -93,5 +106,14 @@ class User implements UserInterface, \Serializable
             // see section on salt below
             // $this->salt
         ) = unserialize($serialized);
+    }
+     public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword($password)
+    {
+        $this->plainPassword = $password;
     }
 }
