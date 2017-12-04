@@ -98,4 +98,16 @@ class SecurityController extends Controller
             array('form' => $form->createView())
         );
     }
+
+    /**
+     * @Route("/list_users", name="list_users")
+     */
+    public function listUsersAction(Request $request){
+    	$users = $this->getDoctrine()->getRepository("ISICBundle:User")->findAll();
+    	return $this->render(
+            'security/list_users.html.twig',
+            array(
+            	'users'=>$users)
+        );
+    }
 }

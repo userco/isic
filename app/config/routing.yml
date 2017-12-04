@@ -14,3 +14,6 @@ user_registration:
 edit_user:
     path:     /edit_user/{userId}
     defaults: { _controller: ISICBundle:Security:editUser }
+list_users:
+    path:     /list_users
+    defaults: { _controller: ISICBundle:Security:listUsers }    

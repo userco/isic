@@ -1,0 +1,6 @@
+{% for user in users %}
+    <div class="span4">
+        {{ user.username }}
+          <a href="{{ url('edit_user',{'userId': user.id}) }}">Edit</a> 
+    </div>
+{% endfor %}
