@@ -18,12 +18,16 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email', 'email')
-            ->add('username', 'text')
+            ->add('email', 'email', array(
+                'label' => "Е-майл"
+                ))
+            ->add('username', 'text', array(
+                'label' => "Потребителско име"
+                ))
             ->add('roles', EntityType::class, array(
                     // query choices from this entity
                     'class' => 'ISICBundle:Role',
-
+                    'label' => "Роли",
                     // use the User.username property as the visible option string
                     'choice_label' => 'name',
                     'data' => $this->checked,
@@ -33,10 +37,13 @@ class UserType extends AbstractType
                 ))
             ->add('plainPassword', 'repeated', array(
                 'type' => 'password',
-                'first_options'  => array('label' => 'Password'),
-                'second_options' => array('label' => 'Repeat Password'),
-            ));
-           
+                'first_options'  => array('label' => 'Парола'),
+                'second_options' => array('label' => 'Повторете паролата'),
+            ))
+           ->add('save', 'submit', array(
+                'label' => "Запази",
+                'attr'=> array('class'=>'btn btn-success'),
+                ));
     }
 
     public function configureOptions(OptionsResolver $resolver)

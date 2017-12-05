@@ -1,10 +1,12 @@
 {# templates/security/login.html.twig #}
 {# ... you will probably extend your base template, like base.html.twig #}
-
+{% extends "::base.html.twig" %}
+{% block body %}
 {% if error %}
     <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 {% endif %}
-
+<h1>ISIC Карти</h1>
+<h2>Вход в системата</h2>
 <form action="{{ path('login') }}" method="post">
     <label for="username">Username:</label>
     <input type="text" id="username" name="_username" value="{{ last_username }}" />
@@ -18,5 +20,6 @@
         <input type="hidden" name="_target_path" value="/account" />
     #}
 
-    <button type="submit">login</button>
+    <button type="submit" class = "btn btn-success">Вход</button>
 </form>
+{% endblock %}

@@ -19,18 +19,24 @@ class RoleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', 'text')
+            ->add('name', 'text', array(
+                'label' => "Наименование"
+                ))
             ->add('permissions', EntityType::class, array(
     // query choices from this entity
     'class' => 'ISICBundle:Permission',
-
+    'label' => 'Права',
     // use the User.username property as the visible option string
     'choice_label' => 'name',
     'data' => $this->checked,
     // used to render a select box, check boxes or radios
     'multiple' => true,
     'expanded' => true,
-));
+))
+            ->add('save', 'submit', array(
+                'label' => "Запази",
+                'attr'=> array('class'=>'btn btn-success'),
+                ));;
 
         
     }

@@ -1,10 +1,18 @@
 {# app/Resources/views/security/edit_user.html.twig #}
+{% extends "::base.html.twig" %}
+{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
 
+{% block body %}
+<div id = "container">
+<h2>Редактиране на потребител</h2>
 {{ form_start(form) }}
     {{ form_row(form.username) }}
     {{ form_row(form.email) }}
     {{ form_row(form.plainPassword.first) }}
     {{ form_row(form.plainPassword.second) }}
+    {{ form_row(form.roles) }}
 
-    <button type="submit">Register!</button>
+    
 {{ form_end(form) }}
+</div>
+{% endblock %}
