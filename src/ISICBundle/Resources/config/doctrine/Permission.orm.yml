@@ -1,31 +1,23 @@
-ISICBundle\Entity\User:
+ISICBundle\Entity\Permission:
     type: entity
-    table: app_users
     manyToMany:
         roles:
             targetEntity: Role
-            inversedBy: users
+            inversedBy: permissions
             joinTable:
-                name: users_roles
+                name: roles_permissions
                 joinColumns:
-                    user_id:
+                    permission_id:
                         referencedColumnName: id
                 inverseJoinColumns:
-                    permission_id:
+                    role_id:
                         referencedColumnName: id
     id:
         id:
             type: integer
             generator: { strategy: AUTO }
     fields:
-        username:
+        name:
             type: string
             length: 100
-        password:
-            type: string
-            length: 1000
-        email:
-            type: string
-            length: 255
-        isActive:
-            type: boolean
+        
