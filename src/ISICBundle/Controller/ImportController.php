@@ -5,6 +5,7 @@ namespace ISICBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use PHPExcel;
 use PHPExcel_IOFactory;
+use ISICBundle\Entity\Isic;
 
 class ImportController extends Controller
 {
@@ -52,172 +53,46 @@ class ImportController extends Controller
             $highestRow = $sheet->getHighestRow();
             $highestColumn = $sheet->getHighestColumn();
 
-            for ($row = 2; $row <= $highestRow; $row++){
+            for ($row = 2; $row <= $highestRow; $row++) {
                 //  Read a row of data into an array
                 $rowData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row,
                     NULL,
                     TRUE,
                     FALSE);
-                dump($rowData);
-                //  Insert row data array into your database of choice here
-            }
-            exit;
+                $newIsicCard = new Isic();
 
-//            if (($handle = fopen('./uploads/a.csv', 'r')) !== FALSE) {
-//                $row = fgetcsv($handle);
-//
-//                $documents = $em->getRepository('PriemBundle:Document');
-//
-//                while (($row = fgetcsv($handle)) !== FALSE) {
-//
-//                    $specialtyID = (int)$row[2];
-//
-//                    $entryNumber = $row[0];
-//                    $EN = strlen($entryNumber);
-//                    switch ($EN) {
-//                        case 0:
-//                            $entryNumber = $row[0];
-//                            break;
-//                        case 1:
-//                            $entryNumber = '0000' . $row[0];
-//                            break;
-//                        case 2:
-//                            $entryNumber = '000' . $row[0];
-//                            break;
-//                        case 3:
-//                            $entryNumber = '00' . $row[0];
-//                            break;
-//                        case 4:
-//                            $entryNumber = '0' . $row[0];
-//                            break;
-//                        default:
-//                            $entryNumber = $row[0];
-//                    }
-//
-//                    if (($student = $documents->findBy(array('entryNumber' => $entryNumber))) != NULL) {
-//                        $i = 0;
-//
-//                        foreach ($student as $docs) {
-//                            foreach ($docs->getExams() as $ex) {
-//                                if ($ex->getId() == $specialtyID) {
-//                                    $i += 1;
-//                                }
-//                            }
-//                        }
-//                        if ($i == 0) {
-//                            $message = 'Не можете да въведете несъществуваща специалност.' . ' - ' . $entryNumber . '  ' . $row[1] . "  - " . $row[3];
-//                            return $this->render('ISICBundle:Import:Import.html.twig', array(
-//                                'uploadForm' => $form->createView(),
-//                                'message' => $message,
-//                            ));
-//                        } else {
-//                            $specialty = $this->getDoctrine()->getRepository('NomenclatureBundle:Exam')->findOneById($specialtyID);
-//                        }
-//                    } else {
-//                        $message = 'Не можете да въведете несъществуващ входящ номер.' . ' - ' . $entryNumber . '  ' . $row[1];
-//                        return $this->render('ISICBundle:Import:Import.html.twig', array(
-//                            'uploadForm' => $form->createView(),
-//                            'message' => $message,
-//                        ));
-//                    }
-//                    $whiteSpace = str_replace(" ", "", $row[4]);
-//                    if ($whiteSpace == '') {
-//                        $message = 'Не сте въвели всички оценки.';
-//                        return $this->render('ISICBundle:Import:Import.html.twig', array(
-//                            'uploadForm' => $form->createView(),
-//                            'message' => $message,
-//                        ));
-//                    }
-//                    //start checking marks
-//                    $markExplodeComma = explode(',', $row[4]);
-//                    $markExplodePoint = explode('.', $row[4]);
-//
-//
-//                    if (count($markExplodePoint) == 1) {
-//                        if (count($markExplodeComma) == 2) {
-//                            if (is_numeric($markExplodeComma[0]) && $markExplodeComma[0] >= 0 && $markExplodeComma[0] <= 6) {
-//                                if (is_numeric($markExplodeComma[1]) && $markExplodeComma[1] >= 0 && $markExplodeComma[1] <= 99 && $this->isUpToSix($markExplodeComma[0], $markExplodeComma[1]) == 1) {
-//                                    $validatedMark = $markExplodeComma[0] . '.' . $markExplodeComma[1];
-//                                    $message = 'Оценките са записани успешно.';
-//                                } else {
-//                                    $message = 'Грешен формат или не сте въвели всички оценки. Прегледайте файла и опитайте отново.' . ' - ' . $entryNumber;
-//                                    return $this->render('ISICBundle:Import:Import.html.twig', array(
-//                                        'uploadForm' => $form->createView(),
-//                                        'message' => $message,
-//                                    ));
-//                                }
-//                            } else {
-//                                $message = 'Грешен формат или не сте въвели всички оценки. Прегледайте файла и опитайте отново.' . ' - ' . $entryNumber;
-//                                return $this->render('ISICBundle:Import:Import.html.twig', array(
-//                                    'uploadForm' => $form->createView(),
-//                                    'message' => $message,
-//                                ));
-//                            }
-//                        } elseif (count($markExplodeComma) == 1) {
-//                            if (is_numeric($markExplodeComma[0]) && $markExplodeComma[0] >= 0 && $markExplodeComma[0] <= 6) {
-//                                $validatedMark = $row[4];
-//                                $message = 'Оценките са записани успешно.';
-//                            } else {
-//                                $message = 'Грешен формат или не сте въвели всички оценки. Прегледайте файла и опитайте отново.' . ' - ' . $entryNumber;
-//                                return $this->render('ISICBundle:Import:Import.html.twig', array(
-//                                    'uploadForm' => $form->createView(),
-//                                    'message' => $message,
-//                                ));
-//                            }
-//                        } else {
-//                            $message = 'Грешен формат или не сте въвели всички оценки. Прегледайте файла и опитайте отново.' . ' - ' . $entryNumber;
-//                            return $this->render('ISICBundle:Import:Import.html.twig', array(
-//                                'uploadForm' => $form->createView(),
-//                                'message' => $message,
-//                            ));
-//                        }
-//                    } elseif (count($markExplodePoint) == 2) {
-//                        if (is_numeric($markExplodePoint[0]) && $markExplodePoint[0] >= 0 && $markExplodePoint[0] <= 6) {
-//                            if (is_numeric($markExplodePoint[1]) && $markExplodePoint[1] >= 0 && $markExplodePoint[1] <= 99 && $this->isUpToSix($markExplodePoint[0], $markExplodePoint[1]) == 1) {
-//                                $validatedMark = $row[4];
-//                                $message = 'Оценките са записани успешно.';
-//                            } else {
-//                                $message = 'Грешен формат или не сте въвели всички оценки. Прегледайте файла и опитайте отново.' . ' - ' . $entryNumber;
-//                                return $this->render('ISICBundle:Import:Import.html.twig', array(
-//                                    'uploadForm' => $form->createView(),
-//                                    'message' => $message,
-//                                ));
-//                            }
-//                        } else {
-//                            $message = 'Грешен формат или не сте въвели всички оценки. Прегледайте файла и опитайте отново.' . ' - ' . $entryNumber;
-//                            return $this->render('ISICBundle:Import:Import.html.twig', array(
-//                                'uploadForm' => $form->createView(),
-//                                'message' => $message,
-//                            ));
-//                        }
-//                    } else {
-//                        $message = 'Грешен формат или не сте въвели всички оценки. Прегледайте файла и опитайте отново.' . ' - ' . $entryNumber;
-//                        return $this->render('ISICBundle:Import:Import.html.twig', array(
-//                            'uploadForm' => $form->createView(),
-//                            'message' => $message,
-//                        ));
-//                    }
-////end checking marks
-//                    $mark = (float)$validatedMark;
-//
-//                    if (($markedStudent = $alreadyMarked->findOneBy(array('entryNumber' => $entryNumber, 'exam' => $specialty))) != NULL) {
-//                        $markedStudent->setExamMark($mark);
-//                        $em->persist($markedStudent);
-//                    } else {
-//                        $newMark = new ExamNotes();
-//                        $newMark->setExam($specialty);
-//                        $newMark->setEntryNumber($entryNumber);
-//                        $newMark->setExamMark($mark);
-//                        $em->persist($newMark);
-//                    }
-//                }
-//                $em->flush();
-//
-//                return $this->render('ISICBundle:Import:Import.html.twig', array(
-//                    'uploadForm' => $form->createView(),
-//                    'message' => $message,
-//                ));
-//            }
+                $newIsicCard->setIDWKeyColumn($rowData[0][0]);
+                $newIsicCard->setIDWFirstNameBG($rowData[0][1]);
+                $newIsicCard->setIDWFamilyNameBG($rowData[0][2]);
+                $newIsicCard->setIDWFirstNameEN($rowData[0][3]);
+                $newIsicCard->setIDWFamilyNameEN($rowData[0][4]);
+                $newIsicCard->setIDWFacultyBG($rowData[0][5]);
+                $newIsicCard->setIDWFacultyEN($rowData[0][6]);
+                $newIsicCard->setIDWClass($rowData[0][7]);
+                $newIsicCard->setIDWFacultyNumber($rowData[0][8]);
+                $newIsicCard->setIDWLID($rowData[0][9]);
+                $newIsicCard->setIDWBarCodeInt($rowData[0][10]);
+                $newIsicCard->setIDWBarCodeField($rowData[0][11]);
+                $newIsicCard->setIDWLIDBack($rowData[0][12]);
+                $newIsicCard->setIDWBarCodeIntBack($rowData[0][13]);
+                $newIsicCard->setIDWBarCodeFieldBack($rowData[0][14]);
+                $newIsicCard->setIDWPhoto($rowData[0][15]);
+                $newIsicCard->setEGN($rowData[0][16]);
+                $newIsicCard->setBirthdate($rowData[0][17]);
+                $newIsicCard->setSpecialty($rowData[0][18]);
+                $newIsicCard->setChipNumber($rowData[0][19]);
+                $newIsicCard->setPhoneNumber($rowData[0][20]);
+                $newIsicCard->setEmail($rowData[0][21]);
+                $newIsicCard->setNames($rowData[0][22]);
+
+                $em->persist($newIsicCard);
+            }
+            $em->flush();
+            $message = 'Data has been imported!';
+            return $this->render('ISICBundle:Import:Import.html.twig', array(
+                'uploadForm' => $form->createView(),
+                'message' => $message,
+            ));
         }
         return $this->render('ISICBundle:Import:Import.html.twig', array(
             'uploadForm' => $form->createView(),
@@ -226,8 +101,3 @@ class ImportController extends Controller
     }
 
 }
-
-//    {
-//        return $this->render('');
-//    }
-//}

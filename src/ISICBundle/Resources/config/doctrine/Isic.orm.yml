@@ -11,30 +11,41 @@ ISICBundle\Entity\Isic:
         IDWFirstNameBG:
             type: string
             length: 250
+            nullable: true
         IDWFamilyNameBG:
-            type: date
+            type: string
+            length: 50
+            nullable: true
         IDWFirstNameEN:
             type: string
             length: 250
+            nullable: true
         IDWFamilyNameEN:
             type: string
             length: 250
+            nullable: true
         IDWFacultyBG:
             type: string
             length: 250
+            nullable: true
         IDWFacultyEN:
             typr: string
             length: 250
+            nullable: true
         IDWClass:
             type: string
             length: 250
+            nullable: true
         IDWFacultyNumber:
             type: string
             length: 250
+            nullable: true
         IDWLID:
-            type: integer
+            type: string
+            length: 50
         IDWBarCodeInt:
-            type: integer
+            type: string
+            length: 50
         IDWBarCodeField:
             type: string
             length: 250
@@ -50,23 +61,32 @@ ISICBundle\Entity\Isic:
         IDWPhoto:
             type: string
             length: 250
+            nullable: true
         EGN:
             type: string
             length: 250
+            nullable: true
         Birthdate:
-            type: date
+            type: string
+            length: 50
+            nullable: true
         Specialty:
             type: string
             length: 250
+            nullable: true
         ChipNumber:
             type: string
             length: 250
+            nullable: true
         PhoneNumber:
             type: string
             length: 250
+            nullable: true
         Email:
             type: string
             length: 250
+            nullable: true
         Names:
             type: string
             length: 250
+            nullable: true
