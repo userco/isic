@@ -14,7 +14,7 @@ class Role{
 	protected $id;
 	
 	protected $name;
-	/***
+	/**
      *
      * @ORM\ManyToMany(targetEntity="ISICBundle\Entity\Permission", mappedBy="roles")
      */
@@ -41,4 +41,8 @@ class Role{
 	public function getPermissions(){
 		return $this->permissions;
 	}
+	public function addPermission(Permission $permission)
+    {
+        $this->permissions[] = $permission;
+    }
 }

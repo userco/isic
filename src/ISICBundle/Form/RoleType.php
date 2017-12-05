@@ -10,6 +10,12 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class RoleType extends AbstractType
 {
+    protected $checked;
+    
+    public function __construct($checked){
+        $this->checked = $checked;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -20,7 +26,7 @@ class RoleType extends AbstractType
 
     // use the User.username property as the visible option string
     'choice_label' => 'name',
-
+    'data' => $this->checked,
     // used to render a select box, check boxes or radios
     'multiple' => true,
     'expanded' => true,

@@ -11,7 +11,7 @@ ISICBundle\Entity\User:
                     user_id:
                         referencedColumnName: id
                 inverseJoinColumns:
-                    permission_id:
+                    role_id:
                         referencedColumnName: id
     id:
         id:
