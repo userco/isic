@@ -6,6 +6,7 @@ use ISICBundle\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class UserType extends AbstractType
 {
@@ -14,12 +15,23 @@ class UserType extends AbstractType
         $builder
             ->add('email', 'email')
             ->add('username', 'text')
+            ->add('roles', EntityType::class, array(
+                    // query choices from this entity
+                    'class' => 'ISICBundle:Role',
+
+                    // use the User.username property as the visible option string
+                    'choice_label' => 'name',
+
+                    // used to render a select box, check boxes or radios
+                    'multiple' => true,
+                    'expanded' => true,
+                ))
             ->add('plainPassword', 'repeated', array(
                 'type' => 'password',
                 'first_options'  => array('label' => 'Password'),
                 'second_options' => array('label' => 'Repeat Password'),
-            ))
-        ;
+            ));
+           
     }
 
     public function configureOptions(OptionsResolver $resolver)

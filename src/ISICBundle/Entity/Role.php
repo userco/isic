@@ -1,7 +1,7 @@
 <?php
 namespace ISICBundle\Entity;
 
-//use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
@@ -12,9 +12,7 @@ class Role{
      * @ORM\GeneratedValue(strategy="AUTO")
      */
 	protected $id;
-	/**
-     * @ORM\Column(type="string", length="100")
-     */
+	
 	protected $name;
 	/***
      *
@@ -39,5 +37,8 @@ class Role{
 	}
 	public function setName($name){
 		$this->name = $name;
+	}
+	public function getPermissions(){
+		return $this->permissions;
 	}
 }

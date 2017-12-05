@@ -76,10 +76,10 @@ class User implements UserInterface, \Serializable
         return $this->password;
     }
 
-    public function getRoles()
-    {
-        return array('ROLE_USER');
-    }
+    // public function getRoles()
+    // {
+    //     return array('ROLE_USER');
+    // }
 
     public function eraseCredentials()
     {
@@ -145,5 +145,12 @@ class User implements UserInterface, \Serializable
     public function getIsActive()
     {
         return $this->isActive;
+    }
+    public function addRole(Role $role)
+    {
+        $this->roles[] = $role;
+    }
+    public function getRoles(){
+        return $this->roles;
     }
 }
