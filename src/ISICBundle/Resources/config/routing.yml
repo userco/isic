@@ -1,3 +1,6 @@
 isic_homepage:
     path:     /
     defaults: { _controller: ISICBundle:Default:index }
+isic_import:
+    path: import
+    defaults: { _controller: ISICBundle:Import:import }

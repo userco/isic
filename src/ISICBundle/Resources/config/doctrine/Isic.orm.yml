@@ -1,0 +1,72 @@
+ISICBundle\Entity\Isic:
+    type: entity
+    table: isic
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        IDWKeyColumn:
+            type: integer
+        IDWFirstNameBG:
+            type: string
+            length: 250
+        IDWFamilyNameBG:
+            type: date
+        IDWFirstNameEN:
+            type: string
+            length: 250
+        IDWFamilyNameEN:
+            type: string
+            length: 250
+        IDWFacultyBG:
+            type: string
+            length: 250
+        IDWFacultyEN:
+            typr: string
+            length: 250
+        IDWClass:
+            type: string
+            length: 250
+        IDWFacultyNumber:
+            type: string
+            length: 250
+        IDWLID:
+            type: integer
+        IDWBarCodeInt:
+            type: integer
+        IDWBarCodeField:
+            type: string
+            length: 250
+        IDWLIDBack:
+            type: string
+            length: 250
+        IDWBarCodeIntBack:
+            type: string
+            length: 250
+        IDWBarCodeFieldBack:
+            type: string
+            length: 250
+        IDWPhoto:
+            type: string
+            length: 250
+        EGN:
+            type: string
+            length: 250
+        Birthdate:
+            type: date
+        Specialty:
+            type: string
+            length: 250
+        ChipNumber:
+            type: string
+            length: 250
+        PhoneNumber:
+            type: string
+            length: 250
+        Email:
+            type: string
+            length: 250
+        Names:
+            type: string
+            length: 250
