@@ -7,7 +7,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Table(name="app_users")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass="ISICBundle\Repository\UserRepository")
  */
 class User implements UserInterface, \Serializable
 {
@@ -38,6 +38,7 @@ class User implements UserInterface, \Serializable
      */
     private $isActive;
     private $plainPassword;
+    protected $roles;
 
     public function __construct()
     {
@@ -75,10 +76,10 @@ class User implements UserInterface, \Serializable
         return $this->password;
     }
 
-    public function getRoles()
-    {
-        return array('ROLE_USER');
-    }
+    // public function getRoles()
+    // {
+    //     return array('ROLE_USER');
+    // }
 
     public function eraseCredentials()
     {
@@ -121,5 +122,35 @@ class User implements UserInterface, \Serializable
     }
     public function setId($id){
         $this->id = $id;
+    }
+
+    /**
+     * Set isActive
+     *
+     * @param boolean $isActive
+     * @return User
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return boolean 
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }
+    public function addRole(Role $role)
+    {
+        $this->roles[] = $role;
+    }
+    public function getRoles(){
+        return $this->roles;
     }
 }

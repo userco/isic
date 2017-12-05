@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use ISICBundle\Entity\User;
+use ISICBundle\Entity\Role;
+use ISICBundle\Form\RoleType;
 use ISICBundle\Form\UserType;
 
 class SecurityController extends Controller
@@ -37,7 +39,9 @@ class SecurityController extends Controller
     {
         // 1) build the form
         $user = new User();
-        $form = $this->createForm(new UserType(), $user);
+        $checked = array();
+        $checked = $user->getRoles();
+        $form = $this->createForm(new UserType($checked), $user);
 
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
@@ -48,6 +52,12 @@ class SecurityController extends Controller
                 ->encodePassword($user, $user->getPlainPassword());
             $user->setPassword($password);
 
+            // $array_roles = $form->get('roles')->getData();
+            // var_dump($array_roles);
+            // foreach($array_roles as $r){
+            //     $role = $this->getDoctrine()->getRepository('ISICBundle:Role')->findById($r);
+            //     $user->addRole($role);
+            // }
             // 4) save the User!
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
@@ -71,8 +81,11 @@ class SecurityController extends Controller
     {
         // 1) build the form
         $user = $this->getDoctrine()->getRepository('ISICBundle:User')->find($userId);
-        $form = $this->createForm(new UserType(), $user);
+        $checked = array();
+        $checked = $user->getRoles();
+        $form = $this->createForm(new UserType($checked), $user);
 
+        
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -86,11 +99,9 @@ class SecurityController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
+           
 
-            // ... do any other work - like sending them an email, etc
-            // maybe set a "flash" success message for the user
-
-            return $this->redirectToRoute('login');
+            
         }
 
         return $this->render(
@@ -108,6 +119,81 @@ class SecurityController extends Controller
             'security/list_users.html.twig',
             array(
             	'users'=>$users)
+        );
+    }
+    //*************************************************************************************************
+
+    /**
+     * @Route("/role_create", name="role_create")
+     */
+    public function roleCreateAction(Request $request)
+    {
+        // 1) build the form
+        $role = new Role();
+        $checked = array();
+        $checked = $role->getPermissions();
+        
+        $form = $this->createForm(new RoleType($checked), $role);
+
+        // 2) handle the submit (will only happen on POST)
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($role);
+            $em->flush();
+
+            
+            return $this->redirectToRoute('list_roles');
+        }
+
+        return $this->render(
+            'security/roles/create_role.html.twig',
+            array('form' => $form->createView())
+        );
+    }
+    /**
+     * @Route("/edit_role/{roleId}", name="edit_role")
+     */
+    public function editRoleAction(Request $request, $roleId)
+    {
+        // 1) build the form
+        $role = $this->getDoctrine()->getRepository('ISICBundle:Role')->find($roleId);
+        $checked = array();
+        $checked = $role->getPermissions();
+        
+        $form = $this->createForm(new RoleType($checked), $role);
+
+        // 2) handle the submit (will only happen on POST)
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($role);
+            $em->flush();
+
+            // ... do any other work - like sending them an email, etc
+            // maybe set a "flash" success message for the user
+
+            
+            
+            
+        }
+
+        return $this->render(
+            'security/roles/edit_role.html.twig',
+            array('form' => $form->createView())
+        );
+    }
+
+    /**
+     * @Route("/list_roles", name="list_roles")
+     */
+    public function listRolesAction(Request $request){
+        $roles = $this->getDoctrine()->getRepository("ISICBundle:Role")->findAll();
+        return $this->render(
+            'security/roles/list_roles.html.twig',
+            array(
+                'roles'=>$roles)
         );
     }
 }

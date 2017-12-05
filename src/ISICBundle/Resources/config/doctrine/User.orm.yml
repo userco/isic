@@ -1,6 +1,18 @@
 ISICBundle\Entity\User:
     type: entity
     table: app_users
+    manyToMany:
+        roles:
+            targetEntity: Role
+            inversedBy: users
+            joinTable:
+                name: users_roles
+                joinColumns:
+                    user_id:
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    role_id:
+                        referencedColumnName: id
     id:
         id:
             type: integer
