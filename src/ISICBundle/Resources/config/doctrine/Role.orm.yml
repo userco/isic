@@ -1,9 +1,17 @@
 ISICBundle\Entity\Role:
     type: entity
     manyToMany:
-      permissions:
-        targetEntity: Permission
-        mappedBy: roles
+        permissions:
+            targetEntity: Permission
+            inversedBy: roles
+            joinTable:
+                name: role_permission
+                joinColumns:
+                    role_id:
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    permission_id:
+                        referencedColumnName: id
     manyToMany:
       users:
         targetEntity: User

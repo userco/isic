@@ -1,0 +1,6 @@
+{% for role in roles %}
+    <div class="span4">
+        {{ role.name }}
+          <a href="{{ url('edit_role',{'roleId': role.id}) }}">Edit</a> 
+    </div>
+{% endfor %}

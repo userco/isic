@@ -16,4 +16,14 @@ edit_user:
     defaults: { _controller: ISICBundle:Security:editUser }
 list_users:
     path:     /list_users
-    defaults: { _controller: ISICBundle:Security:listUsers }    
+    defaults: { _controller: ISICBundle:Security:listUsers }
+
+role_create:
+    path:     /role_create
+    defaults: { _controller: ISICBundle:Security:roleCreate }
+edit_role:
+    path:     /edit_role/{roleId}
+    defaults: { _controller: ISICBundle:Security:editRole }
+list_roles:
+    path:     /list_roles
+    defaults: { _controller: ISICBundle:Security:listRoles }           
