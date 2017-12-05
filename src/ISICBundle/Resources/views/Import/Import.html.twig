@@ -1,0 +1,38 @@
+<div class="inner" style="width: 370px; margin-left:auto;margin-right:auto;">
+    <h1>ISIC Import EXCEL</h1>
+
+    {{ form_start(uploadForm) }}
+
+    <ul class="errorMessages errorMessage">
+    </ul>
+    {% if message is defined %}
+        <ul class="errorMessage" style="display:block">
+            {{ message }}
+        </ul>
+    {% endif %}
+
+    <div class="alert alert-info">
+        Моля добавете файл, който да качите!
+    </div>
+
+    <table class="records_list table table-striped table-condensed">
+        <thead>
+        <tr>
+            <th style="text-align: center;">Добави файл</th>
+            <th style="text-align: center;">Качи ISIC картите</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td style="text-align: center;">
+                {{ form_label(uploadForm.file, null, {'label_attr' : {'class' : 'btn btn-danger btn-small'} }) }}
+                {{ form_widget(uploadForm.file, {'attr': {'class' : 'chooseFile'} }) }}
+            </td>
+            <td style="text-align: center;">
+                {{ form_widget(uploadForm.Submit, {'attr': {'class': 'btn btn-success btn-small'} }) }}
+            </td>
+            {{ form_end(uploadForm) }}
+        </tr>
+        </tbody>
+    </table>
+</div>
