@@ -4,6 +4,10 @@ ISICBundle\Entity\Role:
       permissions:
         targetEntity: Permission
         mappedBy: roles
+    manyToMany:
+      users:
+        targetEntity: User
+        mappedBy: roles
     id:
         id:
             type: integer

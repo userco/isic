@@ -38,6 +38,7 @@ class User implements UserInterface, \Serializable
      */
     private $isActive;
     private $plainPassword;
+    protected $roles;
 
     public function __construct()
     {

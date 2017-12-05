@@ -21,6 +21,7 @@ class Role{
      * @ORM\ManyToMany(targetEntity="ISICBundle\Entity\Permission", mappedBy="roles")
      */
     private $permissions;
+    protected $users;
 
 	public function __construct() {
         $this->permissions = new \Doctrine\Common\Collections\ArrayCollection();
