@@ -1,8 +1,15 @@
 {# app/Resources/views/security/roles/edit_role.html.twig #}
-
+{% extends "::base.html.twig" %}
+{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+{% block body %}
+<div id = "container">
+<h2>Създаване на роля</h2>
 {{ form_start(form) }}
     {{ form_row(form.name) }}
-    
+    {{ form_row(form.permissions) }}
 
-    <button type="submit">Запази</button>
+
+    
 {{ form_end(form) }}
+</div>
+{% endblock %}

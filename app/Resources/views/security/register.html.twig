@@ -1,10 +1,19 @@
 {# app/Resources/views/security/register.html.twig #}
+{% extends "::base.html.twig" %}
+{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
 
+{% block body %}
+<div id = "container">
+<h2>Създаване на потребител</h2>
 {{ form_start(form) }}
     {{ form_row(form.username) }}
     {{ form_row(form.email) }}
     {{ form_row(form.plainPassword.first) }}
     {{ form_row(form.plainPassword.second) }}
 
-    <button type="submit">Register!</button>
+    {{ form_row(form.roles) }}
+
+    
 {{ form_end(form) }}
+</div>
+{% endblock %}

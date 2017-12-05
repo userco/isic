@@ -1,6 +1,14 @@
+{% extends "::base.html.twig" %}
+
+
+{% block body %}
+<div id = "container">
+<h2>Роли:</h2>
 {% for role in roles %}
     <div class="span4">
         {{ role.name }}
           <a href="{{ url('edit_role',{'roleId': role.id}) }}">Edit</a> 
     </div>
 {% endfor %}
+</div>
+{% endblock %}
