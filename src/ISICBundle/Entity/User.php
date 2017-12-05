@@ -7,7 +7,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Table(name="app_users")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass="ISICBundle\Repository\UserRepository")
  */
 class User implements UserInterface, \Serializable
 {
@@ -121,5 +121,28 @@ class User implements UserInterface, \Serializable
     }
     public function setId($id){
         $this->id = $id;
+    }
+
+    /**
+     * Set isActive
+     *
+     * @param boolean $isActive
+     * @return User
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return boolean 
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
     }
 }
