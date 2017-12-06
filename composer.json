@@ -16,17 +16,26 @@
     },
     "require": {
         "php": ">=5.3.9",
+        "bcc/resque-bundle": "1.1.7",
+        "chrisboulton/php-resque": "^1.2",
         "doctrine/doctrine-bundle": "~1.4",
         "doctrine/orm": "^2.4.8",
         "incenteev/composer-parameter-handler": "~2.0",
+        "liuggio/excelbundle": "dev-master",
+        "predis/predis": "^1.0",
         "sensio/distribution-bundle": "~4.0",
         "sensio/framework-extra-bundle": "^3.0.2",
         "symfony/monolog-bundle": "^3.0.2",
         "symfony/swiftmailer-bundle": "~2.3,>=2.3.10",
         "symfony/symfony": "2.8.*",
-        "twig/twig": "^1.0||^2.0",
-        "liuggio/excelbundle": "dev-master"
+        "twig/twig": "^1.0||^2.0"
     },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/chrisboulton/php-resque-scheduler"
+        }
+    ],
     "require-dev": {
         "sensio/generator-bundle": "~3.0",
         "symfony/phpunit-bridge": "~2.7"

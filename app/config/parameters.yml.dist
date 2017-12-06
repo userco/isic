@@ -7,6 +7,11 @@ parameters:
     database_name: symfony
     database_user: root
     database_password: ~
+    susi_database_host: 192.168.200.105
+    susi_database_port: null
+    susi_database_name: SU_STUDENTDATABASE
+    susi_database_user: taso
+    susi_database_password: !QAZ@wsx
     # You should uncomment this if you want to use pdo_sqlite
     #database_path: "%kernel.root_dir%/data.db3"
 

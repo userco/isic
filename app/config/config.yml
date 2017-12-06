@@ -42,25 +42,42 @@ twig:
 # Doctrine Configuration
 doctrine:
     dbal:
-        driver: pdo_mysql
-        host: '%database_host%'
-        port: '%database_port%'
-        dbname: '%database_name%'
-        user: '%database_user%'
-        password: '%database_password%'
-        charset: UTF8
-        # if using pdo_sqlite as your database driver:
-        #   1. add the path in parameters.yml
-        #     e.g. database_path: '%kernel.root_dir%/data/data.db3'
-        #   2. Uncomment database_path in parameters.yml.dist
-        #   3. Uncomment next line:
-        #path: '%database_path%'
+        default_connection: default
+        connections:
+            default:
+                driver: pdo_mysql
+                host: '%database_host%'
+                port: '%database_port%'
+                dbname: '%database_name%'
+                user: '%database_user%'
+                password: '%database_password%'
+                charset: UTF8
+                # if using pdo_sqlite as your database driver:
+                #   1. add the path in parameters.yml
+                #     e.g. database_path: '%kernel.root_dir%/data/data.db3'
+                #   2. Uncomment database_path in parameters.yml.dist
+                #   3. Uncomment next line:
+                #path: '%database_path%'
+            susi:
+              driver: pdo_sqlsrv
+              host: '%susi_database_host%'
+              port: '%susi_database_port%'
+              dbname: '%susi_database_name%'
+              user: '%susi_database_user%'
+              password: '%susi_database_password%'
+              charset: UTF8
+
 
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'
-        naming_strategy: doctrine.orm.naming_strategy.underscore
-        auto_mapping: true
-
+        default_entity_manager: default
+        entity_managers:
+            default:
+                connection: default
+                naming_strategy: doctrine.orm.naming_strategy.underscore
+                auto_mapping: true
+            susi:
+                connection: susi
 # Swiftmailer Configuration
 swiftmailer:
     transport: '%mailer_transport%'
@@ -69,4 +86,15 @@ swiftmailer:
     password: '%mailer_password%'
     spool: { type: memory }
 
+bcc_resque:
+    class: BCC\ResqueBundle\Resque           # the resque class if different from default
+    vendor_dir: %kernel.root_dir%/../vendor  # the vendor dir if different from default
+    prefix: my-resque-prefix                 # optional prefix to separate Resque data per site/app
+    redis:
+        host: 'redis'                         # the redis host
+        port: 6379                           # the redis port
+        database: 0                          # the redis database
+#    auto_retry: [0, 10, 60]                  # auto retry failed jobs
+#    worker:
+#        root_dir: path/to/worker/root        # the root dir of app that run workers (optional)
     
