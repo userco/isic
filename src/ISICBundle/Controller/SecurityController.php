@@ -38,8 +38,8 @@ class SecurityController extends Controller
     public function registerAction(Request $request)
     {
         // 1) build the form
-        $usr= $this->get('security.context')->getToken()->getUser();
-        var_dump($usr->getUsername());
+        //$usr= $this->get('security.context')->getToken()->getUser();
+        //var_dump($usr->getUsername());
         $user = new User();
         $checked = array();
         $checked = $user->getUserRoles();

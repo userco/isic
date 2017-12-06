@@ -4,11 +4,7 @@
 
 {% block body %}
 <div id = "container">
-
-
-{% if admin_auth.isAllowed(app.user, 'user_registration') and  app.user is not empty %}
-    <li><a href="{{ path('user_registration') }}">Създаване на потребител</a></li>{% endif %}
-</ul>
+{% include('menu.html.twig') %}
 <h2>Създаване на потребител</h2>
 {{ form_start(form) }}
     {{ form_row(form.username) }}

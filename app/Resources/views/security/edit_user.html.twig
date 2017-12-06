@@ -4,6 +4,7 @@
 
 {% block body %}
 <div id = "container">
+{% include('menu.html.twig') %}
 <h2>Редактиране на потребител</h2>
 {{ form_start(form) }}
     {{ form_row(form.username) }}
@@ -14,5 +15,7 @@
 
     
 {{ form_end(form) }}
+
+
 </div>
 {% endblock %}

@@ -44,6 +44,7 @@ class Authorization {
 		// if (!$this->securityContext->getToken() instanceof AdminToken) {
 		// 	return;
 		// }
+		
 		$routeId = $event->getRequest()->attributes->get('_route');
 		$route = $this->router->getRouteCollection()->get($routeId);
 		// if (!($route instanceof Route)) {
@@ -54,9 +55,9 @@ class Authorization {
 		// 	return;
 		// }
 		$user = $this->securityContext->getToken()->getUser();
-		// if (!($user instanceof AdminEntity\User)) {
-		// 	return;
-		// }
+		if (!($user instanceof AdminEntity\User)) {
+			return;
+		}
 		// if(!$user) return;
 		/* @var $user \ISICBundle\Entity\User */
 		if(!$this->isAllowed($user, $routeId)) {
@@ -66,7 +67,7 @@ class Authorization {
 
 	public function isAllowed(AdminEntity\User $user, $routeId) {
 		
-		
+		if($routeId == 'login') return true;
 		if (!$this->_queryCountRoute) {
 			$builder = $this->registry->getManager()->createQueryBuilder();
 			/* @var $builder \Doctrine\ORM\QueryBuilder */

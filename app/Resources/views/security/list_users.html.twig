@@ -3,6 +3,7 @@
 
 {% block body %}
 <div id = "container">
+{% include('menu.html.twig') %}
 <h2>Потребители:</h2>
 {% for user in users %}
     <div class="span4">
@@ -10,5 +11,7 @@
           <a href="{{ url('edit_user',{'userId': user.id}) }}">Edit</a> 
     </div>
 {% endfor %}
+<br/>
+<a  class="btn btn-primary" href="{{ path('user_registration') }}">Създаване на потребител</a>
 </div>
 {% endblock %}

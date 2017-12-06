@@ -26,4 +26,6 @@ edit_role:
     defaults: { _controller: ISICBundle:Security:editRole }
 list_roles:
     path:     /list_roles
-    defaults: { _controller: ISICBundle:Security:listRoles }           
+    defaults: { _controller: ISICBundle:Security:listRoles } 
+logout:
+    path: /logout              

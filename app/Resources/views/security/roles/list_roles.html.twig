@@ -3,6 +3,7 @@
 
 {% block body %}
 <div id = "container">
+{% include('menu.html.twig') %}
 <h2>Роли:</h2>
 {% for role in roles %}
     <div class="span4">
@@ -10,5 +11,6 @@
           <a href="{{ url('edit_role',{'roleId': role.id}) }}">Edit</a> 
     </div>
 {% endfor %}
+<a  class="btn btn-primary" href="{{ path('role_create') }}">Създаване на потребител</a>
 </div>
 {% endblock %}
