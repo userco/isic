@@ -2,7 +2,7 @@ ISICBundle\Entity\User:
     type: entity
     table: app_users
     manyToMany:
-        roles:
+        userRoles:
             targetEntity: Role
             inversedBy: users
             joinTable:
@@ -29,3 +29,6 @@ ISICBundle\Entity\User:
             length: 255
         isActive:
             type: boolean
+        roles:
+            type: string    
+            length: 255

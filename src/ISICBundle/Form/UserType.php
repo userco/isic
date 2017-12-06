@@ -24,7 +24,7 @@ class UserType extends AbstractType
             ->add('username', 'text', array(
                 'label' => "Потребителско име"
                 ))
-            ->add('roles', EntityType::class, array(
+            ->add('userRoles', EntityType::class, array(
                     // query choices from this entity
                     'class' => 'ISICBundle:Role',
                     'label' => "Роли",

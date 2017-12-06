@@ -5,13 +5,14 @@
 {% if error %}
     <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 {% endif %}
+<div class ="container">
 <h1>ISIC Карти</h1>
 <h2>Вход в системата</h2>
 <form action="{{ path('login') }}" method="post">
-    <label for="username">Username:</label>
+    <label for="username">Потребителско име:</label>
     <input type="text" id="username" name="_username" value="{{ last_username }}" />
 
-    <label for="password">Password:</label>
+    <label for="password">Парола:</label>
     <input type="password" id="password" name="_password" />
 
     {#
@@ -22,4 +23,5 @@
 
     <button type="submit" class = "btn btn-success">Вход</button>
 </form>
+</div>
 {% endblock %}

@@ -3,7 +3,7 @@ ISICBundle\Entity\Role:
     manyToMany:
         permissions:
             targetEntity: Permission
-            inversedBy: roles
+            inversedBy: userRoles
             joinTable:
                 name: role_permission
                 joinColumns:
@@ -15,7 +15,7 @@ ISICBundle\Entity\Role:
     manyToMany:
       users:
         targetEntity: User
-        mappedBy: roles
+        mappedBy: userRoles
     id:
         id:
             type: integer

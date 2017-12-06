@@ -3,16 +3,24 @@
 {% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
 
 {% block body %}
-<div id = "container">
+<div class = "container">
+{% include('menu.html.twig') %}
 <h2>Редактиране на потребител</h2>
+{% for flashMessage in app.session.flashbag.get('error') %}
+
+ <div class = "alert alert-danger">   {{ flashMessage }}</div>
+
+{% endfor %}
 {{ form_start(form) }}
     {{ form_row(form.username) }}
     {{ form_row(form.email) }}
     {{ form_row(form.plainPassword.first) }}
     {{ form_row(form.plainPassword.second) }}
-    {{ form_row(form.roles) }}
+    {{ form_row(form.userRoles) }}
 
     
 {{ form_end(form) }}
+
+
 </div>
 {% endblock %}

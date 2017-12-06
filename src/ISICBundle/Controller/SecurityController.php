@@ -10,6 +10,7 @@ use ISICBundle\Entity\User;
 use ISICBundle\Entity\Role;
 use ISICBundle\Form\RoleType;
 use ISICBundle\Form\UserType;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class SecurityController extends Controller
 {
@@ -38,26 +39,37 @@ class SecurityController extends Controller
     public function registerAction(Request $request)
     {
         // 1) build the form
+        //$usr= $this->get('security.context')->getToken()->getUser();
+        //var_dump($usr->getUsername());
+        $session = new Session();
+        //$session->start();
         $user = new User();
         $checked = array();
-        $checked = $user->getRoles();
+        $checked = $user->getUserRoles();
         $form = $this->createForm(new UserType($checked), $user);
-
+       // var_dump($user->getUsername());
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
+            $username = $form->get('username')->getData();
+            $existing_user =$this->getDoctrine()->getRepository('ISICBundle:User')->findOneByUsername($username);
+            if($existing_user){
+                $session->getFlashBag()->add('error', 'Потребителското име вече съществува.');
+                return $this->redirectToRoute('user_registration');
+            }
             // 3) Encode the password (you could also do this via Doctrine listener)
             $password = $this->get('security.password_encoder')
                 ->encodePassword($user, $user->getPlainPassword());
             $user->setPassword($password);
-
-            // $array_roles = $form->get('roles')->getData();
-            // var_dump($array_roles);
+            
+             $array_roles = $form->get('userRoles')->getData();
+            //var_dump($array_roles);
             // foreach($array_roles as $r){
-            //     $role = $this->getDoctrine()->getRepository('ISICBundle:Role')->findById($r);
-            //     $user->addRole($role);
+            //     $array_roles = $this->getDoctrine()->getRepository('ISICBundle:Role')->findOneById($r)->getName();
+            //     //$user->addRole($role);
             // }
+            // var_dump($array_roles);
+            // $user->setUserRoles($array_roles);
             // 4) save the User!
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
@@ -80,9 +92,10 @@ class SecurityController extends Controller
     public function editUserAction(Request $request, $userId)
     {
         // 1) build the form
+        $session = new Session();
         $user = $this->getDoctrine()->getRepository('ISICBundle:User')->find($userId);
         $checked = array();
-        $checked = $user->getRoles();
+        $checked = $user->getUserRoles();
         $form = $this->createForm(new UserType($checked), $user);
 
         
@@ -129,6 +142,7 @@ class SecurityController extends Controller
     public function roleCreateAction(Request $request)
     {
         // 1) build the form
+        $session = new Session();
         $role = new Role();
         $checked = array();
         $checked = $role->getPermissions();
@@ -138,6 +152,16 @@ class SecurityController extends Controller
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $name = $form->get('name')->getData();
+            $existing_role =$this->getDoctrine()->getRepository('ISICBundle:Role')->findOneByName($name);
+            if($existing_role){
+                $session->getFlashBag()->add('error', 'Ролята вече съществува.');
+              return $this->render(
+            'security/roles/create_role.html.twig',
+            array('form' => $form->createView())
+        );
+           }
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($role);
@@ -158,6 +182,7 @@ class SecurityController extends Controller
     public function editRoleAction(Request $request, $roleId)
     {
         // 1) build the form
+        $session = new Session();
         $role = $this->getDoctrine()->getRepository('ISICBundle:Role')->find($roleId);
         $checked = array();
         $checked = $role->getPermissions();
@@ -167,6 +192,8 @@ class SecurityController extends Controller
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+
+            
             $em = $this->getDoctrine()->getManager();
             $em->persist($role);
             $em->flush();

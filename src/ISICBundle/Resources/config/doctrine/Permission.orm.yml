@@ -1,7 +1,7 @@
 ISICBundle\Entity\Permission:
     type: entity
     manyToMany:
-      roles:
+      userRoles:
         targetEntity: Role
         mappedBy: permissions
     

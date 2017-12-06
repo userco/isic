@@ -30,3 +30,6 @@ list_roles:
 BCCResqueBundle:
     resource: "@BCCResqueBundle/Resources/config/routing.xml"
     prefix:   /resque
+    defaults: { _controller: ISICBundle:Security:listRoles } 
+logout:
+    path: /logout

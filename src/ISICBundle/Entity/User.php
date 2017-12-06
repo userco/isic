@@ -38,11 +38,12 @@ class User implements UserInterface, \Serializable
      */
     private $isActive;
     private $plainPassword;
+    protected $userRoles;
     protected $roles;
-
     public function __construct()
     {
         $this->isActive = true;
+        $this->userRoles = new \Doctrine\Common\Collections\ArrayCollection();
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid('', true));
     }
@@ -146,11 +147,17 @@ class User implements UserInterface, \Serializable
     {
         return $this->isActive;
     }
-    public function addRole(Role $role)
+    public function addUserRole(ISICBundle\Entity\Role $role)
     {
-        $this->roles[] = $role;
+        $this->userRoles[] = $role;
+    }
+
+    public function getUserRoles(){
+        return $this->userRoles;
+
     }
     public function getRoles(){
-        return $this->roles;
+         return array('ROLE_USER');
     }
+   
 }

@@ -26,5 +26,10 @@ security:
             form_login:
                 login_path: login
                 check_path: login
-#    access_control:
-#            - { path: ^/resque, roles: ROLE_ADMIN }
+
+                default_target_path: /list_users
+        #secured_area:
+            # ...
+            logout:
+                path:   /logout
+                target: /login

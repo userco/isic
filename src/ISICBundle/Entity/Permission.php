@@ -27,7 +27,7 @@ class Permission{
      *      @ORM\JoinColumn(name="role_id", referencedColumnName="id")
      *  })
      */
-	private $roles;
+	private $userRoles;
 	public function __construct() {
         $this->roles = new \Doctrine\Common\Collections\ArrayCollection();
     }

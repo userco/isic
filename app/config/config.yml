@@ -38,6 +38,10 @@ twig:
 
     form:
         resources: ['bootstrap_3_horizontal_layout.html.twig']
+    globals:
+        admin_auth: "@isic.security.authorization"
+        security: "@security.context"
+        kernel: "@kernel"
 
 # Doctrine Configuration
 doctrine:
