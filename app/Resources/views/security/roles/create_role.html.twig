@@ -5,6 +5,11 @@
 <div class = "container">
 {% include('menu.html.twig') %}
 <h2>Създаване на роля</h2>
+{% for flashMessage in app.session.flashbag.get('error') %}
+
+ <div class = "alert alert-danger">   {{ flashMessage }}</div>
+
+{% endfor %}
 {{ form_start(form) }}
     {{ form_row(form.name) }}
     {{ form_row(form.permissions) }}

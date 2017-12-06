@@ -6,6 +6,11 @@
 <div class = "container">
 {% include('menu.html.twig') %}
 <h2>Редактиране на потребител</h2>
+{% for flashMessage in app.session.flashbag.get('error') %}
+
+ <div class = "alert alert-danger">   {{ flashMessage }}</div>
+
+{% endfor %}
 {{ form_start(form) }}
     {{ form_row(form.username) }}
     {{ form_row(form.email) }}
