@@ -1,11 +1,11 @@
 <?php
 namespace ISICBundle\Entity;
-
+use Symfony\Component\Security\Core\Role\RoleInterface;
 use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
-class Role{
+class Role implements RoleInterface{
 	/**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -44,5 +44,9 @@ class Role{
 	public function addPermission(Permission $permission)
     {
         $this->permissions[] = $permission;
+    }
+    public function getRole()
+    {
+    	return $this->name;
     }
 }

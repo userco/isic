@@ -38,11 +38,13 @@ class SecurityController extends Controller
     public function registerAction(Request $request)
     {
         // 1) build the form
+        $usr= $this->get('security.context')->getToken()->getUser();
+        var_dump($usr->getUsername());
         $user = new User();
         $checked = array();
-        $checked = $user->getRoles();
+        $checked = $user->getUserRoles();
         $form = $this->createForm(new UserType($checked), $user);
-
+       // var_dump($user->getUsername());
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -51,13 +53,15 @@ class SecurityController extends Controller
             $password = $this->get('security.password_encoder')
                 ->encodePassword($user, $user->getPlainPassword());
             $user->setPassword($password);
-
-            // $array_roles = $form->get('roles')->getData();
-            // var_dump($array_roles);
+            
+             $array_roles = $form->get('userRoles')->getData();
+            //var_dump($array_roles);
             // foreach($array_roles as $r){
-            //     $role = $this->getDoctrine()->getRepository('ISICBundle:Role')->findById($r);
-            //     $user->addRole($role);
+            //     $array_roles = $this->getDoctrine()->getRepository('ISICBundle:Role')->findOneById($r)->getName();
+            //     //$user->addRole($role);
             // }
+            // var_dump($array_roles);
+            // $user->setUserRoles($array_roles);
             // 4) save the User!
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
@@ -82,7 +86,7 @@ class SecurityController extends Controller
         // 1) build the form
         $user = $this->getDoctrine()->getRepository('ISICBundle:User')->find($userId);
         $checked = array();
-        $checked = $user->getRoles();
+        $checked = $user->getUserRoles();
         $form = $this->createForm(new UserType($checked), $user);
 
         

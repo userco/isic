@@ -4,6 +4,11 @@
 
 {% block body %}
 <div id = "container">
+
+
+{% if admin_auth.isAllowed(app.user, 'user_registration') and  app.user is not empty %}
+    <li><a href="{{ path('user_registration') }}">Създаване на потребител</a></li>{% endif %}
+</ul>
 <h2>Създаване на потребител</h2>
 {{ form_start(form) }}
     {{ form_row(form.username) }}
@@ -11,7 +16,7 @@
     {{ form_row(form.plainPassword.first) }}
     {{ form_row(form.plainPassword.second) }}
 
-    {{ form_row(form.roles) }}
+    {{ form_row(form.userRoles) }}
 
     
 {{ form_end(form) }}
