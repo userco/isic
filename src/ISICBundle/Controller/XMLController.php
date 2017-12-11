@@ -216,7 +216,7 @@ class XMLController extends Controller
 
                 $message = \Swift_Message::newInstance()
                       ->setFrom('mpenelova@ucc.uni-sofia.bg')
-                      ->setTo('mpenelova@ucc.uni-sofia.bg')//$user_email
+                      ->setTo($user_email)
                       ->setSubject('XML File and Log File')
                       ->setBody('Body')
                       ->attach(\Swift_Attachment::fromPath($this->container->getParameter('zip_path').'/Documents-'.time().".zip"))
