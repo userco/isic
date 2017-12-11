@@ -68,20 +68,27 @@ class XMLController extends Controller
 
             if(!$susi_record)
             {
+                //$isic->setIsPublished(1);
+                $isic->setStatus("ERROR");
+
                 $log .= "ERROR: Няма студент с ЕГН: ".$egn. "\n\n";
                 continue;
             }
             if($susi_record){
+
                 $VarEmail = $isic->getEmail();
                 $VarPhoneNumber = $isic->getPhoneNumber();
 
                 if($susi_record->getEmail()!=$VarEmail){
-                   
+                    //$isic->setIsPublished(1);
+                    $isic->setStatus("WARNING");
                      $log .= "WARNING: Email-ът на студентa с ЕГН: ".$egn. " е ".$VarEmail.".\n\n";
                 }
 
                 if($susi_record->getPhoneNumber()!=$VarPhoneNumber){
-                   
+                    
+                    //$isic->setIsPublished(1);
+                    $isic->setStatus("WARNING");
                      $log .= "WARNING: Телефонът на студентa с ЕГН: ".$egn. " е ".$VarPhoneNumber.".\n\n";
                 }
 
