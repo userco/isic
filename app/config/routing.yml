@@ -33,3 +33,6 @@ BCCResqueBundle:
     defaults: { _controller: ISICBundle:Security:listRoles } 
 logout:
     path: /logout
+generate_xml:
+    path:     /generate_xml
+    defaults: { _controller: ISICBundle:XML:generateXML }    
