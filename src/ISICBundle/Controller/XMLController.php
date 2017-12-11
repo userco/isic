@@ -211,7 +211,7 @@ class XMLController extends Controller
                 $zip->addFromString(basename($f1),  file_get_contents($f1));
                 $zip->addFromString(basename($f2),  file_get_contents($f2));  
                 
-                $user = $this->tokenStorage->getToken()->getUser();
+                $user = $this->get('security.token_storage')->getToken()->getUser();//$this->tokenStorage->getToken()->getUser();
                 $user_email = $user->getEmail();
 
                 $message = \Swift_Message::newInstance()
