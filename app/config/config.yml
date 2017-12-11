@@ -8,6 +8,10 @@ imports:
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
+    path: %kernel.root_dir%/../xmls
+    log_path: %kernel.root_dir%/../xml_logs 
+    zip_path: %kernel.root_dir%/../xml_zips 
+
 
 framework:
     #esi: ~
@@ -101,4 +105,3 @@ bcc_resque:
 #    auto_retry: [0, 10, 60]                  # auto retry failed jobs
 #    worker:
 #        root_dir: path/to/worker/root        # the root dir of app that run workers (optional)
-    

@@ -47,37 +47,30 @@ class XMLController extends Controller
      * @Route("/generate_xml", name="generate_xml")
      */
     public function generateXMLAction(Request $request)
-    {   
-
-        $fs = new \Symfony\Component\Filesystem\Filesystem();
-        $fs->dumpFile('file.xml', "");
-        
-           $params = [
-                        'Details' => [
-                            'PaymentParameters' => [
-                                'first_node'  => 'first_node_value',
-                                'second_node' => 'second_node_value'
-                            ]
-                        ]
-        ];
-
-        $xmlPrepare = new XmlPrepare;
-        $xmlGenerator = new XmlGenerator;
-
-        $xml = $xmlGenerator->setRootName('request')->generateFromArray($xmlPrepare->prepareArrayBeforeToXmlConvert($params));
-
-
+    { 
 
         $isic_xml = new Isic();
         $form = $this->createForm(new XMLType(), $isic_xml);
         $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
     	$isics =$this->getDoctrine()->getRepository('ISICBundle:Isic')->findAll();
+        $log = "";
         $xml = "<?xml version='1.0'?>
                     <p-file-20>";
         foreach($isics as $isic){
             $VarIdNumber = $isic->getIDWLIDBack();
             $Names = $isic->getNames();
+            $egn = $isic->getEGN();
+
+            $em = $this->getDoctrine()->getManager();
+
+            $susi_record = $em->getRepository('ISICBundle:Susi')->findOneByEgn(array('egn'=>$egn));
+
+            if(!$susi_record)
+            {
+                $log .= "ERROR: Няма студент с ЕГН: ".$egn. "\n\n";
+                continue;
+            }
             if($Names){
             $VarLastName = $this->getFirstName($Names);
             $VarFirstName = $this->getLastName($Names);
@@ -88,7 +81,7 @@ class XMLController extends Controller
             $VarFacultyName = $isic->getIDWFacultyBG();
             $VarFacultyNumber = $isic->getIDWFacultyNumber();
             $birthdate = $isic->getBirthDate();
-
+            
             $xml .= "<patron-record>
                     <z303>
                     <match-id-type>00</match-id-type>
@@ -177,10 +170,33 @@ class XMLController extends Controller
                 }
                 $xml .= "</p-file-20>";
                 $fs = new \Symfony\Component\Filesystem\Filesystem();
-                $fs->dumpFile('file.xml', $xml);
+                $fs->dumpFile($this->container->getParameter('path').'/xml.xml', $xml);
                 
+
+                $fs1 = new \Symfony\Component\Filesystem\Filesystem();
+                $fs1->dumpFile($this->container->getParameter('log_path').'/log.txt', $log);
                     
 
+                $zip = new \ZipArchive();
+                $zipName = $this->container->getParameter('zip_path').'/Documents-'.time().".zip";
+                $zip->open($zipName,  \ZipArchive::CREATE);
+                
+                $f1= $this->container->getParameter('log_path').'/log.txt';
+                $f2= $this->container->getParameter('path').'/xml.xml';
+
+                $zip->addFromString(basename($f1),  file_get_contents($f1));
+                $zip->addFromString(basename($f2),  file_get_contents($f2));  
+                
+            
+                $message = \Swift_Message::newInstance()
+                      ->setFrom('mpenelova@ucc.uni-sofia.bg')
+                      ->setTo('mpenelova@ucc.uni-sofia.bg')
+                      ->setSubject('XML')
+                      ->setBody('Body')
+                      ->attach(\Swift_Attachment::fromPath($this->container->getParameter('zip_path').'/Documents-'.time().".zip"))
+                    ;
+
+                $this->container->get('mailer')->send($message);
             //}
         }
         return $this->render(

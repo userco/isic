@@ -30,7 +30,7 @@ ISICBundle\Entity\Susi:
             type: string
             length: 25
             nullable: true 
-        email:
+        egn:
             type: string
             length: 25
             nullable: true 
