@@ -211,11 +211,13 @@ class XMLController extends Controller
                 $zip->addFromString(basename($f1),  file_get_contents($f1));
                 $zip->addFromString(basename($f2),  file_get_contents($f2));  
                 
-            
+                $user = $this->tokenStorage->getToken()->getUser();
+                $user_email = $user->getEmail();
+
                 $message = \Swift_Message::newInstance()
                       ->setFrom('mpenelova@ucc.uni-sofia.bg')
-                      ->setTo('mpenelova@ucc.uni-sofia.bg')
-                      ->setSubject('XML')
+                      ->setTo('mpenelova@ucc.uni-sofia.bg')//$user_email
+                      ->setSubject('XML File and Log File')
                       ->setBody('Body')
                       ->attach(\Swift_Attachment::fromPath($this->container->getParameter('zip_path').'/Documents-'.time().".zip"))
                     ;
