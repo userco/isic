@@ -1,0 +1,83 @@
+<?php
+// src/ISICBundle/Entity/User.php
+namespace ISICBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+class Susi{
+	protected $name;
+	protected $egn;
+	protected $faculty;
+	protected $facultyNumber;
+	protected $email;
+	protected $phoneNumber;
+	protected $addressCity;
+	protected $addressStreet;
+	protected $birthDate;
+	protected $genderName;
+
+	public function getName(){
+		return $this->name;
+	}
+	public function setName($name){
+		$this->name = $name;
+	}
+
+	public function getEgn(){
+		return $this->egn;
+	}
+	public function setEgn($egn){
+		$this->egn = $egn;
+	}
+
+	public function getFaculty(){
+		return $this->faculty;
+	}
+	public function setFaculty($faculty){
+		$this->faculty = $faculty;
+	}
+	public function getFacultyNumber(){
+		return $this->facultyNumber;
+	}
+	public function setFacultyNumber($facultyNumber){
+		$this->facultyNumber = $facultyNumber;
+	}
+
+	public function getEmail(){
+		return $this->email;
+	}
+	public function setEmail($email){
+		$this->email = $email;
+	}
+	public function getPhoneNumber(){
+		return $this->phoneNumber;
+	}
+	public function setPhoneNumber($phoneNumber){
+		$this->phoneNumber = $phoneNumber;
+	}
+	public function getAddressCity(){
+		return $this->addressCity;
+	}
+	public function setAddressCity($addressCity){
+		$this->addressCity = $addressCity;
+	}
+
+	public function getAddressStreet(){
+		return $this->addressStreet;
+	}
+	public function setAddressStreet($addressStreet){
+		$this->addressStreet = $addressStreet;
+	}
+	public function getBirthDate(){
+		return $this->birthDate;
+	}
+	public function setBirthDate($birthDate){
+		$this->birthDate = $birthDate;
+	}
+	public function getGenderName(){
+		return $this->genderName;
+	}
+	public function setGenderName($genderName){
+		$this->genderName= $genderName;
+	}
+}
