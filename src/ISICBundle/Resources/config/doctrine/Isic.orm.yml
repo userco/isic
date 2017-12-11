@@ -90,3 +90,10 @@ ISICBundle\Entity\Isic:
             type: string
             length: 250
             nullable: true
+        status:
+            type: string
+            length: 10
+            nullable: true
+        isPublished:
+            type: boolean
+            nullable: true                 

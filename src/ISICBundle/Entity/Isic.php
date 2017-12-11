@@ -14,6 +14,8 @@ class Isic
     private $IDWFamilyNameEN;
     private $IDWFacultyBG;
     private $IDWFacultyEN;
+    protected $isPublished;
+    protected $status;
 
     /**
      * @return mixed
@@ -409,5 +411,19 @@ class Isic
         $this->id = $id;
     }
 
+    public function getIsPublished(){
+        return $this->isPublished;
+    }
 
+    public function setIsPublished($isPublished){
+        $this->isPublished = $isPublished;
+    }
+
+    public function getStatus(){
+        return $this->status;
+    }
+
+    public function setStatus($status){
+        $this->status = $status;
+    }
 }
