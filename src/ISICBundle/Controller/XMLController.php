@@ -71,6 +71,23 @@ class XMLController extends Controller
                 $log .= "ERROR: Няма студент с ЕГН: ".$egn. "\n\n";
                 continue;
             }
+            if($susi_record){
+                $VarEmail = $isic->getEmail();
+                $VarPhoneNumber = $isic->getPhoneNumber();
+
+                if($susi_record->getEmail()!=$VarEmail){
+                   
+                     $log .= "WARNING: Email-ът на студентa с ЕГН: ".$egn. " е ".$VarEmail.".\n\n";
+                }
+
+                if($susi_record->getPhoneNumber()!=$VarPhoneNumber){
+                   
+                     $log .= "WARNING: Телефонът на студентa с ЕГН: ".$egn. " е ".$VarPhoneNumber.".\n\n";
+                }
+
+                 //Проверка за трите имена на студента
+
+            }
             if($Names){
             $VarLastName = $this->getFirstName($Names);
             $VarFirstName = $this->getLastName($Names);
