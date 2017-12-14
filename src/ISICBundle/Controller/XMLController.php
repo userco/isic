@@ -14,7 +14,9 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use ISICBundle\Form\XMLType;
 use Desperado\XmlBundle\Model\XmlPrepare;
 use Desperado\XmlBundle\Model\XmlGenerator;
-
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\Response;
 class XMLController extends Controller
 {
 
@@ -108,6 +110,7 @@ class XMLController extends Controller
             $gender =$susi_record->getGenderName();
             $address_city = $susi_record->getAddressCity();
             $address_street = $susi_record->getAddressStreet();
+            $postCode = ($susi_record->getPostCode())? $susi_record->getPostCode(): "+";
             $xml .= "<patron-record>
                     <z303>
                     <match-id-type>00</match-id-type>
@@ -151,7 +154,7 @@ class XMLController extends Controller
                     <z304-address-2>".$address_street."</z304-address-2>
                     <z304-address-3>+</z304-address-3>
                     <z304-address-4>+</z304-address-4>
-                    <z304-zip>VarZipCode</z304-zip>
+                    <z304-zip>".$postCode."</z304-zip>
                     <z304-email-address>".$VarEmail."</z304-email-address>
                     <z304-telephone>".$VarPhoneNumber."</z304-telephone>
                     <z304-date-from>+</z304-date-from>
@@ -212,20 +215,13 @@ class XMLController extends Controller
 
                 $zip->addFromString(basename($f1),  file_get_contents($f1));
                 $zip->addFromString(basename($f2),  file_get_contents($f2));  
+                $zip->close();
                 
-                $user = $this->get('security.token_storage')->getToken()->getUser();//$this->tokenStorage->getToken()->getUser();
-                $user_email = $user->getEmail();
-
-                $message = \Swift_Message::newInstance()
-                      ->setFrom('mpenelova@ucc.uni-sofia.bg')
-                      ->setTo($user_email)
-                      ->setSubject('XML File and Log File')
-                      ->setBody('Body')
-                      ->attach(\Swift_Attachment::fromPath($this->container->getParameter('zip_path').'/Documents-'.time().".zip"))
-                    ;
-
-                $this->container->get('mailer')->send($message);
-            //}
+                 $response = new BinaryFileResponse($zipName);
+                 $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+               
+                return $response;
+              
         }
         return $this->render(
             'security/xml/generate_xml.html.twig',array(
