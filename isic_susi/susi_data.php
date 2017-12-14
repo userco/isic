@@ -1,20 +1,26 @@
 <?php
 //function getSUSIdata($egn){
 	try{
-		$link = new PDO("dblib:host=62.44.109.144;dbname=SU_STUDENTDATABASE", 'maria', '123456');
+		$link = new PDO("sqlsrv:Server=62.44.109.144;Database=SU_STUDENTDATABASE", 'maria', '123456');
 	} catch (PDOException $e) {
 			echo 'Connection failed: ' . $e->getMessage();
 			exit();
 	}
-
+	try{
 	$dbh = new PDO('mysql:dbname=isic;host=localhost;charset=utf8', 'root', 'strongly');
-
+	} catch (PDOException $e) {
+			echo 'Connection failed: ' . $e->getMessage();
+			exit();
+	}
 	$querystr = "SELECT
 			  pd.FullName Name, 
 			pd.PersonalNumber EGN, 
 			convert(varchar(10), pd.BirthDate, 121) BirthDate, 
 			faccat.CategoryName, 
-			faccat.Abrv Faculty, 
+			faccat.Abrv Faculty,
+			 
+			 
+			ci.CityName as cityname, 
 			s.FacultyNumber FacultyNumber, 
 			eduplan.EducationPlanName, 
 			com1.Number GSM, 
@@ -26,6 +32,7 @@
 	FROM       [dbo].[PersonData]         AS pd  
 	INNER JOIN [dbo].[Students]           AS s    ON pd.[PersonData_ID]            = s.[PersonData_ID]
 	INNER JOIN Addresses                  ad      ON ad.PersonData_ID = pd.PersonData_ID
+	inner join [dbo].[Cities]             AS ci         ON ci.[City_ID] = ad.[City_ID]
 	INNER JOIN [dbo].[EducationPlans]     AS eduplan    ON eduplan.[EducationPlan_ID]    = s.[EducationPlan_ID]
 	INNER JOIN [dbo].[EducationalDegrees] AS edudeg     ON edudeg.[EducationalDegree_ID] = eduplan.[EducationalDegree_ID]
 	INNER JOIN [dbo].[EducationalForms]   AS eduform    ON eduform.[EducationalForm_ID]  = eduplan.[EducationalForm_ID]
@@ -47,36 +54,46 @@
 	LEFT JOIN Communications com2   ON   com2.PersonData_ID=s.PersonData_ID AND com2.CommunicationType_ID = 3
 
 	WHERE
-		yearcat.[CategoryName] = 2017";
-	//AND pd.PersonalNumber IN ( ? )";
-
+		yearcat.[CategoryName] = 2017
+	--AND pd.PersonalNumber IN ( ? )";
+	$susi_info = array();
 	$query2 = $link->prepare($querystr);
-	$query2->execute();//array($egn));
+	$query2->execute(array());//$egn));
 	// if ($query2->rowCount()==0) {
 	// 	return false;
 	// }
-	//else {
+	// else {
 		$susi_info = $query2->fetchAll(PDO::FETCH_ASSOC);
-		//return $susi_info;
-	//}
-//}
+// 		return $susi_info;
+// 	}
+// //}
 foreach($susi_info as $row){
-	$statement = $link->prepare("INSERT INTO susi(name, birth_date, faculty, faculty_number, email, phone_number, egn, address_city, address_street, gender_name)
-    VALUES(:name, :birth_date, :faculty, :faculty_number, :email, :phoneNumber, :egn, :addressCity, :addressStreet, :genderName)");
-$statement->execute(array(
-    "name" => $row['Name'],
+	//, `faculty`, `faculty_number`, `email`, `phone_number`, 	
+	 	   // `address_city`, `address_street`, `egn`, `gender_name`)
+	 $statement = $dbh->prepare("INSERT INTO `susi`(`name`, `faculty`,`faculty_number`, `email`, `phone_number`, 	
+	 	    `address_city`, `address_street`, `egn`, `gender_name`)
+
+	  VALUES(:name, :faculty, :facultyNumber, :email, :phoneNumber, :addressCity,  :addressStreet, :egn, :genderName)");
+    // $name = $row['EGN'];
+    // var_dump($name);
+    // $statement->bindParam(':name1', $name);
+	$statement->execute(array(
+   "name" => $row['Name'],
     "egn" => $row['EGN'],
-    "birth_date" => $row['BirthDate'],
-    "faculty" => $row['Faculty'],
-    "faculty_number" => $row['FacultyNumber'],
-    "phone_number" => $row['phoneNumber'],
+    // //"birth_date" => $row['BirthDate'],
+     "faculty" => $row['Faculty'],
+    "facultyNumber" => $row['FacultyNumber'],
+    "phoneNumber" => $row['GSM'],
     "email" => $row['Email'],
     "genderName" => $row['GenderName'],
-    "addressCity" => "",//$row['Addres'],
-     "addressStreet" => $row['addressStreet'],
+    "addressCity" =>$row['AddressStreet'],
+    "addressStreet" => $row['AddressStreet']
+    ));
+echo "\nPDOStatement::errorCode(): ";
+print $statement->errorCode();
 
-));
+//));
 }
 //var_dump(getSUSIdata('8810290702'));
-//var_dump(getSUSIdata('9711083225'));    //9711083225    9608083801
+//var_dump(getSUSIdata('9608083801'));    //9711083225    9608083801
 ?>
