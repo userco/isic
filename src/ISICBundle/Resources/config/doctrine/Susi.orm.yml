@@ -45,4 +45,12 @@ ISICBundle\Entity\Susi:
         genderName:
             type: string
             length: 2
-            nullable: true            
+            nullable: true 
+        postCode:
+            type: string
+            length: 7
+            nullable: true 
+        birthDate:
+            type: string
+            length: 15
+            nullable: true                   

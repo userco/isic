@@ -14,6 +14,7 @@ class Susi{
 	protected $email;
 	protected $phoneNumber;
 	protected $addressCity;
+	protected $postCode;
 	protected $addressStreet;
 	protected $birthDate;
 	protected $genderName;
@@ -85,6 +86,12 @@ class Susi{
 	}
 	public function setBirthDate($birthDate){
 		$this->birthDate = $birthDate;
+	}
+	public function getPostCode(){
+		return $this->postCode;
+	}
+	public function setPostCode($postCode){
+		$this->postCode = $postCode;
 	}
 	public function getGenderName(){
 		return $this->genderName;

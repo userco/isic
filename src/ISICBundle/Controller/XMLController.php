@@ -102,10 +102,12 @@ class XMLController extends Controller
             $VarEmail = $isic->getEmail();
             $VarPhoneNumber = $isic->getPhoneNumber();
             $VarBarCode = $isic->getIDWBarCodeInt();
-            $VarFacultyName = $isic->getIDWFacultyBG();
-            $VarFacultyNumber = $isic->getIDWFacultyNumber();
+            $VarFacultyName = $susi_record->getFaculty();
+            $VarFacultyNumber = $susi_record->getFacultyNumber();
             $birthdate = $isic->getBirthDate();
-            
+            $gender =$susi_record->getGenderName();
+            $address_city = $susi_record->getAddressCity();
+            $address_street = $susi_record->getAddressStreet();
             $xml .= "<patron-record>
                     <z303>
                     <match-id-type>00</match-id-type>
@@ -137,18 +139,18 @@ class XMLController extends Controller
                     <z303-plain-html>B</z303-plain-html>
                     <z303-want-sms>N</z303-want-sms>
                     <z303-title-req-limit>0100</z303-title-req-limit>
-                    <z303-gender>VarGender</z303-gender>
-                    <z303-birthplace>VarBirthPlace</z303-birthplace>
+                    <z303-gender>".$gender."</z303-gender>
+                    <z303-birthplace>".$address_city."</z303-birthplace>
                     </z303>
                     <z304>
                     <record-action>A</record-action>
                     <z304-id>".$VarIdNumber."</z304-id>
                     <z304-sequence>01</z304-sequence>
                     <z304-address-0>".$VarLastName ." ".$VarFirstName."</z304-address-0>
-                    <z304-address-1>VarAddressCity</z304-address-1>
-                    <z304-address-2>VarAddressFirstLine</z304-address-2>
-                    <z304-address-3>VarAddressSecondLine</z304-address-3>
-                    <z304-address-4>VarAddressThirdLine</z304-address-4>
+                    <z304-address-1>".$address_city."</z304-address-1>
+                    <z304-address-2>".$address_street."</z304-address-2>
+                    <z304-address-3>+</z304-address-3>
+                    <z304-address-4>+</z304-address-4>
                     <z304-zip>VarZipCode</z304-zip>
                     <z304-email-address>".$VarEmail."</z304-email-address>
                     <z304-telephone>".$VarPhoneNumber."</z304-telephone>

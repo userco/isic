@@ -25,6 +25,7 @@
 			eduplan.EducationPlanName, 
 			com1.Number GSM, 
 			com2.Number Email,
+			ad.PostCode  postcode,
 	    	ad.AddressText AddressStreet,	
 	    	CASE WHEN pd.Sex>0 THEN 'F' ELSE 'M' END GenderName,
 	    	eduplan.BeginYear FirstYear 
@@ -71,23 +72,24 @@ foreach($susi_info as $row){
 	//, `faculty`, `faculty_number`, `email`, `phone_number`, 	
 	 	   // `address_city`, `address_street`, `egn`, `gender_name`)
 	 $statement = $dbh->prepare("INSERT INTO `susi`(`name`, `faculty`,`faculty_number`, `email`, `phone_number`, 	
-	 	    `address_city`, `address_street`, `egn`, `gender_name`)
+	 	    `address_city`, `address_street`, `egn`, `gender_name`, `post_code`, birth_date)
 
-	  VALUES(:name, :faculty, :facultyNumber, :email, :phoneNumber, :addressCity,  :addressStreet, :egn, :genderName)");
+	  VALUES(:name, :faculty, :facultyNumber, :email, :phoneNumber, :addressCity,  :addressStreet, :egn, :genderName, :postCode, :birthDate)");
     // $name = $row['EGN'];
     // var_dump($name);
     // $statement->bindParam(':name1', $name);
 	$statement->execute(array(
    "name" => $row['Name'],
     "egn" => $row['EGN'],
-    // //"birth_date" => $row['BirthDate'],
+    "birthDate" => $row['BirthDate'],
      "faculty" => $row['Faculty'],
     "facultyNumber" => $row['FacultyNumber'],
     "phoneNumber" => $row['GSM'],
     "email" => $row['Email'],
     "genderName" => $row['GenderName'],
     "addressCity" =>$row['cityname'],
-    "addressStreet" => $row['AddressStreet']
+    "addressStreet" => $row['AddressStreet'],
+    "postCode" => $row['postcode'],
     ));
 echo "\nPDOStatement::errorCode(): ";
 print $statement->errorCode();
