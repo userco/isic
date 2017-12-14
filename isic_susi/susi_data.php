@@ -86,7 +86,7 @@ foreach($susi_info as $row){
     "phoneNumber" => $row['GSM'],
     "email" => $row['Email'],
     "genderName" => $row['GenderName'],
-    "addressCity" =>$row['AddressStreet'],
+    "addressCity" =>$row['cityname'],
     "addressStreet" => $row['AddressStreet']
     ));
 echo "\nPDOStatement::errorCode(): ";
