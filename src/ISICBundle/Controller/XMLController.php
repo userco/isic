@@ -81,6 +81,26 @@ class XMLController extends Controller
                 $VarEmail = $isic->getEmail();
                 $VarPhoneNumber = $isic->getPhoneNumber();
 
+                if($susi_record->getName()!=$isic->getNames()){
+                    //$isic->setIsPublished(1);
+                    $isic->setStatus("ERROR");
+                     $log .= "ERROR: Имената на студентa с ЕГН: ".$egn. " е ".$susi_record->getName().".\n\n";
+                }
+                if($susi_record->getFaculty()!=$isic->getIDWFacultyBG()){
+                    //$isic->setIsPublished(1);
+                    $isic->setStatus("ERROR");
+                     $log .= "ERROR: Фaкултетът на студентa с ЕГН: ".$egn. " е ".$susi_record->getFaculty().".\n\n";
+                }
+                if($susi_record->getFacultyNumber()!=$isic->getIDWFacultyNumber()){
+                    //$isic->setIsPublished(1);
+                    $isic->setStatus("ERROR");
+                     $log .= "ERROR: Фaкултетният номер на студентa с ЕГН: ".$egn. " е ".$susi_record->getFacultyNumber().".\n\n";
+                }
+                if($susi_record->getBirthDate()!=$isic->getBirthdate()){
+                    //$isic->setIsPublished(1);
+                    $isic->setStatus("ERROR");
+                     $log .= "ERROR: Рождената дата на студентa с ЕГН: ".$egn. " е ".$susi_record->getBirthDate().".\n\n";
+                }
                 if($susi_record->getEmail()!=$VarEmail){
                     //$isic->setIsPublished(1);
                     $isic->setStatus("WARNING");
@@ -101,8 +121,8 @@ class XMLController extends Controller
             $VarLastName = $this->getFirstName($Names);
             $VarFirstName = $this->getLastName($Names);
              }
-            $VarEmail = $isic->getEmail();
-            $VarPhoneNumber = $isic->getPhoneNumber();
+            // $VarEmail = $isic->getEmail();
+            // $VarPhoneNumber = $isic->getPhoneNumber();
             $VarBarCode = $isic->getIDWBarCodeInt();
             $VarFacultyName = $susi_record->getFaculty();
             $VarFacultyNumber = $susi_record->getFacultyNumber();
