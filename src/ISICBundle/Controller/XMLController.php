@@ -124,7 +124,8 @@ class XMLController extends Controller
                      if($isic->getStatus()!="ERROR")
                         $isic->setStatus("WARNING"); 
                 }
-
+                if($isic->getStatus()!="ERROR" && $isic->getStatus()!= "WARNING")
+                        $isic->setStatus("OK"); 
                  //Проверка за трите имена на студента
                 $em->persist($isic);
                 $em->flush();
