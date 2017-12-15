@@ -13,9 +13,9 @@ use ISICBundle\Entity as AdminEntity;
 class Authorization {
 	
 	public static $allowed = array(
-		'ucict.admin.index',
-		'ucict.admin.logout.action',
-		'ucict.admin.login.action'
+		//'uciindex',
+		'logout',
+		'login'
 	);
 
 	/**
@@ -66,8 +66,10 @@ class Authorization {
 	}
 
 	public function isAllowed(AdminEntity\User $user, $routeId) {
-		
-		if($routeId == 'login') return true;
+		if(in_array($routeId, static::$allowed, TRUE)) {
+			return true;
+		}
+		//if($routeId == 'login') return true;
 		if (!$this->_queryCountRoute) {
 			$builder = $this->registry->getManager()->createQueryBuilder();
 			/* @var $builder \Doctrine\ORM\QueryBuilder */
