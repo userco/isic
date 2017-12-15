@@ -55,7 +55,7 @@ class XMLController extends Controller
         $form = $this->createForm(new XMLType(), $isic_xml);
         $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
-    	$isics =$this->getDoctrine()->getRepository('ISICBundle:Isic')->findAll();
+    	$isics =$this->getDoctrine()->getRepository('ISICBundle:Isic')->findBy(array('isPublished'=>NULL));
         $log = "";
         $xml = "<?xml version='1.0'?>
                     <p-file-20>";
@@ -86,7 +86,7 @@ class XMLController extends Controller
                 if($susi_record->getName()!=$isic->getNames()){
                     //$isic->setIsPublished(1);
                     $isic->setStatus("ERROR");
-                     $log .= "ERROR: Имената на студентa с ЕГН: ".$egn. " е ".$susi_record->getName().".\n\n";
+                     $log .= "ERROR: Имената на студентa с ЕГН: ".$egn. " са ".$susi_record->getName().".\n\n";
                      $isic->setStatus("ERROR");
                 }
                 if($susi_record->getFaculty()!=$isic->getIDWFacultyBG()){
