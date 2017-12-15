@@ -75,9 +75,11 @@ class XMLController extends Controller
 
                 $log .= "ERROR: Няма студент с ЕГН: ".$egn. "\n\n";
                 continue;
+                $isic->setStatus("ERROR");
             }
             if($susi_record){
 
+                $isic->setIsPublished(1);
                 $VarEmail = $isic->getEmail();
                 $VarPhoneNumber = $isic->getPhoneNumber();
 
@@ -85,26 +87,33 @@ class XMLController extends Controller
                     //$isic->setIsPublished(1);
                     $isic->setStatus("ERROR");
                      $log .= "ERROR: Имената на студентa с ЕГН: ".$egn. " е ".$susi_record->getName().".\n\n";
+                     $isic->setStatus("ERROR");
                 }
                 if($susi_record->getFaculty()!=$isic->getIDWFacultyBG()){
                     //$isic->setIsPublished(1);
                     $isic->setStatus("ERROR");
                      $log .= "ERROR: Фaкултетът на студентa с ЕГН: ".$egn. " е ".$susi_record->getFaculty().".\n\n";
+                     $isic->setStatus("ERROR");
                 }
                 if($susi_record->getFacultyNumber()!=$isic->getIDWFacultyNumber()){
                     //$isic->setIsPublished(1);
                     $isic->setStatus("ERROR");
                      $log .= "ERROR: Фaкултетният номер на студентa с ЕГН: ".$egn. " е ".$susi_record->getFacultyNumber().".\n\n";
+                     $isic->setStatus("ERROR");
                 }
                 if($susi_record->getBirthDate()!=$isic->getBirthdate()){
                     //$isic->setIsPublished(1);
                     $isic->setStatus("ERROR");
                      $log .= "ERROR: Рождената дата на студентa с ЕГН: ".$egn. " е ".$susi_record->getBirthDate().".\n\n";
+                     $isic->setStatus("ERROR");
                 }
                 if($susi_record->getEmail()!=$VarEmail){
                     //$isic->setIsPublished(1);
                     $isic->setStatus("WARNING");
                      $log .= "WARNING: Email-ът на студентa с ЕГН: ".$egn. " е ".$VarEmail.".\n\n";
+                     if($isic->getStatus()!="ERROR")
+                        $isic->setStatus("WARNING"); 
+                     
                 }
 
                 if($susi_record->getPhoneNumber()!=$VarPhoneNumber){
@@ -112,10 +121,13 @@ class XMLController extends Controller
                     //$isic->setIsPublished(1);
                     $isic->setStatus("WARNING");
                      $log .= "WARNING: Телефонът на студентa с ЕГН: ".$egn. " е ".$VarPhoneNumber.".\n\n";
+                     if($isic->getStatus()!="ERROR")
+                        $isic->setStatus("WARNING"); 
                 }
 
                  //Проверка за трите имена на студента
-
+                $em->persist($isic);
+                $em->flush();
             }
             if($Names){
             $VarLastName = $this->getFirstName($Names);

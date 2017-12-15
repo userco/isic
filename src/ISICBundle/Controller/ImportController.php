@@ -74,7 +74,7 @@ class ImportController extends Controller
                 $newIsicCard->setChipNumber($rowData[0][8]);
                 $newIsicCard->setIDWLID($rowData[0][9]);
                 $newIsicCard->setIDWBarCodeInt($rowData[0][10]);
-                
+                $newIsicCard->setImportDate(new \DateTime());
                 /*$newIsicCard->setIDWKeyColumn($rowData[0][0]);
                 $newIsicCard->setIDWFirstNameBG($rowData[0][1]);
                 $newIsicCard->setIDWFamilyNameBG($rowData[0][2]);

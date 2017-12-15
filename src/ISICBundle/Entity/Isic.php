@@ -16,6 +16,7 @@ class Isic
     private $IDWFacultyEN;
     protected $isPublished;
     protected $status;
+    protected $importDate;
 
     /**
      * @return mixed
@@ -401,6 +402,7 @@ class Isic
     private $Email;
     private $Names;
 
+
     public function getId()
     {
         return $this->id;
@@ -425,5 +427,13 @@ class Isic
 
     public function setStatus($status){
         $this->status = $status;
+    }
+
+    public function getImportDate(){
+        return $this->importDate;
+    }
+
+    public function setImportDate($importDate){
+        $this->importDate = $importDate;
     }
 }

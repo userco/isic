@@ -103,4 +103,7 @@ ISICBundle\Entity\Isic:
             nullable: true
         isPublished:
             type: boolean
-            nullable: true                 
+            nullable: true
+        importDate:
+            type: datetime
+                 
