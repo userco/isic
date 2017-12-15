@@ -8,6 +8,7 @@ ISICBundle\Entity\Isic:
     fields:
         IDWKeyColumn:
             type: integer
+            nullable: true	
         IDWFirstNameBG:
             type: string
             length: 250
@@ -43,21 +44,27 @@ ISICBundle\Entity\Isic:
         IDWLID:
             type: string
             length: 50
+            nullable: true
         IDWBarCodeInt:
             type: string
             length: 50
+            nullable: true
         IDWBarCodeField:
             type: string
             length: 250
+            nullable: true
         IDWLIDBack:
             type: string
             length: 250
+            nullable: true
         IDWBarCodeIntBack:
             type: string
             length: 250
+            nullable: true
         IDWBarCodeFieldBack:
             type: string
             length: 250
+            nullable: true
         IDWPhoto:
             type: string
             length: 250
