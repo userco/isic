@@ -1,4 +1,14 @@
-<div class="inner" style="width: 370px; margin-left:auto;margin-right:auto;">
+{% extends "::base.html.twig" %}
+{% form_theme uploadForm 'bootstrap_3_horizontal_layout.html.twig' %}
+{#% form_theme uploadForm 'form.html.twig' %#}
+
+
+{% block body %}
+<div class = "container">
+{% include('menu.html.twig') %}
+
+
+<br>
     <h1>ISIC Import EXCEL</h1>
 
     {{ form_start(uploadForm) }}
@@ -25,7 +35,7 @@
         <tbody>
         <tr>
             <td style="text-align: center;">
-                {{ form_label(uploadForm.file, null, {'label_attr' : {'class' : 'btn btn-danger btn-small'} }) }}
+               	{{ form_label(uploadForm.file, null, {'label_attr' : {'class' : 'btn btn-danger btn-small'} }) }}
                 {{ form_widget(uploadForm.file, {'attr': {'class' : 'chooseFile'} }) }}
             </td>
             <td style="text-align: center;">
@@ -35,4 +45,6 @@
         </tr>
         </tbody>
     </table>
+
 </div>
+{% endblock %}
