@@ -262,10 +262,17 @@ class XMLController extends Controller
                 $em->persist($archive);
                 $em->flush();
                 
+                if(file_exists($f2)){
                  $response = new BinaryFileResponse($zipName);
                  $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
                
                 return $response;
+            }
+            else{
+                $session = new Session();
+                //$session->start();
+                $session->getFlashBag()->add('error', 'Няма нови данни за обработка.');
+            }
               
         }
         return $this->render(
