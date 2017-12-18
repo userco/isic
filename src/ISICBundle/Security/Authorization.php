@@ -41,9 +41,9 @@ class Authorization {
 	}
 
 	public function onKernelController(FilterControllerEvent $event) {
-		// if (!$this->securityContext->getToken() instanceof AdminToken) {
-		// 	return;
-		// }
+		if (!$this->securityContext->getToken() instanceof AdminToken) {
+			return;
+		}
 		
 		$routeId = $event->getRequest()->attributes->get('_route');
 		$route = $this->router->getRouteCollection()->get($routeId);
@@ -58,14 +58,20 @@ class Authorization {
 		if (!($user instanceof AdminEntity\User)) {
 			return;
 		}
-		// if(!$user) return;
+		 if(!$user) //return;
+		 	throw new AccessDeniedException('Вие нямате достъп до тази страница.');
 		/* @var $user \ISICBundle\Entity\User */
 		if(!$this->isAllowed($user, $routeId)) {
 			throw new AccessDeniedException('Вие нямате достъп до тази страница.');
 		}
 	}
 
-	public function isAllowed(AdminEntity\User $user, $routeId) {
+	public function isAllowed( $user, $routeId) {
+
+		if (!($user instanceof AdminEntity\User)) {
+			die("Нямате достъп до тази страница");
+			return false;
+		}
 		if(in_array($routeId, static::$allowed, TRUE)) {
 			return true;
 		}

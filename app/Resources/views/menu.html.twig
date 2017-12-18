@@ -12,6 +12,8 @@
     <li><a class="nav-link" href="{{ path('generate_xml') }}"> Генериране на XML файл</a></li>{% endif %}
     {% if admin_auth.isAllowed(app.user, 'search_xml') and  app.user is not empty %}
     <li><a class="nav-link" href="{{ path('search_xml') }}"> Търсене на XML файл</a></li>{% endif %}
+   {% if admin_auth.isAllowed(app.user, 'logout') and  app.user is not empty %}
+    <li><a class="nav-link" href="{{ path('logout') }}"> Изход</a></li>{% endif %}
     </ul>
   </div>
 </nav>
