@@ -8,18 +8,16 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-class XMLType extends AbstractType
+class XML1Type extends AbstractType
 {   
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('generateDate', 'date', array(
-                'label' =>"XML за качените на дата:"
-                ))
+            
             
            ->add('save', 'submit', array(
-                'label' => "Търсене",
+                'label' => "Генериране на XML",
                 'attr'=> array('class'=>'btn btn-success'),
                 ));
     }
@@ -27,12 +25,12 @@ class XMLType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'ISICBundle\Entity\Archive',
+            'data_class' => '\ISICBundle\Entity\Isic',
         ));
     }
 
     public function getName()
     {
-        return 'xml';
+        return 'xml1';
     }
 }

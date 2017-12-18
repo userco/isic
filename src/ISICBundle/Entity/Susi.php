@@ -1,4 +1,5 @@
 <?php
+//автор Мария Пенелова
 // src/ISICBundle/Entity/User.php
 namespace ISICBundle\Entity;
 

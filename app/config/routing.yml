@@ -35,4 +35,7 @@ logout:
     path: /logout
 generate_xml:
     path:     /generate_xml
-    defaults: { _controller: ISICBundle:XML:generateXML }    
+    defaults: { _controller: ISICBundle:XML:generateXML } 
+search_xml:
+    path:     /search_xml
+    defaults: { _controller: ISICBundle:Archive:searchXML }       

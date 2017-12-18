@@ -1,5 +1,6 @@
 <?php
 // src/Controller/SecurityController.php
+//автор Мария Пенелова
 namespace  ISICBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -11,12 +12,15 @@ use ISICBundle\Entity\Role;
 use ISICBundle\Form\RoleType;
 use ISICBundle\Form\UserType;
 use Symfony\Component\HttpFoundation\Session\Session;
-use ISICBundle\Form\XMLType;
+use ISICBundle\Form\XML1Type;
 use Desperado\XmlBundle\Model\XmlPrepare;
 use Desperado\XmlBundle\Model\XmlGenerator;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\Response;
+use ISICBundle\Entity\Archive;
+use DateTime;
+
 class XMLController extends Controller
 {
 
@@ -52,7 +56,7 @@ class XMLController extends Controller
     { 
 
         $isic_xml = new Isic();
-        $form = $this->createForm(new XMLType(), $isic_xml);
+        $form = $this->createForm(new XML1Type(), $isic_xml);
         $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
     	$isics =$this->getDoctrine()->getRepository('ISICBundle:Isic')->findBy(array('isPublished'=>NULL));
@@ -240,7 +244,8 @@ class XMLController extends Controller
                     
 
                 $zip = new \ZipArchive();
-                $zipName = $this->container->getParameter('zip_path').'/Documents-'.time().".zip";
+                $zipName0 = 'Documents-'.time().".zip";
+                $zipName = $this->container->getParameter('zip_path').'/'.$zipName0;
                 $zip->open($zipName,  \ZipArchive::CREATE);
                 
                 $f1= $this->container->getParameter('log_path').'/log.txt';
@@ -249,6 +254,13 @@ class XMLController extends Controller
                 $zip->addFromString(basename($f1),  file_get_contents($f1));
                 $zip->addFromString(basename($f2),  file_get_contents($f2));  
                 $zip->close();
+
+                $archive = new \ISICBundle\Entity\Archive();
+                $generateDate =  new DateTime();
+                $archive->setGenerateDate($generateDate->format('Y-m-d'));
+                $archive->setArchiveName($zipName0);
+                $em->persist($archive);
+                $em->flush();
                 
                  $response = new BinaryFileResponse($zipName);
                  $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
