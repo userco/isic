@@ -7,6 +7,7 @@ use PHPExcel;
 use PHPExcel_IOFactory;
 use ISICBundle\Entity\Isic;
 use ISICBundle\Jobs\ImportJob;
+use PHPExcel_Shared_Date;
 
 class ImportController extends Controller
 {
@@ -62,10 +63,14 @@ class ImportController extends Controller
                     FALSE);
                 $newIsicCard = new Isic();
 
-
+                $birthdate = $rowData[0][2];
+                $date_formated = date('Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($birthdate));
+                //$d  = new \DateTime($birthdate);// ($birthdate)?$birthdate->format('Y-m-d'): NULL;
+                // var_dump($date_formated);
+                // die();
                 $newIsicCard->setNames($rowData[0][0]);
                 $newIsicCard->setEGN($rowData[0][1]);
-                $newIsicCard->setBirthdate($row[0][2]);
+                $newIsicCard->setBirthdate($date_formated);
                 $newIsicCard->setIDWFacultyBG($rowData[0][3]); 
                 $newIsicCard->setIDWFacultyNumber($rowData[0][4]);
                 $newIsicCard->setSpecialty($rowData[0][5]); 
