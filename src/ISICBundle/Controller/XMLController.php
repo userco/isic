@@ -179,7 +179,7 @@ class XMLController extends Controller
                     <z303-ill-library>ILL_CUL</z303-ill-library>
                     <z303-home-library>+</z303-home-library>
                     <z303-note-1>".$VarFacultyName.",". $VarFacultyNumber."</z303-note-1>
-                    <z303-note-2>20180930/z303-note-2>
+                    <z303-note-2>20180930</z303-note-2>
                     <z303-ill-total-limit>0100</z303-ill-total-limit>
                     <z303-ill-active-limit>0100</z303-ill-active-limit>
                     <z303-birth-date>".$birthdate."</z303-birth-date>
