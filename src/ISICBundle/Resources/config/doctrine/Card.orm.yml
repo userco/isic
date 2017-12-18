@@ -1,0 +1,12 @@
+# автор Мария Пенелова
+ISICBundle\Entity\Card:
+    type: entity
+    table: card_type
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        name:
+            type: string
+            length: 250

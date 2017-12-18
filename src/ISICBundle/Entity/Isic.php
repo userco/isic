@@ -17,6 +17,7 @@ class Isic
     protected $isPublished;
     protected $status;
     protected $importDate;
+    protected $cardType;
 
     /**
      * @return mixed
@@ -385,6 +386,16 @@ class Isic
     {
         $this->Names = $Names;
     }
+    public function getCardType()
+    {
+        return $this->cardType;
+    }
+
+    public function setCardType($cardType)
+    {
+        $this->cardType = $cardType;
+    }
+
     private $IDWClass;
     private $IDWFacultyNumber;
     private $IDWLID;

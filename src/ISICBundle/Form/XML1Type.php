@@ -14,7 +14,17 @@ class XML1Type extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            
+            ->add('cardType', 'entity', array(
+                    // query choices from this entity
+                    'class' => 'ISICBundle:Card',
+                    'label' => 'Тип карта',
+                    // use the User.username property as the visible option string
+                    'choice_label' => 'name',
+
+                    // used to render a select box, check boxes or radios
+                    // 'multiple' => true,
+                    // 'expanded' => true,
+                ))
             
            ->add('save', 'submit', array(
                 'label' => "Генериране на XML",
