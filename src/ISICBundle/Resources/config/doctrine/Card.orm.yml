@@ -1,6 +1,10 @@
 # автор Мария Пенелова
 ISICBundle\Entity\Card:
     type: entity
+    oneToMany:
+    isics:
+      targetEntity: Isic
+      mappedBy: cardType
     table: card_type
     id:
         id:

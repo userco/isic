@@ -1,5 +1,13 @@
 ISICBundle\Entity\Isic:
     type: entity
+    manyToOne:
+    cardType:
+      targetEntity: Card
+      inversedBy: isics
+      joinColumn:
+        name: card_type
+        referencedColumnName: id
+
     table: isic
     id:
         id:
@@ -106,4 +114,5 @@ ISICBundle\Entity\Isic:
             nullable: true
         importDate:
             type: datetime
+
                  
