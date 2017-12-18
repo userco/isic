@@ -60,6 +60,16 @@ class XMLController extends Controller
         $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
     	$isics =$this->getDoctrine()->getRepository('ISICBundle:Isic')->findBy(array('isPublished'=>NULL));
+        if(!$isics){
+            $session = new Session();
+                //$session->start();
+            $session->getFlashBag()->add('error', 'Няма нови данни за обработка.');
+
+        return $this->render(
+            'security/xml/generate_xml.html.twig',array(
+           'form' => $form->createView(),
+        ));
+        }
         $log = "";
         $xml = "<?xml version='1.0'?>
                     <p-file-20>";
@@ -71,10 +81,10 @@ class XMLController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $susi_record = $em->getRepository('ISICBundle:Susi')->findOneByEgn(array('egn'=>$egn));
-
+            $log .= "________________________________________________________________\n";
             if(!$susi_record)
             {
-                //$isic->setIsPublished(1);
+                $isic->setIsPublished(1);
                 $isic->setStatus("ERROR");
 
                 $log .= "ERROR: Няма студент с ЕГН: ".$egn. "\n\n";
@@ -90,31 +100,31 @@ class XMLController extends Controller
                 if($susi_record->getName()!=$isic->getNames()){
                     //$isic->setIsPublished(1);
                     $isic->setStatus("ERROR");
-                     $log .= "ERROR: Имената на студентa с ЕГН: ".$egn. " са ".$susi_record->getName().".\n\n";
+                     $log .= "ERROR: Имената на студентa с ЕГН: ".$egn. " в СУСИ са ".$susi_record->getName().".\n\n";
                      $isic->setStatus("ERROR");
                 }
                 if($susi_record->getFaculty()!=$isic->getIDWFacultyBG()){
                     //$isic->setIsPublished(1);
                     $isic->setStatus("ERROR");
-                     $log .= "ERROR: Фaкултетът на студентa с ЕГН: ".$egn. " е ".$susi_record->getFaculty().".\n\n";
+                     $log .= "ERROR: Фaкултетът на студентa с ЕГН: ".$egn. " в СУСИ е ".$susi_record->getFaculty().".\n\n";
                      $isic->setStatus("ERROR");
                 }
                 if($susi_record->getFacultyNumber()!=$isic->getIDWFacultyNumber()){
                     //$isic->setIsPublished(1);
                     $isic->setStatus("ERROR");
-                     $log .= "ERROR: Фaкултетният номер на студентa с ЕГН: ".$egn. " е ".$susi_record->getFacultyNumber().".\n\n";
+                     $log .= "ERROR: Фaкултетният номер на студентa с ЕГН: ".$egn. " в СУСИ е ".$susi_record->getFacultyNumber().".\n\n";
                      $isic->setStatus("ERROR");
                 }
                 if($susi_record->getBirthDate()!=$isic->getBirthdate()){
                     //$isic->setIsPublished(1);
                     $isic->setStatus("ERROR");
-                     $log .= "ERROR: Рождената дата на студентa с ЕГН: ".$egn. " е ".$susi_record->getBirthDate().".\n\n";
+                     $log .= "ERROR: Рождената дата на студентa с ЕГН: ".$egn. " в СУСИ е ".$susi_record->getBirthDate().".\n\n";
                      $isic->setStatus("ERROR");
                 }
                 if($susi_record->getEmail()!=$VarEmail){
                     //$isic->setIsPublished(1);
                     $isic->setStatus("WARNING");
-                     $log .= "WARNING: Email-ът на студентa с ЕГН: ".$egn. " е ".$VarEmail.".\n\n";
+                     $log .= "WARNING: Email-ът на студентa с ЕГН: ".$egn. " в СУСИ  е ".$VarEmail.".\n\n";
                      if($isic->getStatus()!="ERROR")
                         $isic->setStatus("WARNING"); 
                      
@@ -124,7 +134,7 @@ class XMLController extends Controller
                     
                     //$isic->setIsPublished(1);
                     $isic->setStatus("WARNING");
-                     $log .= "WARNING: Телефонът на студентa с ЕГН: ".$egn. " е ".$VarPhoneNumber.".\n\n";
+                     $log .= "WARNING: Телефонът на студентa с ЕГН: ".$egn. " в СУСИ е ".$VarPhoneNumber.".\n\n";
                      if($isic->getStatus()!="ERROR")
                         $isic->setStatus("WARNING"); 
                 }
@@ -232,7 +242,8 @@ class XMLController extends Controller
                     <z308-status>AC</z308-status>
                     <z308-encryption>H</z308-encryption>
                     </z308>
-                    </patron-record>";
+                    </patron-record>
+                    ";
                 }
                 $xml .= "</p-file-20>";
                 $fs = new \Symfony\Component\Filesystem\Filesystem();
