@@ -41,6 +41,7 @@ class ImportController extends Controller
 
             $file = $form->get('file');
             $file1 = $form->get('file')->getData();
+            $cardType = $form->get('cardType')->getData();
             if (!isset($file1)) {
                 $message = 'Моля изберете файл за запис';
                 return $this->render('ISICBundle:Import:Import.html.twig', array(
@@ -91,6 +92,7 @@ class ImportController extends Controller
                 $newIsicCard->setIDWLID($rowData[0][9]);
                 $newIsicCard->setIDWBarCodeInt($rowData[0][10]);
                 $newIsicCard->setImportDate(new \DateTime());
+                $newIsicCard->setCardType($cardType);
                 /*$newIsicCard->setIDWKeyColumn($rowData[0][0]);
                 $newIsicCard->setIDWFirstNameBG($rowData[0][1]);
                 $newIsicCard->setIDWFamilyNameBG($rowData[0][2]);

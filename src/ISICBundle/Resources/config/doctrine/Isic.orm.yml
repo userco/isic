@@ -1,14 +1,15 @@
 ISICBundle\Entity\Isic:
     type: entity
-    manyToOne:
-    cardType:
-      targetEntity: Card
-      inversedBy: isics
-      joinColumn:
-        name: card_type
-        referencedColumnName: id
-
     table: isic
+    manyToOne:
+        cardType:
+          targetEntity: Card
+          inversedBy: isics
+          joinColumn:
+            name: card_type
+            referencedColumnName: id
+
+    
     id:
         id:
             type: integer
