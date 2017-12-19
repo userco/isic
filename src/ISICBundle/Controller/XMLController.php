@@ -30,7 +30,7 @@ class XMLController extends Controller
         
         $firstname="";
         if(count($name_array)==3)
-            $firstname = $name_array[0].",".$name_array[1];
+            $firstname = $name_array[0].", ".$name_array[1];
        
         if(count($name_array)==2)
             $firstname = $name_array[0];
@@ -49,6 +49,25 @@ class XMLController extends Controller
         $date_string = $array[2].$array[1].$array[0];
         return $date_string;
     }
+    private function normalize_phone($gsm) {
+    $gsmSanitized = preg_replace('/\s+|\(|\)/', '', $gsm);
+    $gsmSanitized = preg_replace('/^\+359/', '0', $gsmSanitized);
+    $gsmSanitized = preg_replace('/^00359/', '0', $gsmSanitized);
+    //$gsmSanitized = preg_replace('.', '', $gsmSanitized);
+    return $gsmSanitized;
+}
+    private function normalize_name($name) {
+    $name1 = preg_replace('/\s+/', ' ', $name);
+    return $name1;
+}
+function normalize_date($date) {
+    //$day = substr($date,3,2);
+    //$month = substr($date,0,2);
+    //$year = substr($date,6,4);
+    $date1 = preg_replace('/\//', '/', $date);
+    //return $day . "." . $month . "." . $year;
+    return $date1;
+}
     /**
      * @Route("/generate_xml", name="generate_xml")
      */
@@ -110,7 +129,7 @@ class XMLController extends Controller
                 $VarEmail = $isic->getEmail();
                 $VarPhoneNumber = $isic->getPhoneNumber();
 
-                if($susi_record->getName()!=$isic->getNames()){
+                if($susi_record->getName()!=$this->normalize_name($isic->getNames())){
                     //$isic->setIsPublished(1);
                     $isic->setStatus("WARNING");
                      $log .= "Имена: - СУСИ са ".$susi_record->getName().";";
@@ -142,7 +161,7 @@ class XMLController extends Controller
                      
                 }
 
-                if($susi_record->getPhoneNumber()!=$VarPhoneNumber){
+                if($susi_record->getPhoneNumber()!=$this->normalize_phone($VarPhoneNumber)){
                     
                     //$isic->setIsPublished(1);
                     $isic->setStatus("WARNING");
@@ -188,7 +207,7 @@ class XMLController extends Controller
                     <z303-profile-id>+</z303-profile-id>
                     <z303-ill-library>ILL_CUL</z303-ill-library>
                     <z303-home-library>+</z303-home-library>
-                    <z303-note-1>".$VarFacultyName.",". $VarFacultyNumber."</z303-note-1>
+                    <z303-note-1>".$VarFacultyName.", ". $VarFacultyNumber."</z303-note-1>
                     <z303-note-2>20180930</z303-note-2>
                     <z303-ill-total-limit>0100</z303-ill-total-limit>
                     <z303-ill-active-limit>0100</z303-ill-active-limit>
