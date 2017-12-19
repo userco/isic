@@ -53,6 +53,25 @@ class LoadPermissionData extends AbstractFixture implements OrderedFixtureInterf
             $manager->flush();
             
         }
+        $fileCardType = new \SplFileObject( $dir."/card_type.csv");
+        $readerCardType = new CsvReader($fileCardType, ',');
+        
+        foreach ($readerCardType as $row) {
+
+            $cardType = new Card();
+            $cardType->setId($row[0]);
+            
+            $cardType->setName($row[1]);
+           
+
+            $manager->persist($cardType);
+
+            $metadata = $em->getClassMetaData(get_class($cardType));
+            $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
+
+            $manager->flush();
+            
+        }
 
     } 
 

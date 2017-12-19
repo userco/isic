@@ -21,7 +21,7 @@ class XMLType extends AbstractType
                 'label' =>" до дата включително:"
                 ))
            ->add('save', 'submit', array(
-                'label' => "Търсене",
+                'label' =>  "Търсене",
                 'attr'=> array('class'=>'btn btn-success'),
                 ));
     }
