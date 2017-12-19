@@ -252,7 +252,28 @@ class XMLController extends Controller
                     </z308>
                     </patron-record>
                     ";
-                }
+}
+                    $out = array(
+
+                $Names,
+                $egn,
+                $isic->getBirthdate(),
+                $isic->getIDWFacultyBg(),
+                $isic->getIDWFacultyNumber(),
+                $isic->getSpecialty(),
+                $isic->getPhoneNumber(),
+                $isic->getEmail(),
+                $isic->getChipNumber(),
+                $isic->getIDWLID(),
+                $isic->getIDWBarCodeInt(),
+                $isic->getCardType()->getName(),
+                $log
+            );
+
+
+                fputcsv($handle, $out, ","); 
+            //}
+        }
                 $xml .= "</p-file-20>";
                 $fs = new \Symfony\Component\Filesystem\Filesystem();
                 $fs->dumpFile($this->container->getParameter('path').'/xml.xml', $xml);
@@ -262,26 +283,8 @@ class XMLController extends Controller
                 // $fs1->dumpFile($this->container->getParameter('log_path').'/log.txt', $log);
                 
             
-                $out = array(
-
-                $Names,
-                $egn,
-                $birthdate,
-                $isic->getIDWFacultyBg(),
-                $isic->getIDWFacultyNumber(),
-                $isic->getSpecialty(),
-                $VarPhoneNumber,
-                $VarEmail,
-                $isic->getChipNumber(),
-                $isic->getIDWLID(),
-                $isic->getIDWBarCodeInt(),
-                $isic->getCardType()->getName(),
-                $log
-            );
-
-
-                fputcsv($handle, $out, ",");
-}
+               
+//}
                 $zip = new \ZipArchive();
                 $zipName0 = 'Documents-'.time().".zip";
                 $zipName = $this->container->getParameter('zip_path').'/'.$zipName0;
