@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\Response;
 use ISICBundle\Entity\Archive;
+use ISICBundle\Entity\Models\ArchiveModel;
 
 
 class ArchiveController extends Controller
@@ -27,21 +28,28 @@ class ArchiveController extends Controller
     public function searchXMLAction(Request $request)
     { 
 
-        $archive = new Archive();
-        $form = $this->createForm(new XMLType(), $archive);
+        $archiveModel = new ArchiveModel();
+        $form = $this->createForm(new XMLType(), $archiveModel);
         //$request = $this->get('request');
 
         if ( $request->getMethod() == 'POST') {
             $form->handleRequest($request);
 
-            $date = $form->get('generateDate')->getData();
-            $d = $date->format('Y-m-d');
-            //var_dump($d);
-            //  die();
-            //$date1 = $date->format('Y-m-d H:i:s');
-    	    $archives = $this->getDoctrine()->getRepository('ISICBundle:Archive')->findBy(array('generateDate'=>$d));
-            // var_dump($archives);
-            // die();
+            $dateFrom = $form->get('generateDateFrom')->getData();
+            $dateTo = $form->get('generateDateTo')->getData();
+           
+            $em = $this->getDoctrine()->getManager();
+            $query = $em->createQuery(
+                'SELECT a
+                FROM ISICBundle:Archive a
+                WHERE a.generateDate > :dateFrom
+                AND  a.generateDate < :dateTo'
+            )->setParameter('dateFrom', $dateFrom)
+             ->setParameter('dateTo', $dateTo);
+
+            $archives = $query->getResult();
+
+    	   
             $dataPackage = $this->container->getParameter('archives').'/archives-'.time().".zip";
             $zip = new \ZipArchive();
             $zip->open($dataPackage,  \ZipArchive::CREATE);

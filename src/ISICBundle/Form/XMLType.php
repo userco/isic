@@ -29,7 +29,7 @@ class XMLType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'ISICBundle\Entity\Archive',
+            'data_class' => 'ISICBundle\Entity\Models\ArchiveModel',
         ));
     }
 
