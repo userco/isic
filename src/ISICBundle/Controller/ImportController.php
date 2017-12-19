@@ -16,6 +16,17 @@ class ImportController extends Controller
         $request = $this->getRequest();
 
         $form = $this->createFormBuilder()
+            ->add('cardType', 'entity', array(
+                    // query choices from this entity
+                    'class' => 'ISICBundle:Card',
+                    'label' => 'Тип карта',
+                    // use the User.username property as the visible option string
+                    'choice_label' => 'name',
+
+                    // used to render a select box, check boxes or radios
+                    // 'multiple' => true,
+                    // 'expanded' => true,
+                ))
             ->add('file', 'file', array(
                 'label' => 'Избери',
                 'required' => false,

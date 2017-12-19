@@ -14,10 +14,12 @@ class XMLType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('generateDate', 'date', array(
-                'label' =>"XML за качените на дата:"
+            ->add('generateDateFrom', 'date', array(
+                'label' =>"XML за качените от дата:"
                 ))
-            
+            ->add('generateDateTo', 'date', array(
+                'label' =>" дата:"
+                ))
            ->add('save', 'submit', array(
                 'label' => "Търсене",
                 'attr'=> array('class'=>'btn btn-success'),
