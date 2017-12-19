@@ -1,7 +1,7 @@
 <?php
 //автор Мария Пенелова
 namespace ISICBundle\Entity;
-
+use Doctrine\Common\Collections\ArrayCollection;
 class Card{
 
 	protected $id;
