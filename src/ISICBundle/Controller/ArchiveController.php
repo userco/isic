@@ -42,8 +42,8 @@ class ArchiveController extends Controller
             $query = $em->createQuery(
                 'SELECT a
                 FROM ISICBundle:Archive a
-                WHERE a.generateDate > :dateFrom
-                AND  a.generateDate < :dateTo'
+                WHERE a.generateDate >= :dateFrom
+                AND  a.generateDate <= :dateTo'
             )->setParameter('dateFrom', $dateFrom)
              ->setParameter('dateTo', $dateTo);
 

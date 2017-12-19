@@ -18,7 +18,7 @@ class XMLType extends AbstractType
                 'label' =>"XML за качените от дата:"
                 ))
             ->add('generateDateTo', 'date', array(
-                'label' =>" дата:"
+                'label' =>" до дата включително:"
                 ))
            ->add('save', 'submit', array(
                 'label' => "Търсене",
