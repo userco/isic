@@ -71,6 +71,14 @@ class XMLController extends Controller
         ));
         }
         $log = "";
+        $directory = $this->container->getParameter('log_path');
+        $f1 = $directory . "/log-" . time() . '.csv';
+        $handle = fopen($f1, 'w');
+
+        $headers = 'Име, ЕГН, Рождена дата, Факултет, Факултетен номер, Специалност, Телефон, Имейл, Чип на картата, Библиотечен номер, Баркод, Тип карта,Грешки'. "\r\n";   
+
+        fwrite($handle, $headers);
+
         $xml = "<?xml version='1.0'?>
                     <p-file-20>";
         foreach($isics as $isic){
@@ -81,14 +89,14 @@ class XMLController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $susi_record = $em->getRepository('ISICBundle:Susi')->findOneByEgn(array('egn'=>$egn));
-            $log .= "________________________________________________________________\n";
+            $log = "";
             if(!$susi_record)
             {
                 $isic->setIsPublished(1);
                 $isic->setStatus("ERROR");
 
-                $log .= "ERROR: Няма студент с ЕГН: ".$egn. "\n\n";
-                continue;
+                $log .= "ERROR: Няма студент с ЕГН: ".$egn. ";";
+                
                 $isic->setStatus("ERROR");
             }
             if($susi_record){
@@ -100,31 +108,31 @@ class XMLController extends Controller
                 if($susi_record->getName()!=$isic->getNames()){
                     //$isic->setIsPublished(1);
                     $isic->setStatus("ERROR");
-                     $log .= "ERROR: Имената на студентa с ЕГН: ".$egn. " в СУСИ са ".$susi_record->getName().".\n\n";
+                     $log .= "Имена: - СУСИ са ".$susi_record->getName().";";
                      $isic->setStatus("ERROR");
                 }
                 if($susi_record->getFaculty()!=$isic->getIDWFacultyBG()){
                     //$isic->setIsPublished(1);
                     $isic->setStatus("ERROR");
-                     $log .= "ERROR: Фaкултетът на студентa с ЕГН: ".$egn. " в СУСИ е ".$susi_record->getFaculty().".\n\n";
+                     $log .= "Фaкултет - СУСИ е ".$susi_record->getFaculty().";";
                      $isic->setStatus("ERROR");
                 }
                 if($susi_record->getFacultyNumber()!=$isic->getIDWFacultyNumber()){
                     //$isic->setIsPublished(1);
                     $isic->setStatus("ERROR");
-                     $log .= "ERROR: Фaкултетният номер на студентa с ЕГН: ".$egn. " в СУСИ е ".$susi_record->getFacultyNumber().".\n\n";
+                     $log .= "Фaкултетният номер - СУСИ е ".$susi_record->getFacultyNumber().";";
                      $isic->setStatus("ERROR");
                 }
                 if($susi_record->getBirthDate()!=$isic->getBirthdate()){
                     //$isic->setIsPublished(1);
                     $isic->setStatus("ERROR");
-                     $log .= "ERROR: Рождената дата на студентa с ЕГН: ".$egn. " в СУСИ е ".$susi_record->getBirthDate().".\n\n";
+                     $log .= "Рождена дата - СУСИ е ".$susi_record->getBirthDate().";";
                      $isic->setStatus("ERROR");
                 }
                 if($susi_record->getEmail()!=$VarEmail){
                     //$isic->setIsPublished(1);
                     $isic->setStatus("WARNING");
-                     $log .= "WARNING: Email-ът на студентa с ЕГН: ".$egn. " в СУСИ  е ".$VarEmail.".\n\n";
+                     $log .= " Email - СУСИ  е ".$VarEmail.";";
                      if($isic->getStatus()!="ERROR")
                         $isic->setStatus("WARNING"); 
                      
@@ -134,7 +142,7 @@ class XMLController extends Controller
                     
                     //$isic->setIsPublished(1);
                     $isic->setStatus("WARNING");
-                     $log .= "WARNING: Телефонът на студентa с ЕГН: ".$egn. " в СУСИ е ".$VarPhoneNumber.".\n\n";
+                     $log .= "Телефон - СУСИ е ".$VarPhoneNumber.";";
                      if($isic->getStatus()!="ERROR")
                         $isic->setStatus("WARNING"); 
                 }
@@ -143,7 +151,7 @@ class XMLController extends Controller
                  //Проверка за трите имена на студента
                 $em->persist($isic);
                 $em->flush();
-            }
+            
             if($Names){
             $VarLastName = $this->getFirstName($Names);
             $VarFirstName = $this->getLastName($Names);
@@ -248,18 +256,38 @@ class XMLController extends Controller
                 $xml .= "</p-file-20>";
                 $fs = new \Symfony\Component\Filesystem\Filesystem();
                 $fs->dumpFile($this->container->getParameter('path').'/xml.xml', $xml);
+                //}
+
+                // $fs1 = new \Symfony\Component\Filesystem\Filesystem();
+                // $fs1->dumpFile($this->container->getParameter('log_path').'/log.txt', $log);
                 
+            
+                $out = array(
 
-                $fs1 = new \Symfony\Component\Filesystem\Filesystem();
-                $fs1->dumpFile($this->container->getParameter('log_path').'/log.txt', $log);
-                    
+                $Names,
+                $egn,
+                $birthdate,
+                $isic->getIDWFacultyBg(),
+                $isic->getIDWFacultyNumber(),
+                $isic->getSpecialty(),
+                $VarPhoneNumber,
+                $VarEmail,
+                $isic->getChipNumber(),
+                $isic->getIDWLID(),
+                $isic->getIDWBarCodeInt(),
+                $isic->getCardType()->getName(),
+                $log
+            );
 
+
+                fputcsv($handle, $out, ",");
+}
                 $zip = new \ZipArchive();
                 $zipName0 = 'Documents-'.time().".zip";
                 $zipName = $this->container->getParameter('zip_path').'/'.$zipName0;
                 $zip->open($zipName,  \ZipArchive::CREATE);
                 
-                $f1= $this->container->getParameter('log_path').'/log.txt';
+                //$f1= $this->container->getParameter('log_path').'/log.txt';
                 $f2= $this->container->getParameter('path').'/xml.xml';
 
                 $zip->addFromString(basename($f1),  file_get_contents($f1));
