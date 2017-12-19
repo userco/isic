@@ -55,6 +55,10 @@ class XMLController extends Controller
     public function generateXMLAction(Request $request)
     { 
 
+        $errorCount = 0;
+        $warningCount = 0;
+        $okCount = 0;
+
         $isic_xml = new Isic();
         $form = $this->createForm(new XML1Type(), $isic_xml);
         $request = $this->get('request');
@@ -92,12 +96,13 @@ class XMLController extends Controller
             $log = "";
             if(!$susi_record)
             {
+                
                 $isic->setIsPublished(1);
                 $isic->setStatus("ERROR");
 
                 $log .= "ERROR: Няма студент с ЕГН: ".$egn. ";";
                 
-                $isic->setStatus("ERROR");
+                
             }
             if($susi_record){
 
@@ -107,34 +112,33 @@ class XMLController extends Controller
 
                 if($susi_record->getName()!=$isic->getNames()){
                     //$isic->setIsPublished(1);
-                    $isic->setStatus("ERROR");
+                    $isic->setStatus("WARNING");
                      $log .= "Имена: - СУСИ са ".$susi_record->getName().";";
-                     $isic->setStatus("ERROR");
+                     
                 }
                 if($susi_record->getFaculty()!=$isic->getIDWFacultyBG()){
                     //$isic->setIsPublished(1);
-                    $isic->setStatus("ERROR");
+                    $isic->setStatus("WARNING");
                      $log .= "Фaкултет - СУСИ е ".$susi_record->getFaculty().";";
-                     $isic->setStatus("ERROR");
+                     
                 }
                 if($susi_record->getFacultyNumber()!=$isic->getIDWFacultyNumber()){
                     //$isic->setIsPublished(1);
-                    $isic->setStatus("ERROR");
+                    $isic->setStatus("WARNING");
                      $log .= "Фaкултетният номер - СУСИ е ".$susi_record->getFacultyNumber().";";
-                     $isic->setStatus("ERROR");
+                     
                 }
                 if($susi_record->getBirthDate()!=$isic->getBirthdate()){
                     //$isic->setIsPublished(1);
-                    $isic->setStatus("ERROR");
+                    $isic->setStatus("WARNING");
                      $log .= "Рождена дата - СУСИ е ".$susi_record->getBirthDate().";";
-                     $isic->setStatus("ERROR");
+                     
                 }
                 if($susi_record->getEmail()!=$VarEmail){
                     //$isic->setIsPublished(1);
                     $isic->setStatus("WARNING");
                      $log .= " Email - СУСИ  е ".$VarEmail.";";
-                     if($isic->getStatus()!="ERROR")
-                        $isic->setStatus("WARNING"); 
+                     
                      
                 }
 
@@ -143,8 +147,6 @@ class XMLController extends Controller
                     //$isic->setIsPublished(1);
                     $isic->setStatus("WARNING");
                      $log .= "Телефон - СУСИ е ".$VarPhoneNumber.";";
-                     if($isic->getStatus()!="ERROR")
-                        $isic->setStatus("WARNING"); 
                 }
                 if($isic->getStatus()!="ERROR" && $isic->getStatus()!= "WARNING")
                         $isic->setStatus("OK"); 
@@ -253,6 +255,12 @@ class XMLController extends Controller
                     </patron-record>
                     ";
 }
+if($isic->getStatus()=="ERROR")
+$errorCount++;
+if($isic->getStatus()=="WARNING")
+$warningCount++;
+if($isic->getStatus()=="OK")
+$okCount++;
                     $out = array(
 
                 $Names,
@@ -278,9 +286,11 @@ class XMLController extends Controller
                 $fs = new \Symfony\Component\Filesystem\Filesystem();
                 $fs->dumpFile($this->container->getParameter('path').'/xml.xml', $xml);
                 //}
-
-                // $fs1 = new \Symfony\Component\Filesystem\Filesystem();
-                // $fs1->dumpFile($this->container->getParameter('log_path').'/log.txt', $log);
+                $errors = 'ERRORS(Записи - не са включени в XML файла): '.$errorCount.',
+                           WARNINGS(Записи, включени в XML файла)'.$warningCount. ',
+                            OK (Записи, включени в XML файла)'.$okCount;
+                $fs3 = new \Symfony\Component\Filesystem\Filesystem();
+                $fs3->dumpFile($this->container->getParameter('log_path').'/errors.txt', $errors);
                 
             
                
@@ -290,11 +300,13 @@ class XMLController extends Controller
                 $zipName = $this->container->getParameter('zip_path').'/'.$zipName0;
                 $zip->open($zipName,  \ZipArchive::CREATE);
                 
-                //$f1= $this->container->getParameter('log_path').'/log.txt';
+               
                 $f2= $this->container->getParameter('path').'/xml.xml';
+                $f3= $this->container->getParameter('log_path').'/errors.txt';
 
                 $zip->addFromString(basename($f1),  file_get_contents($f1));
-                $zip->addFromString(basename($f2),  file_get_contents($f2));  
+                $zip->addFromString(basename($f2),  file_get_contents($f2));
+                $zip->addFromString(basename($f3),  file_get_contents($f3));  
                 $zip->close();
 
                 $archive = new \ISICBundle\Entity\Archive();
