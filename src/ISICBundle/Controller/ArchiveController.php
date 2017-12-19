@@ -78,7 +78,7 @@ class ArchiveController extends Controller
             else{
                 $session = new Session();
                 //$session->start();
-                $session->getFlashBag()->add('error', 'Данни на тази дата не са качвани.');
+                $session->getFlashBag()->add('error', 'Данни между тези дати не са качвани.');
             }
         }
 
