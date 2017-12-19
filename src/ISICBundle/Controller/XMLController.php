@@ -186,6 +186,10 @@ function normalize_date($date) {
             $gender =$susi_record->getGenderName();
             $address_city = $susi_record->getAddressCity();
             $address_street = $susi_record->getAddressStreet();
+            $secondPhone = "+";
+            if($susi_record->getPhoneNumber()!=$this->normalize_phone($VarPhoneNumber)){
+                $secondPhone = $susi_record->getPhoneNumber();
+            }
             $postCode = ($susi_record->getPostCode())? $susi_record->getPostCode(): "+";
             $xml .= "<patron-record>
                     <z303>
@@ -236,7 +240,7 @@ function normalize_date($date) {
                     <z304-date-from>+</z304-date-from>
                     <z304-date-to>+</z304-date-to>
                     <z304-address-type>01</z304-address-type>
-                    <z304-telephone-2>+</z304-telephone-2>
+                    <z304-telephone-2>".$secondPhone."</z304-telephone-2>
                     </z304>
                     <z305>
                     <record-action>A</record-action>
