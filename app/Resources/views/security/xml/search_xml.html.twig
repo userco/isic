@@ -1,0 +1,22 @@
+{% extends "::base.html.twig" %}
+{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+{% block body %}
+<div class = "container">
+{% include('menu.html.twig') %}
+<h2>Търсене на XML</h2>
+{% for flashMessage in app.session.flashbag.get('error') %}
+
+ <div class = "alert alert-danger">   {{ flashMessage }}</div>
+
+{% endfor %}
+{{ form_start(form) }}
+    {#{ form_row(form.name) }}
+    {{ form_row(form.permissions) }#}
+
+    
+{{ form_end(form) }}
+{% for archive in archives %}   
+  <a href="{{ path('get_xml', {'archiveId': archive.id}) }}" >{{ archive.archiveName}}</a><br>
+{% endfor %}
+</div>
+{% endblock %}

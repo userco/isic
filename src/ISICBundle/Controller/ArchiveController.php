@@ -28,6 +28,7 @@ class ArchiveController extends Controller
     public function searchXMLAction(Request $request)
     { 
 
+        $archives = array();
         $archiveModel = new ArchiveModel();
         $form = $this->createForm(new XMLType(), $archiveModel);
         //$request = $this->get('request');
@@ -50,32 +51,31 @@ class ArchiveController extends Controller
             $archives = $query->getResult();
 
     	   
-            $dataPackage = $this->container->getParameter('archives').'/archives-'.time().".zip";
-            $zip = new \ZipArchive();
-            $zip->open($dataPackage,  \ZipArchive::CREATE);
-            $zipName = "";
+            // $dataPackage = $this->container->getParameter('archives').'/archives-'.time().".zip";
+            // $zip = new \ZipArchive();
+            // $zip->open($dataPackage,  \ZipArchive::CREATE);
+            // $zipName = "";
 
-            foreach($archives as $ar){
-                // die();
-               // if($ar->getGenerateDate()==$d){
-                $zipName1 = $ar->getArchiveName();
-               // var_dump($ar->getGenerateDate());
-                // die();
-                $zipName = $this->container->getParameter('zip_path').'/'.$zipName1;
+            // foreach($archives as $ar){
+            //     // die();
+            //    // if($ar->getGenerateDate()==$d){
+            //     $zipName1 = $ar->getArchiveName();
+            //    // var_dump($ar->getGenerateDate());
+            //     // die();
+            //     $zipName = $this->container->getParameter('zip_path').'/'.$zipName1;
 
-               // $zip->open($dataPackage,  \ZipArchive::CREATE);
-                $zip->addFromString(basename($zipName),  file_get_contents($zipName));
-            //}  
-            }
+            //    // $zip->open($dataPackage,  \ZipArchive::CREATE);
+            //     $zip->addFromString(basename($zipName),  file_get_contents($zipName));
+            // //}  
+            // }
 
-            $zip->close();
-            if(file_exists($zipName)){
-            $response = new BinaryFileResponse($dataPackage);
-            $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+            // $zip->close();
+            // if(file_exists($zipName)){
+            // $response = new BinaryFileResponse($dataPackage);
+            // $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
             
-            return $response;
-        }
-            else{
+            // return $response;
+        if(!$archives){
                 $session = new Session();
                 //$session->start();
                 $session->getFlashBag()->add('error', 'Данни между тези дати не са качвани.');
@@ -85,8 +85,24 @@ class ArchiveController extends Controller
         return $this->render(
             'security/xml/search_xml.html.twig',array(
            'form' => $form->createView(),
+           'archives'=>$archives,
         ));
-    } 
+    }
+
+    /**
+     * @Route("/get_xml", name="get_xml")
+     */
+    public function resultArchiveAction(Request $request, $archiveId){
+        $archive =$this->getDoctrine()->getRepository('ISICBundle:Archive')->find($archiveId);
+            $zipName1 = $archive->getArchiveName();
+
+            $zipName = $this->container->getParameter('zip_path').'/'.$zipName1;
+           if(file_exists($zipName)){
+            $response = new BinaryFileResponse($zipName);
+            $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+            return $response;
+        }
+    }
 }           
 
             

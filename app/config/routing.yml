@@ -38,4 +38,7 @@ generate_xml:
     defaults: { _controller: ISICBundle:XML:generateXML } 
 search_xml:
     path:     /search_xml
-    defaults: { _controller: ISICBundle:Archive:searchXML }       
+    defaults: { _controller: ISICBundle:Archive:searchXML }   
+get_xml:
+    path:     /get_xml/{archiveId}
+    defaults: { _controller: ISICBundle:Archive:resultArchive }    
