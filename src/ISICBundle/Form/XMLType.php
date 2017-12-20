@@ -10,15 +10,28 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class XMLType extends AbstractType
 {   
+    protected $currentDate;
+    protected $yesterdayDate; 
+    
+    public function __construct(){
+	
+       $this->currentDate = new \DateTime('today');
+       $this->yesterdayDate = new \DateTime();
+       $this->yesterdayDate->add(\DateInterval::createFromDateString('yesterday'));
+
+    }
+	
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('generateDateFrom', 'date', array(
-                'label' =>"XML за качените от дата:"
+                'label' =>"XML за качените от дата:",
+		'data'  => $this->yesterdayDate,
                 ))
             ->add('generateDateTo', 'date', array(
-                'label' =>" до дата включително:"
+                'label' =>" до дата включително:",
+		'data'  => $this->currentDate,
                 ))
            ->add('save', 'submit', array(
                 'label' =>  "Търсене",

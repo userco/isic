@@ -54,6 +54,11 @@ class XMLController extends Controller
     $gsmSanitized = preg_replace('/^\+359/', '0', $gsmSanitized);
     $gsmSanitized = preg_replace('/^00359/', '0', $gsmSanitized);
     //$gsmSanitized = preg_replace('.', '', $gsmSanitized);
+    $first_char = mb_substr($gsmSanitized, 0, 1);
+    
+    if($first_char != "0")
+        $gsmSanitized = "0".$gsmSanitized;
+   
     return $gsmSanitized;
 }
     private function normalize_name($name) {
@@ -95,10 +100,12 @@ function normalize_date($date) {
         }
         $log = "";
         $directory = $this->container->getParameter('log_path');
-        $f1 = $directory . "/log-" . time() . '.csv';
+        $generateDate =  new DateTime();
+               
+        $f1 = $directory . "/log-" . $generateDate->format('Y-m-d_H:i') . '.csv';
         $handle = fopen($f1, 'w');
 
-        $headers = 'Име, ЕГН, Рождена дата, Факултет, Факултетен номер, Специалност, Телефон, Имейл, Чип на картата, Библиотечен номер, Баркод, Тип карта,Грешки'. "\r\n";   
+        $headers = 'Име, ЕГН, Рождена дата, Факултет, Факултетен номер, Специалност, Телефон, Имейл, Чип на картата, Библиотечен номер, Баркод, Тип карта, Статус, Грешки'. "\r\n";   
 
         fwrite($handle, $headers);
 
@@ -128,22 +135,25 @@ function normalize_date($date) {
                 $isic->setIsPublished(1);
                 $VarEmail = $isic->getEmail();
                 $VarPhoneNumber = $isic->getPhoneNumber();
+                $VarPhoneNumber = $this->normalize_phone($VarPhoneNumber);
+                $susi_names = $susi_record->getName();
+                $susi_names = $this->normalize_name($susi_names);
 
-                if($susi_record->getName()!=$this->normalize_name($isic->getNames())){
+                if($susi_names != $isic->getNames()){
                     //$isic->setIsPublished(1);
-                    $isic->setStatus("WARNING");
+                    $isic->setStatus("ERROR");
                      $log .= "Имена: - СУСИ са ".$susi_record->getName().";";
                      
                 }
                 if($susi_record->getFaculty()!=$isic->getIDWFacultyBG()){
                     //$isic->setIsPublished(1);
-                    $isic->setStatus("WARNING");
+                    $isic->setStatus("ERROR");
                      $log .= "Фaкултет - СУСИ е ".$susi_record->getFaculty().";";
                      
                 }
                 if($susi_record->getFacultyNumber()!=$isic->getIDWFacultyNumber()){
                     //$isic->setIsPublished(1);
-                    $isic->setStatus("WARNING");
+                    $isic->setStatus("ERROR");
                      $log .= "Фaкултетният номер - СУСИ е ".$susi_record->getFacultyNumber().";";
                      
                 }
@@ -153,15 +163,17 @@ function normalize_date($date) {
                      $log .= "Рождена дата - СУСИ е ".$susi_record->getBirthDate().";";
                      
                 }
-                if($susi_record->getEmail()!=$VarEmail){
+                if($susi_record->getEmail() && $susi_record->getEmail()!=$VarEmail){
                     //$isic->setIsPublished(1);
                     $isic->setStatus("WARNING");
                      $log .= " Email - СУСИ  е ".$VarEmail.";";
                      
                      
                 }
+                $susi_phone = $susi_record->getPhoneNumber();
+                $susi_phone = $this->normalize_phone($susi_phone);
 
-                if($susi_record->getPhoneNumber()!=$this->normalize_phone($VarPhoneNumber)){
+                if($susi_phone!=$VarPhoneNumber){
                     
                     //$isic->setIsPublished(1);
                     $isic->setStatus("WARNING");
@@ -187,10 +199,13 @@ function normalize_date($date) {
             $address_city = $susi_record->getAddressCity();
             $address_street = $susi_record->getAddressStreet();
             $secondPhone = "+";
-            if($susi_record->getPhoneNumber()!=$this->normalize_phone($VarPhoneNumber)){
-                $secondPhone = $susi_record->getPhoneNumber();
+
+
+            if($susi_phone!=$VarPhoneNumber){
+                $secondPhone = $susi_phone;
             }
             $postCode = ($susi_record->getPostCode())? $susi_record->getPostCode(): "+";
+            if($isic->getStatus()=="ERROR"){
             $xml .= "<patron-record>
                     <z303>
                     <match-id-type>00</match-id-type>
@@ -278,26 +293,36 @@ function normalize_date($date) {
                     </patron-record>
                     ";
 }
+}
 if($isic->getStatus()=="ERROR")
 $errorCount++;
 if($isic->getStatus()=="WARNING")
 $warningCount++;
 if($isic->getStatus()=="OK")
 $okCount++;
+$date1 = $isic->getBirthdate();
+$array =  array();
+$array = explode("-",$date1 );
+
+$year = $array[0];
+$month= $array[1];
+$day = $array[2];
+//list($year, $month, $day) = split('[/.-]', $date1);///new \DateTime($isic->getBirthdate());
                     $out = array(
 
                 $Names,
                 $egn,
-                $isic->getBirthdate(),
+                $month."/".$day."/".$year,
                 $isic->getIDWFacultyBg(),
                 $isic->getIDWFacultyNumber(),
                 $isic->getSpecialty(),
-                $isic->getPhoneNumber(),
+                $VarPhoneNumber,
                 $isic->getEmail(),
                 $isic->getChipNumber(),
                 $isic->getIDWLID(),
                 $isic->getIDWBarCodeInt(),
                 $isic->getCardType()->getName(),
+                $isic->getStatus(),
                 $log
             );
 
@@ -307,19 +332,22 @@ $okCount++;
         }
                 $xml .= "</p-file-20>";
                 $fs = new \Symfony\Component\Filesystem\Filesystem();
-                $fs->dumpFile($this->container->getParameter('path').'/xml.xml', $xml);
+                $xmlFileName = $this->container->getParameter('path').'/xml-'.$generateDate->format('Y-m-d_H:i:s').'.xml';
+                $fs->dumpFile($xmlFileName, $xml);
                 //}
                 $errors = 'ERRORS(Записи - не са включени в XML файла): '.$errorCount.',
                            WARNINGS(Записи, включени в XML файла)'.$warningCount. ',
                             OK (Записи, включени в XML файла)'.$okCount;
                 $fs3 = new \Symfony\Component\Filesystem\Filesystem();
-                $fs3->dumpFile($this->container->getParameter('log_path').'/errors.txt', $errors);
+                $errorFileName = $this->container->getParameter('log_path').'/errors-'.$generateDate->format('Y-m-d_H:i').'.txt';
+                $fs3->dumpFile($errorFileName, $errors);
                 
             
                
 //}
                 $zip = new \ZipArchive();
-                $zipName0 = 'Documents-'.time().".zip";
+               // $generateDate =  new DateTime();
+                $zipName0 = 'Documents-'.$generateDate->format('Y-m-d_H:i:s').".zip";
                 $zipName = $this->container->getParameter('zip_path').'/'.$zipName0;
                 $zip->open($zipName,  \ZipArchive::CREATE);
                 
@@ -328,12 +356,12 @@ $okCount++;
                 $f3= $this->container->getParameter('log_path').'/errors.txt';
 
                 $zip->addFromString(basename($f1),  file_get_contents($f1));
-                $zip->addFromString(basename($f2),  file_get_contents($f2));
-                $zip->addFromString(basename($f3),  file_get_contents($f3));  
+                $zip->addFromString(basename($xmlFileName),  file_get_contents($xmlFileName));
+                $zip->addFromString(basename($errorFileName),  file_get_contents($errorFileName));  
                 $zip->close();
 
                 $archive = new \ISICBundle\Entity\Archive();
-                $generateDate =  new DateTime();
+                
                 $archive->setGenerateDate($generateDate->format('Y-m-d'));
                 $archive->setArchiveName($zipName0);
                 $em->persist($archive);
