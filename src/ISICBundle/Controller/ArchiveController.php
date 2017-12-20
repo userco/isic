@@ -38,46 +38,27 @@ class ArchiveController extends Controller
 
             $dateFrom = $form->get('generateDateFrom')->getData();
             $dateTo = $form->get('generateDateTo')->getData();
-           
+
+            $dateFrom = $dateFrom->format('Y-m-d');
+            $dateTo = $dateTo->format('Y-m-d');
+           //var_dump($dateFrom);
+          // die();
             $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
                 'SELECT a
                 FROM ISICBundle:Archive a
                 WHERE a.generateDate >= :dateFrom
-                AND  a.generateDate <= :dateTo'
+                   AND  a.generateDate <= :dateTo
+                '
             )->setParameter('dateFrom', $dateFrom)
              ->setParameter('dateTo', $dateTo);
 
             $archives = $query->getResult();
 
     	   
-            // $dataPackage = $this->container->getParameter('archives').'/archives-'.time().".zip";
-            // $zip = new \ZipArchive();
-            // $zip->open($dataPackage,  \ZipArchive::CREATE);
-            // $zipName = "";
-
-            // foreach($archives as $ar){
-            //     // die();
-            //    // if($ar->getGenerateDate()==$d){
-            //     $zipName1 = $ar->getArchiveName();
-            //    // var_dump($ar->getGenerateDate());
-            //     // die();
-            //     $zipName = $this->container->getParameter('zip_path').'/'.$zipName1;
-
-            //    // $zip->open($dataPackage,  \ZipArchive::CREATE);
-            //     $zip->addFromString(basename($zipName),  file_get_contents($zipName));
-            // //}  
-            // }
-
-            // $zip->close();
-            // if(file_exists($zipName)){
-            // $response = new BinaryFileResponse($dataPackage);
-            // $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
-            
-            // return $response;
+           
         if(!$archives){
                 $session = new Session();
-                //$session->start();
                 $session->getFlashBag()->add('error', 'Данни между тези дати не са качвани.');
             }
         }
