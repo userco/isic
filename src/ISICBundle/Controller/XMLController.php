@@ -58,7 +58,7 @@ class XMLController extends Controller
     
     if($first_char != "0")
         $gsmSanitized = "0".$gsmSanitized;
-   
+
     return $gsmSanitized;
 }
     private function normalize_name($name) {
@@ -163,21 +163,28 @@ function normalize_date($date) {
                      $log .= "Рождена дата - СУСИ е ".$susi_record->getBirthDate().";";
                      
                 }
-                if($susi_record->getEmail() && $susi_record->getEmail()!=$VarEmail){
+                $susi_email = $susi_record->getEmail();
+
+                if($susi_email !=NULL && $susi_email!=$VarEmail){
                     //$isic->setIsPublished(1);
                     $isic->setStatus("WARNING");
-                     $log .= " Email - СУСИ  е ".$VarEmail.";";
+                     $log .= " Email - СУСИ  е ".$susi_email.";";
                      
+                     if(!$VarEmail)
+                        $VarEmail = ($susi_email)?$susi_email:"+";
                      
                 }
                 $susi_phone = $susi_record->getPhoneNumber();
                 $susi_phone = $this->normalize_phone($susi_phone);
 
-                if($susi_phone!=$VarPhoneNumber){
+                if($susi_phone && $susi_phone!=$VarPhoneNumber){
+                    
                     
                     //$isic->setIsPublished(1);
                     $isic->setStatus("WARNING");
-                     $log .= "Телефон - СУСИ е ".$VarPhoneNumber.";";
+                     $log .= "Телефон - СУСИ е ".$susi_phone.";";
+                     if(!$VarPhoneNumber)
+                        $VarPhoneNumber = ($susi_phone)?$susi_phone:"+";
                 }
                 if($isic->getStatus()!="ERROR" && $isic->getStatus()!= "WARNING")
                         $isic->setStatus("OK"); 
