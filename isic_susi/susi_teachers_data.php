@@ -16,7 +16,7 @@
 				pd.FullName Name,
                 pd.PersonalNumber EGN,
                 convert(varchar(10), pd.BirthDate, 121) BirthDate,
-                com1.Number GSM,
+             	com1.Number GSM,
                com2.Number Email,
               ad.AddressText AddressStreet,
                 CASE WHEN pd.Sex>0 THEN 'F' ELSE 'M' END GenderName,
@@ -25,16 +25,15 @@
 
 FROM [PersonData] as pd inner join [Teachers] as t on
 pd.[PersonData_ID]=t.[PersonData_ID]
-                                        inner join  [Addresses] as ad on ad.PersonData_ID=t.PersonData_ID
-                                          inner join  [Cities] as c on c.City_ID=ad.City_ID
-                                        inner join  [AddressTypes] as adt on ad.AddressType_ID =
-adt.AddressType_ID and adt.Permanent=1
-                                       left  join  [Staff] as s on s.PersonData_ID=t.PersonData_ID and
-s.ByMainContract=1
-                                    left join  [Communications] as com1 on
-com1.PersonData_ID=t.PersonData_ID and com1.CommunicationType_ID=2
-                     left join  [Communications] as com2 on
-com2.PersonData_ID=t.PersonData_ID and com2.CommunicationType_ID=3";
+                                       left join  [Addresses] as ad on ad.PersonData_ID=t.PersonData_ID
+                                      left join  [Cities] as c on c.City_ID=ad.City_ID
+                                      -- left join  [AddressTypes] as adt on ad.AddressType_ID =
+--adt.AddressType_ID and adt.Permanent=1
+                                    ---  left  join  [Staff] as s on s.PersonData_ID=t.PersonData_ID and s.ByMainContract=1--
+                                  left join  [Communications] as com1 on
+com1.PersonData_ID=pd.PersonData_ID and com1.CommunicationType_ID=2
+               left join  [Communications] as com2 on
+com2.PersonData_ID=pd.PersonData_ID and com2.CommunicationType_ID=3";
 	$susi_info = array();
 	$query2 = $link->prepare($querystr);
 	$query2->execute(array());//$egn));
@@ -65,8 +64,8 @@ foreach($susi_info as $row){
     "birthDate" => $row['BirthDate'],
      "faculty" => NULL,//$row['Faculty'],
     "facultyNumber" => NULL, //$row['FacultyNumber'],
-    "phoneNumber" => $row['GSM'],
-    "email" => $row['Email'],
+    "phoneNumber" => NULL,//$row['GSM'],
+    "email" => NULL,//$row['Email'],
     "genderName" => $row['GenderName'],
     "addressCity" =>$row['cityname'],
     "addressStreet" => $row['AddressStreet'],
