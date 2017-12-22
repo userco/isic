@@ -25,11 +25,12 @@
 
 FROM [PersonData] as pd inner join [Teachers] as t on
 pd.[PersonData_ID]=t.[PersonData_ID]
+--inner  join  [Staff] as s on s.PersonData_ID=t.PersonData_ID and s.ByMainContract=1
                                        left join  [Addresses] as ad on ad.PersonData_ID=t.PersonData_ID
                                       left join  [Cities] as c on c.City_ID=ad.City_ID
                                       -- left join  [AddressTypes] as adt on ad.AddressType_ID =
 --adt.AddressType_ID and adt.Permanent=1
-                                    ---  left  join  [Staff] as s on s.PersonData_ID=t.PersonData_ID and s.ByMainContract=1--
+                                    
                                   left join  [Communications] as com1 on
 com1.PersonData_ID=pd.PersonData_ID and com1.CommunicationType_ID=2
                left join  [Communications] as com2 on
@@ -64,8 +65,8 @@ foreach($susi_info as $row){
     "birthDate" => $row['BirthDate'],
      "faculty" => NULL,//$row['Faculty'],
     "facultyNumber" => NULL, //$row['FacultyNumber'],
-    "phoneNumber" => NULL,//$row['GSM'],
-    "email" => NULL,//$row['Email'],
+    "phoneNumber" => $row['GSM'],
+    "email" => $row['Email'],
     "genderName" => $row['GenderName'],
     "addressCity" =>$row['cityname'],
     "addressStreet" => $row['AddressStreet'],
