@@ -159,7 +159,7 @@ function normalize_date($date) {
                 }
                 if($susi_record->getBirthDate()!=$isic->getBirthdate()){
                     //$isic->setIsPublished(1);
-                    $isic->setStatus("WARNING");
+                    $isic->setStatus("ERROR");
                      $log .= "Рождена дата - СУСИ е ".$susi_record->getBirthDate().";";
                      
                 }
@@ -186,6 +186,11 @@ function normalize_date($date) {
                      if(!$VarPhoneNumber)
                         $VarPhoneNumber = ($susi_phone)?$susi_phone:"+";
                 }
+            $VarFacultyName = $susi_record->getFaculty();
+
+            
+            $VarFacultyNumber = $susi_record->getFacultyNumber();
+            
                 if($isic->getStatus()!="ERROR" && $isic->getStatus()!= "WARNING")
                         $isic->setStatus("OK"); 
                  //Проверка за трите имена на студента
@@ -199,12 +204,11 @@ function normalize_date($date) {
             // $VarEmail = $isic->getEmail();
             // $VarPhoneNumber = $isic->getPhoneNumber();
             $VarBarCode = $isic->getIDWBarCodeInt();
-            $VarFacultyName = $susi_record->getFaculty();
-            $VarFacultyNumber = $susi_record->getFacultyNumber();
+            
             $birthdate = $isic->getBirthDate();
             $gender =$susi_record->getGenderName();
-            $address_city = $susi_record->getAddressCity();
-            $address_street = $susi_record->getAddressStreet();
+            $address_city = ($susi_record->getAddressCity())?$susi_record->getAddressCity(): "+" ;
+            $address_street = ($susi_record->getAddressStreet())?$susi_record->getAddressStreet(): "+";
             $secondPhone = "+";
 
 

@@ -63,7 +63,7 @@ class ImportController extends Controller
                 die('Error loading file "' . pathinfo($inputFileName, PATHINFO_BASENAME) . '": ' . $e->getMessage());
             }
 
-            $sheet = $objPHPExcel->getSheet(3);
+            $sheet = $objPHPExcel->getSheet(0);
             $highestRow = $sheet->getHighestRow();
             $highestColumn = $sheet->getHighestColumn();
 
