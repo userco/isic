@@ -142,27 +142,27 @@ function normalize_date($date) {
                 if($susi_names != $isic->getNames()){
                     //$isic->setIsPublished(1);
                     $isic->setStatus("ERROR");
-                     $log .= "Имена: - СУСИ са ".$susi_record->getName().";";
+                     $log .= " ERROR: Имена: - СУСИ са ".$susi_record->getName().";";
                      
                 }
                 $susi_faculty = $susi_record->getFaculty();
                 if($susi_faculty && $susi_faculty!=$isic->getIDWFacultyBG()){
                     //$isic->setIsPublished(1);
                     $isic->setStatus("ERROR");
-                     $log .= "Фaкултет - СУСИ е ".$susi_record->getFaculty().";";
+                     $log .= " ERROR: Фaкултет - СУСИ е ".$susi_record->getFaculty().";";
                      
                 }
                 $susi_faculty_number = $susi_record->getFacultyNumber();
                 if($susi_faculty_number && $susi_faculty_number !=$isic->getIDWFacultyNumber()){
                     //$isic->setIsPublished(1);
                     $isic->setStatus("ERROR");
-                     $log .= "Фaкултетният номер - СУСИ е ".$susi_record->getFacultyNumber().";";
+                     $log .= " ERROR: Фaкултетният номер - СУСИ е ".$susi_record->getFacultyNumber().";";
                      
                 }
                 if($susi_record->getBirthDate()!=$isic->getBirthdate()){
                     //$isic->setIsPublished(1);
                     $isic->setStatus("ERROR");
-                     $log .= "Рождена дата - СУСИ е ".$susi_record->getBirthDate().";";
+                     $log .= " ERROR: Рождена дата - СУСИ е ".$susi_record->getBirthDate().";";
                      
                 }
                 $susi_email = $susi_record->getEmail();
