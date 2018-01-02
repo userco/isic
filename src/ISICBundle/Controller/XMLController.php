@@ -145,13 +145,15 @@ function normalize_date($date) {
                      $log .= "Имена: - СУСИ са ".$susi_record->getName().";";
                      
                 }
-                if($susi_record->getFaculty()!=$isic->getIDWFacultyBG()){
+                $susi_faculty = $susi_record->getFaculty();
+                if($susi_faculty && $susi_faculty!=$isic->getIDWFacultyBG()){
                     //$isic->setIsPublished(1);
                     $isic->setStatus("ERROR");
                      $log .= "Фaкултет - СУСИ е ".$susi_record->getFaculty().";";
                      
                 }
-                if($susi_record->getFacultyNumber()!=$isic->getIDWFacultyNumber()){
+                $susi_faculty_number = $susi_record->getFacultyNumber();
+                if($susi_faculty_number && $susi_faculty_number !=$isic->getIDWFacultyNumber()){
                     //$isic->setIsPublished(1);
                     $isic->setStatus("ERROR");
                      $log .= "Фaкултетният номер - СУСИ е ".$susi_record->getFacultyNumber().";";
@@ -166,8 +168,8 @@ function normalize_date($date) {
                 $susi_email = $susi_record->getEmail();
 
                 if($susi_email !=NULL && $susi_email!=$VarEmail){
-                    //$isic->setIsPublished(1);
-                    $isic->setStatus("WARNING");
+                    if(!$isic->getStatus())
+                        $isic->setStatus("WARNING");
                      $log .= " Email - СУСИ  е ".$susi_email.";";
                      
                      if(!$VarEmail)
@@ -177,8 +179,9 @@ function normalize_date($date) {
                 $susi_phone = $susi_record->getPhoneNumber();
                 $susi_phone = $this->normalize_phone($susi_phone);
 
-                if($susi_phone && $susi_phone!=$VarPhoneNumber){
-                    
+                if( $susi_phone && strlen($susi_phone) == 10  && $susi_phone!=$VarPhoneNumber){
+                    if(!$isic->getStatus())
+                        $isic->setStatus("WARNING");
                     
                     //$isic->setIsPublished(1);
                     $isic->setStatus("WARNING");
