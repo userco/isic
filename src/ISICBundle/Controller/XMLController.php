@@ -215,7 +215,7 @@ function normalize_date($date) {
                 $secondPhone = "+";
 
 
-                if($susi_phone!=$VarPhoneNumber){
+                if($susi_phone!=$VarPhoneNumber && $susi_phone && strlen($susi_phone)==10){
                     $secondPhone = $susi_phone;
                 }
                 $postCode = ($susi_record->getPostCode())? $susi_record->getPostCode(): "+";
