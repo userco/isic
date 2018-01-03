@@ -5,7 +5,7 @@ use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use ISICBundle\Entity\Permission;
 use ISICBundle\Entity\Card;
-
+use ISICBundle\Entity\User;
 
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -74,6 +74,15 @@ class LoadPermissionData extends AbstractFixture implements OrderedFixtureInterf
             $manager->flush();
             
         }
+		
+	$user = new User();
+	$user->setUsername("test");
+	$user->setPassword("test");
+	$user->setEmail("test@test.bg");
+	$user->setIsActive("1");
+
+	$manager->persist($user);
+	$manager->flush();
 
     } 
 
