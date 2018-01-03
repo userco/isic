@@ -6,7 +6,8 @@ use Doctrine\Common\Persistence\ObjectManager;
 use ISICBundle\Entity\Permission;
 use ISICBundle\Entity\Card;
 use ISICBundle\Entity\User;
-
+use ISICBundle\Entity\Role;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -24,6 +25,12 @@ class LoadPermissionData extends AbstractFixture implements OrderedFixtureInterf
      * @var ContainerInterface
      */
     private $container;
+// private $encoder;
+
+// public function setEncoder(UserPasswordEncoderInterface $encoder=null)
+// {
+//     $this->encoder = $encoder;
+// }
 
     public function setContainer(ContainerInterface $container = null)
     {
@@ -75,15 +82,31 @@ class LoadPermissionData extends AbstractFixture implements OrderedFixtureInterf
             
         }
 		
+    $permissions = $em->getRepository("ISICBundle\Entity\Permission")->findAll();
+    $role = new Role();
+    $role->setName("superadmin");
+    foreach($permissions as $perm){
+    
+    $role->addPermission($perm);
+
+
+    }
+    $manager->persist($role);
+    $manager->flush();
+    
 	$user = new User();
 	$user->setUsername("test");
-	$user->setPassword("test");
+	$password = $this->container->get('security.password_encoder')
+                ->encodePassword($user, "test");
+        $user->setPassword($password);
 	$user->setEmail("test@test.bg");
 	$user->setIsActive("1");
+	$user->addUserRole($role);
 
 	$manager->persist($user);
 	$manager->flush();
-
+	
+	
     } 
 
     public function getOrder(){

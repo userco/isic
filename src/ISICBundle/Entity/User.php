@@ -147,7 +147,7 @@ class User implements UserInterface, \Serializable
     {
         return $this->isActive;
     }
-    public function addUserRole(ISICBundle\Entity\Role $role)
+    public function addUserRole(Role $role)
     {
         $this->userRoles[] = $role;
     }
