@@ -112,7 +112,7 @@ function normalize_date($date) {
         $xml = "<?xml version='1.0'?>
                     <p-file-20>";
         foreach($isics as $isic){
-            $VarIdNumber = $isic->getIDWLIDBack();
+            $VarIdNumber = $isic->getIDWLID();
             $Names = $isic->getNames();
             $egn = $isic->getEGN();
 
@@ -187,7 +187,7 @@ function normalize_date($date) {
                     $isic->setStatus("WARNING");
                      $log .= "Телефон - СУСИ е ".$susi_phone.";";
                      if(!$VarPhoneNumber)
-                        $VarPhoneNumber = ($susi_phone)?$susi_phone:"+";
+                        $VarPhoneNumber = ($susi_phone && strlen($susi_phone)==10)?$susi_phone:"+";
                 }
                 $VarFacultyName = $susi_record->getFaculty();
 
