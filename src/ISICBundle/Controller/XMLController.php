@@ -382,7 +382,7 @@ $day = $array[2];
                 $em->persist($archive);
                 $em->flush();
                 
-                if(file_exists($f2)){
+                if(file_exists($xmlFileName)){
                  $response = new BinaryFileResponse($zipName);
                  $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
                
