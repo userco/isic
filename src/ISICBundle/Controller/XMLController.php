@@ -196,8 +196,10 @@ function normalize_date($date) {
                 
                 $VarFacultyNumber = $susi_record->getFacultyNumber();
                 $facultyData = $VarFacultyName.", ".$VarFacultyNumber;
-                if($isic->getCardType()->getId()==4)
-                    $facultyData = ($VarFacultyName)? $VarFacultyName: $isic->getIDWFacultyBG();
+                if($isic->getCardType()->getId()==4){
+
+                        $facultyData = $VarFacultyName;
+                }
                 if($isic->getStatus()!="ERROR" && $isic->getStatus()!= "WARNING")
                         $isic->setStatus("OK"); 
                  //Проверка за трите имена на студента
