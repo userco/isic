@@ -55,7 +55,7 @@
 	LEFT JOIN Communications com2   ON   com2.PersonData_ID=s.PersonData_ID AND com2.CommunicationType_ID = 3
 
 	WHERE
-		yearcat.[CategoryName] = 2017
+		yearcat.[Year] = 2017
 	--AND pd.PersonalNumber IN ( ? )";
 	$susi_info = array();
 	$query2 = $link->prepare($querystr);

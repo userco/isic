@@ -119,7 +119,7 @@ function normalize_date($date) {
             $em = $this->getDoctrine()->getManager();
             $VarEmail = $isic->getEmail();
                 $VarPhoneNumber = $isic->getPhoneNumber();
-                $VarPhoneNumber = $this->normalize_phone($VarPhoneNumber);
+                $VarPhoneNumber1 = $this->normalize_phone($VarPhoneNumber);
 
             $susi_record = $em->getRepository('ISICBundle:Susi')->findOneByEgn(array('egn'=>$egn));
             $log = "";
@@ -153,7 +153,7 @@ function normalize_date($date) {
                      
                 }
                 $susi_faculty_number = $susi_record->getFacultyNumber();
-                if($susi_faculty_number && $susi_faculty_number !=$isic->getIDWFacultyNumber()){
+                if($isic->getCardType()->getId()!=4 && $susi_faculty_number && $susi_faculty_number !=$isic->getIDWFacultyNumber()){
                     //$isic->setIsPublished(1);
                     $isic->setStatus("ERROR");
                      $log .= " ERROR: Фaкултетният номер - СУСИ е ".$susi_record->getFacultyNumber().";";
@@ -168,7 +168,7 @@ function normalize_date($date) {
                 $susi_email = $susi_record->getEmail();
 
                 if($susi_email !=NULL && $susi_email!=$VarEmail){
-                    if(!$isic->getStatus())
+                    if($isic->getStatus()!="ERROR")
                         $isic->setStatus("WARNING");
                      $log .= " Email - СУСИ  е ".$susi_email.";";
                      
@@ -179,21 +179,25 @@ function normalize_date($date) {
                 $susi_phone = $susi_record->getPhoneNumber();
                 $susi_phone = $this->normalize_phone($susi_phone);
 
-                if( $susi_phone && strlen($susi_phone) == 10  && $susi_phone!=$VarPhoneNumber){
-                    if(!$isic->getStatus())
+                
+
+                if( $susi_phone && strlen($susi_phone) == 10  && $susi_phone!=$VarPhoneNumber1){
+                    if($isic->getStatus()!="ERROR")
                         $isic->setStatus("WARNING");
+                     
+                
                     
-                    //$isic->setIsPublished(1);
-                    $isic->setStatus("WARNING");
                      $log .= "Телефон - СУСИ е ".$susi_phone.";";
-                     if(!$VarPhoneNumber)
+                     if(!$VarPhoneNumber1 || strlen($VarPhoneNumber1)!=10)
                         $VarPhoneNumber = ($susi_phone && strlen($susi_phone)==10)?$susi_phone:"+";
                 }
                 $VarFacultyName = $susi_record->getFaculty();
 
                 
                 $VarFacultyNumber = $susi_record->getFacultyNumber();
-                
+                $facultyData = $VarFacultyName.", ".$VarFacultyNumber;
+                if($isic->getCardType()->getId()==4)
+                    $facultyData = ($VarFacultyName)? $VarFacultyName: $isic->getIDWFacultyBG();
                 if($isic->getStatus()!="ERROR" && $isic->getStatus()!= "WARNING")
                         $isic->setStatus("OK"); 
                  //Проверка за трите имена на студента
@@ -240,7 +244,7 @@ function normalize_date($date) {
                         <z303-profile-id>+</z303-profile-id>
                         <z303-ill-library>ILL_CUL</z303-ill-library>
                         <z303-home-library>+</z303-home-library>
-                        <z303-note-1>".$VarFacultyName.", ". $VarFacultyNumber."</z303-note-1>
+                        <z303-note-1>".$facultyData."</z303-note-1>
                         <z303-note-2>20180930</z303-note-2>
                         <z303-ill-total-limit>0100</z303-ill-total-limit>
                         <z303-ill-active-limit>0100</z303-ill-active-limit>
@@ -331,7 +335,7 @@ $day = $array[2];
                 $isic->getIDWFacultyBg(),
                 $isic->getIDWFacultyNumber(),
                 $isic->getSpecialty(),
-                $VarPhoneNumber,
+                $isic->getPhoneNumber(),//$VarPhoneNumber1,
                 $isic->getEmail(),
                 $isic->getChipNumber(),
                 $isic->getIDWLID(),

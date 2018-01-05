@@ -21,10 +21,13 @@
               ad.AddressText AddressStreet,
                 CASE WHEN pd.Sex>0 THEN 'F' ELSE 'M' END GenderName,
                ad.PostCode postcode,
-               c.CityName cityname
+               c.CityName cityname,
+               teachercat.Abrv Faculty
 
 FROM [PersonData] as pd inner join [Teachers] as t on
 pd.[PersonData_ID]=t.[PersonData_ID]
+inner join TeachersCategories as tc on t.Teacher_ID = tc.Teacher_ID
+inner join Categories as teachercat on tc.Category_ID = teachercat.Category_ID and teachercat.CategoryType_ID=2
 --inner  join  [Staff] as s on s.PersonData_ID=t.PersonData_ID and s.ByMainContract=1
                                        left join  [Addresses] as ad on ad.PersonData_ID=t.PersonData_ID
                                       left join  [Cities] as c on c.City_ID=ad.City_ID
@@ -63,7 +66,7 @@ foreach($susi_info as $row){
    "name" => $row['Name'],
     "egn" => $row['EGN'],
     "birthDate" => $row['BirthDate'],
-     "faculty" => NULL,//$row['Faculty'],
+     "faculty" => $row['Faculty'],
     "facultyNumber" => NULL, //$row['FacultyNumber'],
     "phoneNumber" => $row['GSM'],
     "email" => $row['Email'],
