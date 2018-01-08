@@ -109,7 +109,7 @@ function normalize_date($date) {
 
         fwrite($handle, $headers);
 
-        $xml = "<?xml version='1.0'?>
+        $xml = "<?xml version='1.0' encoding='UTF-8'?>
                     <p-file-20>";
         foreach($isics as $isic){
             $VarIdNumber = $isic->getIDWLID();
@@ -207,14 +207,22 @@ function normalize_date($date) {
                 $em->flush();
             
                 if($Names){
-                $VarLastName = $this->getFirstName($Names);
-                $VarFirstName = $this->getLastName($Names);
+                $VarLastName = $this->getLastName($Names);
+                $VarFirstName = $this->getFirstName($Names);
                  }
                 // $VarEmail = $isic->getEmail();
                 // $VarPhoneNumber = $isic->getPhoneNumber();
                 $VarBarCode = $isic->getIDWBarCodeInt();
                 
-                $birthdate = $isic->getBirthDate();
+                
+                $date1 = $isic->getBirthdate();
+                $array =  array();
+                $array = explode("-",$date1 );
+
+                $year = $array[0];
+                $month= $array[1];
+                $day = $array[2];
+                $birthdate = $year.$month.$day;
                 $gender =$susi_record->getGenderName();
                 $address_city = ($susi_record->getAddressCity())?$susi_record->getAddressCity(): "+" ;
                 $address_street = ($susi_record->getAddressStreet())?$susi_record->getAddressStreet(): "+";
@@ -321,14 +329,7 @@ if($isic->getStatus()=="WARNING")
 $warningCount++;
 if($isic->getStatus()=="OK")
 $okCount++;
-$date1 = $isic->getBirthdate();
-$array =  array();
-$array = explode("-",$date1 );
 
-$year = $array[0];
-$month= $array[1];
-$day = $array[2];
-//list($year, $month, $day) = split('[/.-]', $date1);///new \DateTime($isic->getBirthdate());
                     $out = array(
 
                 $Names,
