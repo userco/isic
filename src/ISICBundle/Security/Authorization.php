@@ -41,10 +41,11 @@ class Authorization {
 	}
 
 	public function onKernelController(FilterControllerEvent $event) {
-		if (!$this->securityContext->getToken() instanceof AdminToken) {
+		
+		/*if (!$this->securityContext->getToken() instanceof AdminToken) {
 			return;
 		}
-		
+		*/
 		$routeId = $event->getRequest()->attributes->get('_route');
 		$route = $this->router->getRouteCollection()->get($routeId);
 		// if (!($route instanceof Route)) {
@@ -54,27 +55,34 @@ class Authorization {
 		// if (!preg_match('#^/admin/.*#', $route->getPath())) {
 		// 	return;
 		// }
-		$user = $this->securityContext->getToken()->getUser();
-		if (!($user instanceof AdminEntity\User)) {
+		$user = ($this->securityContext->getToken())?$this->securityContext->getToken()->getUser():null;
+		//var_dump($user);
+		//die();
+		/*if (!($user instanceof AdminEntity\User)) {
+			throw new AccessDeniedException('Вие нямате достъп до тази страница.');
 			return;
-		}
-		 if(!$user) //return;
-		 	throw new AccessDeniedException('Вие нямате достъп до тази страница.');
+		}*/
+		 if(!$user) return;
+		 	//throw new AccessDeniedException('Вие нямате достъп до тази страница.');
 		/* @var $user \ISICBundle\Entity\User */
 		if(!$this->isAllowed($user, $routeId)) {
+			
 			throw new AccessDeniedException('Вие нямате достъп до тази страница.');
 		}
 	}
 
 	public function isAllowed( $user, $routeId) {
+	
 
-		if (!($user instanceof AdminEntity\User)) {
-			die("Нямате достъп до тази страница");
-			return false;
-		}
 		if(in_array($routeId, static::$allowed, TRUE)) {
 			return true;
 		}
+
+		if (!($user instanceof AdminEntity\User)) {
+			//die("Нямате достъп до тази страница");
+			return false;
+		}
+		
 		//if($routeId == 'login') return true;
 		if (!$this->_queryCountRoute) {
 			$builder = $this->registry->getManager()->createQueryBuilder();
