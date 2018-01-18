@@ -115,7 +115,7 @@ public function generateXMLAction(Request $request)
 
     fwrite($handle, $headers);
 
-    $xml = "<?xml version='1.0' encoding='UTF-8'?>\r\n<p-file-20>\r\n";
+    $xml = "<?xml version='1.0'?>\r\n<p-file-20>\r\n";
 
     foreach($isics as $isic){
         $VarIdNumber = $isic->getIDWLID();
