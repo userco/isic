@@ -30,7 +30,7 @@ private function getFirstName($Names){
     
     $firstname="";
     if(count($name_array)==3)
-        $firstname = $name_array[0].", ".$name_array[1];
+        $firstname = $name_array[0]." ".$name_array[1];
    
     if(count($name_array)==2)
         $firstname = $name_array[0];
