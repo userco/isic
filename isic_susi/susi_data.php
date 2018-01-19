@@ -7,7 +7,7 @@
 			exit();
 	}
 	try{
-	$dbh = new PDO('mysql:dbname=isic6;host=localhost;charset=utf8', 'root', 'strongly');
+	$dbh = new PDO('mysql:dbname=isic7;host=localhost;charset=utf8', 'root', 'strongly');
 	} catch (PDOException $e) {
 			echo 'Connection failed: ' . $e->getMessage();
 			exit();
@@ -16,7 +16,7 @@
 			  pd.FullName Name, 
 			pd.PersonalNumber EGN, 
 			convert(varchar(10), pd.BirthDate, 121) BirthDate, 
-			faccat.CategoryName, 
+			faccat.CategoryName FAC, 
 			faccat.Abrv Faculty,
 			 
 			 
@@ -32,8 +32,7 @@
 
 	FROM       [dbo].[PersonData]         AS pd  
 	INNER JOIN [dbo].[Students]           AS s    ON pd.[PersonData_ID]            = s.[PersonData_ID]
-	INNER JOIN Addresses                  ad      ON ad.PersonData_ID = pd.PersonData_ID
-	inner join [dbo].[Cities]             AS ci         ON ci.[City_ID] = ad.[City_ID]
+	
 	INNER JOIN [dbo].[EducationPlans]     AS eduplan    ON eduplan.[EducationPlan_ID]    = s.[EducationPlan_ID]
 	INNER JOIN [dbo].[EducationalDegrees] AS edudeg     ON edudeg.[EducationalDegree_ID] = eduplan.[EducationalDegree_ID]
 	INNER JOIN [dbo].[EducationalForms]   AS eduform    ON eduform.[EducationalForm_ID]  = eduplan.[EducationalForm_ID]
@@ -47,12 +46,14 @@
 	INNER JOIN [dbo].[Categories]         AS kurscat    ON kurscat.[Category_ID]     = kurscl.[ParentCategory_ID] AND kurscat.[CategoryType_ID] = 7
 	INNER JOIN [dbo].[CategoryLinks]      AS yearcl     ON yearcl.[ChildCategory_ID] = kurscat.[Category_ID]
 	INNER JOIN [dbo].[Categories]         AS yearcat    ON yearcat.[Category_ID]     = yearcl.[ParentCategory_ID] AND yearcat.[CategoryType_ID] = 6 
-	INNER JOIN [dbo].[CategoryLinks]      AS edpcl      ON edpcl.[ChildCategory_ID]  = yearcat.[Category_ID]
-	INNER JOIN [dbo].[Categories]         AS edpcat     ON edpcat.[Category_ID]      = edpcl.[ParentCategory_ID] AND edpcat.[CategoryType_ID] = 28
-	INNER JOIN [dbo].[StudentsCategories] AS stucat4    ON stucat4.[Student_ID]      = s.[Student_ID]
-	INNER JOIN [dbo].[Categories]         AS spec    ON spec.[Category_ID]     = stucat4.[Category_ID] AND spec.[CategoryType_ID] = 5
+	--INNER JOIN [dbo].[CategoryLinks]      AS edpcl      ON edpcl.[ChildCategory_ID]  = yearcat.[Category_ID]
+	--INNER JOIN [dbo].[Categories]         AS edpcat     ON edpcat.[Category_ID]      = edpcl.[ParentCategory_ID] AND edpcat.[CategoryType_ID] = 28
+	--INNER JOIN [dbo].[StudentsCategories] AS stucat4    ON stucat4.[Student_ID]      = s.[Student_ID]
+	--INNER JOIN [dbo].[Categories]         AS spec    ON spec.[Category_ID]     = stucat4.[Category_ID] AND spec.[CategoryType_ID] = 5
 	LEFT JOIN Communications com1   ON   com1.PersonData_ID=s.PersonData_ID AND com1.CommunicationType_ID = 2
 	LEFT JOIN Communications com2   ON   com2.PersonData_ID=s.PersonData_ID AND com2.CommunicationType_ID = 3
+	LEFT JOIN Addresses                  ad      ON ad.PersonData_ID = pd.PersonData_ID
+	LEFT join [dbo].[Cities]             AS ci         ON ci.[City_ID] = ad.[City_ID]
 
 	WHERE
 		yearcat.[Year] = 2017
@@ -68,13 +69,14 @@
 // 		return $susi_info;
 // 	}
 // //}
+//var_dump($susi_info);
 foreach($susi_info as $row){
 	//, `faculty`, `faculty_number`, `email`, `phone_number`, 	
 	 	   // `address_city`, `address_street`, `egn`, `gender_name`)
-	 $statement = $dbh->prepare("INSERT INTO `susi`(`name`, `faculty`,`faculty_number`, `email`, `phone_number`, 	
+	 $statement = $dbh->prepare("INSERT INTO `susi`(`name`, `faculty`,`FAC`,`faculty_number`, `email`, `phone_number`, 	
 	 	    `address_city`, `address_street`, `egn`, `gender_name`, `post_code`, birth_date)
 
-	  VALUES(:name, :faculty, :facultyNumber, :email, :phoneNumber, :addressCity,  :addressStreet, :egn, :genderName, :postCode, :birthDate)");
+	  VALUES(:name, :faculty, :fac, :facultyNumber, :email, :phoneNumber, :addressCity,  :addressStreet, :egn, :genderName, :postCode, :birthDate)");
     // $name = $row['EGN'];
     // var_dump($name);
     // $statement->bindParam(':name1', $name);
@@ -90,12 +92,28 @@ foreach($susi_info as $row){
     "addressCity" =>$row['cityname'],
     "addressStreet" => $row['AddressStreet'],
     "postCode" => $row['postcode'],
+    "fac" => $row['FAC'],
     ));
 echo "\nPDOStatement::errorCode(): ";
 print $statement->errorCode();
 
 //));
-}
+}/*
 //var_dump(getSUSIdata('8810290702'));
-//var_dump(getSUSIdata('9608083801'));    //9711083225    9608083801
+//var_dump(getSUSIdata('9608083801'));
+   //9711083225    9608083801
+$sql = "select distinct(CategoryName), CategoryType_ID
+from Categories
+WHERE CategoryType_ID = 28
+
+";
+$query2 = $link->prepare($sql);
+$query2->execute(array());//$egn));
+$susi_info = $query2->fetchAll(PDO::FETCH_ASSOC);
+var_dump($susi_info);
+//return $susi_info;
+*/
+// 	}
+// //}
+
 ?>

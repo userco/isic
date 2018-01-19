@@ -136,25 +136,54 @@ public function generateXMLAction(Request $request)
             $facNumber = $isic->getIDWFacultyNumber();
             $fac       = $isic->getIDWFacultyBG();
             $birthdate = $isic->getBirthdate();
-
-            $susi_record_arr = $em->getRepository('ISICBundle:Susi')->findBy(array( 'faculty'=>$fac,'facultyNumber'=>$facNumber, 'birthDate' => $birthdate));
-            //$susi_record_arr = $em->getRepository('ISICBundle:Susi')->findBy(array('email'=>$VarEmail,'birthDate' => $birthdate));
+            $name      = $isic->getNames();
+            //$susi_record_arr = $em->getRepository('ISICBundle:Susi')->findBy(array( 'faculty'=>$fac,'facultyNumber'=>$facNumber, 'birthDate' => $birthdate));
+            $susi_record_arr = $em->getRepository('ISICBundle:Susi')->findBy(array('name'=>$name));//,'birthDate' => $birthdate));
             if($susi_record_arr)
                 $susi_record =$susi_record_arr[0];
             if(!$susi_record)
             {   
                 
                 $isic->setIsPublished(1);
-                $isic->setStatus("ERROR");
+                //$isic->setStatus("ERROR");
 
-                $log = "ERROR: Няма  чуждестранен студент с факултет: ".$fac. ", факултетен номер: ". $facNumber. " и дата на раждане: ".$birthdate. ".;";
+                //$log = "ERROR: Няма  чуждестранен студент с факултет: ".$fac. ", факултетен номер: ". $facNumber. " и дата на раждане: ".$birthdate. ".;";
 
-                 //$log = "ERROR: Няма  чуждестранен студент с email: ".$VarEmail. ", и дата на раждане: ".$birthdate. ".;";
+                 //$log = "ERROR: Няма  чуждестранен студент с имена: ".$name;//, и дата на раждане: ".$birthdate. ".;";
                     
-                    
+                 $susi_record_arr = $em->getRepository('ISICBundle:Susi')->findBy(array('faculty'=>"ЕФ"));//'facNumber' => $birthdate));
+                if($susi_record_arr){
+                    foreach($susi_record_arr as $susi_data){
+                        $fn = $susi_data->getFacultyNumber();
+                        if(strpos($fn, $facNumber))
+                            $susi_record = $susi_data;
+                    }
+                }    
+                if(!$susi_record)
+                    {   
+                        
+                        //$isic->setIsPublished(1);
+                        //$isic->setStatus("ERROR");
+
+                      //  $log = "ERROR: Няма  чуждестранен студент с факултет: ЕФ и  факултетен номер: ". $facNumber;// и дата на раждане: ".$birthdate. ".;";
+
+                         
+                $susi_record_arr = $em->getRepository('ISICBundle:Susi')->findBy(array( 'faculty'=>$fac,'facultyNumber'=>$facNumber, 'birthDate' => $birthdate));
+                if($susi_record_arr){
+                   $susi_record = $susi_record_arr[0];
+                }    
+                if(!$susi_record)
+                    {   
+                        
+                        $isic->setIsPublished(1);
+                        $isic->setStatus("ERROR");
+
+                        $log = "ERROR: Няма  чуждестранен студент с факултет: ".$fac. ", факултетен номер: ". $facNumber. " и дата на раждане: ".$birthdate. ".;";
+                }
+             
+                }
+            
             }
-
-
 
         }
 
