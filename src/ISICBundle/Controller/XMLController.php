@@ -114,14 +114,16 @@ public function generateXMLAction(Request $request)
     $headers = 'Име, ЕГН, Рождена дата, Факултет, Факултетен номер, Специалност, Телефон, Имейл, Чип на картата, Библиотечен номер, Баркод, Тип карта, Статус, Грешки'. "\r\n";   
 
     fwrite($handle, $headers);
-
+$test = 0;
     $xml = "<?xml version='1.0'?>\r\n<p-file-20>\r\n";
 
     foreach($isics as $isic){
         $VarIdNumber = $isic->getIDWLID();
         $Names = $isic->getNames();
         $egn = $isic->getEGN();
-
+        $erasym_flag = 0;
+        $foreigner_flag = 0;
+        
         $em = $this->getDoctrine()->getManager();
         $VarEmail = $isic->getEmail();
         $VarPhoneNumber = $isic->getPhoneNumber();
@@ -132,7 +134,7 @@ public function generateXMLAction(Request $request)
         $log = '';
 
         if($isic->getCardType()->getId()==5){
-
+            $foreigner_flag = 1;
             $facNumber = $isic->getIDWFacultyNumber();
             $fac       = $isic->getIDWFacultyBG();
             $birthdate = $isic->getBirthdate();
@@ -145,41 +147,37 @@ public function generateXMLAction(Request $request)
             {   
                 
                 $isic->setIsPublished(1);
-                //$isic->setStatus("ERROR");
-
-                //$log = "ERROR: Няма  чуждестранен студент с факултет: ".$fac. ", факултетен номер: ". $facNumber. " и дата на раждане: ".$birthdate. ".;";
-
-                 //$log = "ERROR: Няма  чуждестранен студент с имена: ".$name;//, и дата на раждане: ".$birthdate. ".;";
                     
-                 $susi_record_arr = $em->getRepository('ISICBundle:Susi')->findBy(array('faculty'=>"ЕФ"));//'facNumber' => $birthdate));
+                $susi_record_arr = $em->getRepository('ISICBundle:Susi')->findBy(array('faculty'=>"ЕФ"));
                 if($susi_record_arr){
                     foreach($susi_record_arr as $susi_data){
                         $fn = $susi_data->getFacultyNumber();
-                        if(strpos($fn, $facNumber))
+                        if(strpos($fn, $facNumber)){
+                            
                             $susi_record = $susi_data;
+                            $erasym_flag = 1;
+                            $test= $test + 1;
+                            
+                            break;
+                        }
+
                     }
                 }    
                 if(!$susi_record)
-                    {   
-                        
-                        //$isic->setIsPublished(1);
-                        //$isic->setStatus("ERROR");
+                {   
+                    
+                    $susi_record_arr = $em->getRepository('ISICBundle:Susi')->findBy(array( 'faculty'=>$fac,'facultyNumber'=>$facNumber, 'birthDate' => $birthdate));
+                    if($susi_record_arr){
+                       $susi_record = $susi_record_arr[0];
+                    }    
+                    if(!$susi_record)
+                        {   
+                            
+                            $isic->setIsPublished(1);
+                            $isic->setStatus("ERROR");
 
-                      //  $log = "ERROR: Няма  чуждестранен студент с факултет: ЕФ и  факултетен номер: ". $facNumber;// и дата на раждане: ".$birthdate. ".;";
-
-                         
-                $susi_record_arr = $em->getRepository('ISICBundle:Susi')->findBy(array( 'faculty'=>$fac,'facultyNumber'=>$facNumber, 'birthDate' => $birthdate));
-                if($susi_record_arr){
-                   $susi_record = $susi_record_arr[0];
-                }    
-                if(!$susi_record)
-                    {   
-                        
-                        $isic->setIsPublished(1);
-                        $isic->setStatus("ERROR");
-
-                        $log = "ERROR: Няма  чуждестранен студент с факултет: ".$fac. ", факултетен номер: ". $facNumber. " и дата на раждане: ".$birthdate. ".;";
-                }
+                            $log = "ERROR: Няма  чуждестранен студент с факултет: ".$fac. ", факултетен номер: ". $facNumber. " и дата на раждане: ".$birthdate. ".;";
+                    }
              
                 }
             
@@ -191,7 +189,7 @@ public function generateXMLAction(Request $request)
         else{
             $susi_record = $em->getRepository('ISICBundle:Susi')->findOneByEgn(array('egn'=>$egn));
         
-            $log = "";
+            //$log = "";
 
     
             if(!$susi_record)
@@ -211,29 +209,56 @@ public function generateXMLAction(Request $request)
             $susi_names = $susi_record->getName();
             $susi_names = $this->normalize_name($susi_names);
 
-            if($susi_names != $isic->getNames()){
+            if($susi_names != $isic->getNames() && $isic->getCardType()->getId()!=5){
                 $isic->setStatus("ERROR");
                 $log .= " ERROR: Имена: - СУСИ са ".$susi_record->getName().";";
                  
             }
+            elseif($susi_names != $isic->getNames() && $isic->getCardType()->getId()==5){
+                if($isic->getStatus()!="ERROR")
+                $isic->setStatus("WARNING");
+                $log .= " Имена: - СУСИ са ".$susi_record->getName().";";
+                 
+            }
             $susi_faculty = $susi_record->getFaculty();
-            if($susi_faculty && $susi_faculty!=$isic->getIDWFacultyBG()){
+            if($susi_faculty && $susi_faculty!=$isic->getIDWFacultyBG()&& $isic->getCardType()->getId()!=5){
                 
                 $isic->setStatus("ERROR");
                 $log .= " ERROR: Фaкултет - СУСИ е ".$susi_record->getFaculty().";";
                  
             }
+            else if($susi_faculty && $susi_faculty!=$isic->getIDWFacultyBG()&& $isic->getCardType()->getId()==5){
+                if($isic->getStatus()!="ERROR")
+                $isic->setStatus("WARNING");
+                $log .= " Фaкултет - СУСИ е ".$susi_record->getFaculty().";";
+                if($susi_faculty =="ЕФ")
+                    $erasym_flag = 1;
+                $test++;
+                 
+            }
             $susi_faculty_number = $susi_record->getFacultyNumber();
-            if($isic->getCardType()->getId()!=4 && $susi_faculty_number && $susi_faculty_number !=$isic->getIDWFacultyNumber()){
+            if($isic->getCardType()->getId()!=4 && $susi_faculty_number && $susi_faculty_number !=$isic->getIDWFacultyNumber()&& $isic->getCardType()->getId()!=5){
                 
                 $isic->setStatus("ERROR");
                 $log .= " ERROR: Фaкултетният номер - СУСИ е ".$susi_record->getFacultyNumber().";";
                  
             }
-            if($susi_record->getBirthDate()!=$isic->getBirthdate()){
+            else if($isic->getCardType()->getId()!=4 && $susi_faculty_number && $susi_faculty_number !=$isic->getIDWFacultyNumber()&& $isic->getCardType()->getId()==5){
+                if($isic->getStatus()!="ERROR")
+                $isic->setStatus("WARNING");
+                $log .= " Фaкултетният номер - СУСИ е ".$susi_record->getFacultyNumber().";";
+                 
+            }
+
+            if($susi_record->getBirthDate()!=$isic->getBirthdate()&& $isic->getCardType()->getId()!=5){
                 $isic->setStatus("ERROR");
                 $log .= " ERROR: Рождена дата - СУСИ е ".$susi_record->getBirthDate().";";
                  
+            }
+            else if($susi_record->getBirthDate()!=$isic->getBirthdate()&& $isic->getCardType()->getId()==5){
+                if($isic->getStatus()!="ERROR")
+                $isic->setStatus("WARNING");
+                $log .= "Рождена дата - СУСИ е ".$susi_record->getBirthDate().";";
             }
             $susi_email = $susi_record->getEmail();
 
@@ -265,7 +290,11 @@ public function generateXMLAction(Request $request)
 
                 
             $VarFacultyNumber = $susi_record->getFacultyNumber();
-            $facultyData = $VarFacultyName.", ".$VarFacultyNumber;
+            $facultyData = '';
+            if($erasym_flag == 0)
+                $facultyData = $VarFacultyName.", ".$VarFacultyNumber;
+            else if($erasym_flag == 1)
+                $facultyData = $isic->getIDWFacultyBG(). ", ".$isic->getIDWFacultyNumber(). ", Еразъм+";
             if($isic->getCardType()->getId()==4){
 
                     $facultyData = $VarFacultyName;
@@ -304,6 +333,7 @@ public function generateXMLAction(Request $request)
             $postCode = ($susi_record->getPostCode())? $susi_record->getPostCode(): "+";
 
             if($isic->getStatus()!="ERROR"){
+                //$test++;
                 $xml .= "   <patron-record>"."\r\n";
                 $xml .= "       <z303>\r\n";
                 $xml .= "           <match-id-type>00</match-id-type>\r\n";
@@ -422,6 +452,9 @@ public function generateXMLAction(Request $request)
     fputcsv($handle, $out, ","); 
         }   
     $xml .= "</p-file-20>";
+  
+  //var_dump($test);
+  //die();
     $fs = new \Symfony\Component\Filesystem\Filesystem();
     $xmlFileName = $this->container->getParameter('path').'/xml-'.$generateDate->format('Y-m-d_H:i:s').'.xml';
     $fs->dumpFile($xmlFileName, $xml);
