@@ -240,13 +240,13 @@ $test = 0;
             if($isic->getCardType()->getId()!=4 && $susi_faculty_number && $susi_faculty_number !=$isic->getIDWFacultyNumber()&& $isic->getCardType()->getId()!=5){
                 
                 $isic->setStatus("ERROR");
-                $log .= " ERROR: Фaкултетният номер - СУСИ е ".$susi_record->getFacultyNumber().";";
+                $log .= " ERROR: Фaкултетен номер - СУСИ е ".$susi_record->getFacultyNumber().";";
                  
             }
             else if($isic->getCardType()->getId()!=4 && $susi_faculty_number && $susi_faculty_number !=$isic->getIDWFacultyNumber()&& $isic->getCardType()->getId()==5){
                 if($isic->getStatus()!="ERROR")
                 $isic->setStatus("WARNING");
-                $log .= " Фaкултетният номер - СУСИ е ".$susi_record->getFacultyNumber().";";
+                $log .= " Фaкултетен номер - СУСИ е ".$susi_record->getFacultyNumber().";";
                  
             }
 
@@ -258,7 +258,7 @@ $test = 0;
             else if($susi_record->getBirthDate()!=$isic->getBirthdate()&& $isic->getCardType()->getId()==5){
                 if($isic->getStatus()!="ERROR")
                 $isic->setStatus("WARNING");
-                $log .= "Рождена дата - СУСИ е ".$susi_record->getBirthDate().";";
+                $log .= " Рождена дата - СУСИ е ".$susi_record->getBirthDate().";";
             }
             $susi_email = $susi_record->getEmail();
 
