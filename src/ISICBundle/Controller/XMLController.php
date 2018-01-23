@@ -152,6 +152,16 @@ $test = 0;
                 if($susi_record_arr){
                     foreach($susi_record_arr as $susi_data){
                         $fn = $susi_data->getFacultyNumber();
+                        $fac_n_arr = explode(" ",$fn);
+                        $fac_n = $fac_n_arr[0];
+                        if($fac_n == $facNumber){
+
+                            $susi_record = $susi_data;
+                            $erasym_flag = 1;
+                            //$test= $test + 1;
+                            
+                            break;
+                        }
                         if(strpos($fn, $facNumber)){
                             
                             $susi_record = $susi_data;
@@ -162,7 +172,48 @@ $test = 0;
                         }
 
                     }
-                }    
+                }   
+            if(!$susi_record)
+            {   
+                
+                $isic->setIsPublished(1);
+                    
+                $susi_record_arr = $em->getRepository('ISICBundle:Susi')->findBy(array('faculty'=>$fac));
+                if($susi_record_arr){
+                    foreach($susi_record_arr as $susi_data){
+                        $fn = $susi_data->getFacultyNumber();
+                        $fac_n_arr = explode(" ",$fn);
+                        $fac_n = $fac_n_arr[0];
+                        if($fac_n == $facNumber){
+
+                            $susi_record = $susi_data;
+                            $erasym_flag = 1;
+                            //$test= $test + 1;
+                            
+                            break;
+                        }
+                        if(strpos($fn, $facNumber)){
+                            
+                            $susi_record = $susi_data;
+                            $erasym_flag = 1;
+                            $test= $test + 1;
+                            
+                            break;
+                        }
+
+                    }
+                }
+                }  
+                if(!$susi_record)
+                {   
+                    
+                    $susi_record_arr = $em->getRepository('ISICBundle:Susi')->findBy(array( 'faculty'=>$fac,'facultyNumber'=>$facNumber));
+                    if($susi_record_arr){
+                       $susi_record = $susi_record_arr[0];
+                    }    
+                    
+             
+                }   
                 if(!$susi_record)
                 {   
                     
