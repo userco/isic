@@ -23,12 +23,17 @@ use DateTime;
 
 class XMLController extends Controller
 {
-
+private function my_mb_ucfirst($str) {
+    $str = mb_convert_case($str, MB_CASE_LOWER, "UTF-8"); 
+    $fc = mb_strtoupper(mb_substr($str, 0, 1));
+    return $fc.mb_substr($str, 1);
+}
 
 private function getFirstName($Names){
     $name_array = explode(' ', $Names);
     
     $firstname="";
+    if(count($name_array)<2) return $firstname;
     if(count($name_array)==3)
         $firstname = $name_array[0]." ".$name_array[1];
    
@@ -39,6 +44,8 @@ private function getFirstName($Names){
 
 private function getLastName($Names){
     $name_array = explode(' ', $Names);
+    $lastname = "";
+    if(count($name_array)<2) return $lastname;
     if(count($name_array)==3)
         $lastname = $name_array[2];
 
@@ -46,6 +53,27 @@ private function getLastName($Names){
     return $lastname;
 }
 
+private function normalizeName($Names){
+    $name_array = explode(' ', $Names);
+    $firstName = $name_array[0];
+    if(count($name_array)< 2)
+        return $this->my_mb_ucfirst($firstName); 
+    else{
+        if(count($name_array)== 2){
+            $lastName = $name_array[1];
+        
+        $name = $this->my_mb_ucfirst($firstName). " ". $this->my_mb_ucfirst($lastName);
+        return $name;
+    }
+    if(count($name_array)== 3){
+            $secondName = $name_array[1];
+            $lastName = $name_array[2];
+        $name = $this->my_mb_ucfirst($firstName). " ". $this->my_mb_ucfirst($secondName). " ". $this->my_mb_ucfirst($lastName);
+        return $name;
+    }
+    }
+    return;
+}
 private function getBirthDate($birthdate){
     $array = explode('/', $birthdate);
     $date_string = $array[2].$array[1].$array[0];
@@ -289,16 +317,20 @@ $test = 0;
             
             $susi_names = $susi_record->getName();
             $susi_names = $this->normalize_name($susi_names);
+            $susi_names = $this->normalizeName($susi_names);
+            $isic_names = $isic->getNames();
+            $isic_names = $this->normalize_name($isic_names);
+            $isic_names = $this->normalizeName($isic_names);
 
-            if($susi_names != $isic->getNames() && $isic->getCardType()->getId()!=5){
+            if($susi_names != $isic_names && $isic->getCardType()->getId()!=5){
                 $isic->setStatus("ERROR");
-                $log .= " ERROR: Имена: - СУСИ са ".$susi_record->getName().";";
+                $log .= " ERROR: Имена: - СУСИ са ".$susi_names.";";
                  
             }
-            elseif($susi_names != $isic->getNames() && $isic->getCardType()->getId()==5){
+            elseif($susi_names != $isic_names && $isic->getCardType()->getId()==5){
                 if($isic->getStatus()!="ERROR")
                 $isic->setStatus("WARNING");
-                $log .= " Имена: - СУСИ са ".$susi_record->getName().";";
+                $log .= " Имена: - СУСИ са ".$susi_names.";";
                  
             }
             $susi_faculty = $susi_record->getFaculty();
@@ -387,8 +419,8 @@ $test = 0;
             $em->flush();
         
             if($Names){
-                $VarLastName = $this->getLastName($Names);
-                $VarFirstName = $this->getFirstName($Names);
+                $VarLastName = $this->getLastName($susi_names);
+                $VarFirstName = $this->getFirstName($susi_names);
              }
             
             $VarBarCode = $isic->getIDWBarCodeInt();
