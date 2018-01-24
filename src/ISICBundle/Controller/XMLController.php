@@ -190,14 +190,27 @@ $test = 0;
                             
                             break;
                         }
-                        if(strpos($fn, $facNumber)){
+                        $length = strlen($facNumber);
+                        $fac_number_substr =substr($fn, 0, $length);
+
+                        if($fac_number_substr == $facNumber && $facNumber){
                             
+                           // die();
                             $susi_record = $susi_data;
                             $erasym_flag = 1;
                             $test= $test + 1;
                             
                             break;
                         }
+
+                        // if(strpos($fn, $facNumber)){
+                            
+                        //     $susi_record = $susi_data;
+                        //     $erasym_flag = 1;
+                        //     $test= $test + 1;
+                            
+                        //     break;
+                        // }
 
                     }
                 }   
@@ -208,11 +221,12 @@ $test = 0;
                     
                 $susi_record_arr = $em->getRepository('ISICBundle:Susi')->findBy(array('faculty'=>$fac));
                 if($susi_record_arr){
-                    foreach($susi_record_arr as $susi_data){
+                     foreach($susi_record_arr as $susi_data){
                         $fn = $susi_data->getFacultyNumber();
                         $fac_n_arr = explode(" ",$fn);
                         $fac_n = $fac_n_arr[0];
-                        if($fac_n == $facNumber){
+                        $length = strlen($facNumber);
+                        if($fac_n == $facNumber ){
 
                             $susi_record = $susi_data;
                             //$erasym_flag = 1;
@@ -220,13 +234,31 @@ $test = 0;
                             
                             break;
                         }
-                        if(strpos($fn, $facNumber)){
+                        $length = strlen($facNumber);
+                        $fac_number_substr =substr($fn, 0, $length);
+                        if($fac_number_substr == $facNumber && $facNumber && $length){
                             
                             $susi_record = $susi_data;
                             //$erasym_flag = 1;
                             $test= $test + 1;
                             
                             break;
+                        }
+                        if(strpos($fn, $facNumber)){
+                            $name =$this->normalizeName($name);
+                            $susi_name =$this->normalizeName($susi_name);
+                            $family_name = $this->getLastName($name);
+                            $first_name = $this->getFirstName($name);
+                            $susi_family_name = $this->getLastName($susi_name);
+                            $susi_first_name = $this->getFirstName($susi_name);
+                            
+                            if($family_name== $susi_family_name || $first_name==$susi_first_name){
+                            $susi_record = $susi_data;
+                            //$erasym_flag = 1;
+                            $test= $test + 1;
+                            
+                            break;
+                        }
                         }
 
                     }
@@ -237,13 +269,33 @@ $test = 0;
                     
                     $susi_record_arr = $em->getRepository('ISICBundle:Susi')->findBy(array('faculty'=>$fac,
                         //'facultyNumber'=>$facNumber, 
-                        'birthDate' => $birthdate));
+                       // 'birthDate' => $birthdate
+                ));
+                     $family_name = $this->getLastName($name);
+
                     if($susi_record_arr){
-                       $susi_record = $susi_record_arr[0];
+                      // $susi_record = $susi_record_arr[0];
+                        foreach($susi_record_arr as $susi_data){
+                        $susi_name = $susi_data->getName();
+                        $susi_family_name = $this->getLastName($susi_name);
+                        
+                        if($family_name == $susi_family_name){
+
+                            $susi_record = $susi_data;
+                            //$erasym_flag = 1;
+                            //$test= $test + 1;
+                            
+                            break;
+                        }
+                        
+
+                    }
+                
                     }    
                     
              
                 }   
+                
                 if(!$susi_record)
                 {   
                     $family_name = $this->getLastName($name);
