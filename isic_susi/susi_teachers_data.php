@@ -1,13 +1,13 @@
 <?php
 //function getSUSIdata($egn){
 	try{
-		$link = new PDO("sqlsrv:Server=62.44.109.144;Database=SU_STUDENTDATABASE", 'maria', '123456');
+		$link = new PDO("dblib:version=7.0;charset=UTF-8;host=62.44.109.144;dbname=SU_STUDENTDATABASE", 'maria', '123456');
 	} catch (PDOException $e) {
 			echo 'Connection failed: ' . $e->getMessage();
 			exit();
 	}
 	try{
-	$dbh = new PDO('mysql:dbname=isic6;host=localhost;charset=utf8', 'root', 'strongly');
+	$dbh = new PDO('mysql:dbname=isic8;host=localhost;charset=utf8', 'root', 'strongly');
 	} catch (PDOException $e) {
 			echo 'Connection failed: ' . $e->getMessage();
 			exit();
@@ -51,7 +51,7 @@ com2.PersonData_ID=pd.PersonData_ID and com2.CommunicationType_ID=3";
 
 
 		var_dump($susi_info);
-// //}
+
 foreach($susi_info as $row){
 	//, `faculty`, `faculty_number`, `email`, `phone_number`, 	
 	 	   // `address_city`, `address_street`, `egn`, `gender_name`)
