@@ -1,13 +1,13 @@
 <?php
 //function getSUSIdata($egn){
 	try{
-		$link = new PDO("dblib:version=7.0;charset=UTF-8;host=62.44.109.144;dbname=SU_STUDENTDATABASE", 'maria', '123456');
+		$link = new PDO("dblib:version=7.0;charset=UTF-8;host=192.168.96.130;dbname=SU_STUDENTDATABASE", 'cards_su', '@123$');
 	} catch (PDOException $e) {
 			echo 'Connection failed: ' . $e->getMessage();
 			exit();
 	}
 	try{
-	$dbh = new PDO('mysql:dbname=isic8;host=localhost;charset=utf8', 'root', 'strongly');
+	$dbh = new PDO('mysql:dbname=cards_uni_sofia_bg;host=192.168.96.112;charset=utf8', 'cards_uni_sofia_bg', 'neI1Ng4jJK3rvMod00Fmr85rs97Tlop2yze22_22');
 	} catch (PDOException $e) {
 			echo 'Connection failed: ' . $e->getMessage();
 			exit();

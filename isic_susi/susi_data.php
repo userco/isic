@@ -1,14 +1,14 @@
 <?php
 //function getSUSIdata($egn){
 	try{
-		//$link = new PDO("sqlsrv:Server=62.44.109.144;Database=SU_STUDENTDATABASE", 'maria', '123456');
-		$link = new PDO("dblib:version=7.0;charset=UTF-8;host=62.44.109.144;dbname=SU_STUDENTDATABASE", 'maria', '123456');
+		//$link = new PDO("sqlsrv:Server=192.168.96.130;Database=SU_STUDENTDATABASE", 'cards_su', '@123$');
+		$link = new PDO("dblib:version=7.0;charset=UTF-8;host=192.168.96.130;dbname=SU_STUDENTDATABASE", 'sa', '!@SF0220091');
 	} catch (PDOException $e) {
 			echo 'Connection failed: ' . $e->getMessage();
 			exit();
 	}
 	try{
-	$dbh = new PDO('mysql:dbname=isic7;host=localhost;charset=utf8', 'root', 'strongly');
+	$dbh = new PDO('mysql:dbname=cards_uni_sofia_bg;host=192.168.96.112;charset=utf8', 'cards_uni_sofia_bg', 'neI1Ng4jJK3rvMod00Fmr85rs97Tlop2yze22_22');
 	} catch (PDOException $e) {
 			echo 'Connection failed: ' . $e->getMessage();
 			exit();
@@ -47,32 +47,29 @@
 	INNER JOIN [dbo].[Categories]         AS kurscat    ON kurscat.[Category_ID]     = kurscl.[ParentCategory_ID] AND kurscat.[CategoryType_ID] = 7
 	INNER JOIN [dbo].[CategoryLinks]      AS yearcl     ON yearcl.[ChildCategory_ID] = kurscat.[Category_ID]
 	INNER JOIN [dbo].[Categories]         AS yearcat    ON yearcat.[Category_ID]     = yearcl.[ParentCategory_ID] AND yearcat.[CategoryType_ID] = 6 
-	--INNER JOIN [dbo].[CategoryLinks]      AS edpcl      ON edpcl.[ChildCategory_ID]  = yearcat.[Category_ID]
-	--INNER JOIN [dbo].[Categories]         AS edpcat     ON edpcat.[Category_ID]      = edpcl.[ParentCategory_ID] AND edpcat.[CategoryType_ID] = 28
-	--INNER JOIN [dbo].[StudentsCategories] AS stucat4    ON stucat4.[Student_ID]      = s.[Student_ID]
-	--INNER JOIN [dbo].[Categories]         AS spec    ON spec.[Category_ID]     = stucat4.[Category_ID] AND spec.[CategoryType_ID] = 5
 	LEFT JOIN Communications com1   ON   com1.PersonData_ID=s.PersonData_ID AND com1.CommunicationType_ID = 2
 	LEFT JOIN Communications com2   ON   com2.PersonData_ID=s.PersonData_ID AND com2.CommunicationType_ID = 3
 	LEFT JOIN Addresses                  ad      ON ad.PersonData_ID = pd.PersonData_ID
 	LEFT join [dbo].[Cities]             AS ci         ON ci.[City_ID] = ad.[City_ID]
 
 	WHERE
-		yearcat.[Year] = 2017
-	--AND pd.PersonalNumber IN ( ? )";
+		yearcat.[Year] = 2017";
 	$susi_info = array();
 	$query2 = $link->prepare($querystr);
 	$query2->execute(array());//$egn));
-	// if ($query2->rowCount()==0) {
-	// 	return false;
-	// }
-	// else {
+	 if ($query2->rowCount()==0) {
+	 	echo "no rows found";
+	 }
+	 else {
 		$susi_info = $query2->fetchAll(PDO::FETCH_ASSOC);
-// 		return $susi_info;
-// 	}
+ //		return $susi_info;
+ 	}
 // //}
 //var_dump($susi_info);
+
 foreach($susi_info as $row){
-	//, `faculty`, `faculty_number`, `email`, `phone_number`, 	
+	
+		//, `faculty`, `faculty_number`, `email`, `phone_number`, 	
 	 	   // `address_city`, `address_street`, `egn`, `gender_name`)
 	 $statement = $dbh->prepare("INSERT INTO `susi`(`name`, `faculty`,`FAC`,`faculty_number`, `email`, `phone_number`, 	
 	 	    `address_city`, `address_street`, `egn`, `gender_name`, `post_code`, birth_date)
@@ -96,7 +93,7 @@ foreach($susi_info as $row){
     "fac" => $row['FAC'],
     ));
 echo "\nPDOStatement::errorCode(): ";
-print $statement->errorCode();
+var_dump($statement->errorInfo());
 
 //));
 }/*
