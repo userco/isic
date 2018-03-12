@@ -1,18 +1,12 @@
 <?php
 //function getSUSIdata($egn){
-	try{
-		//$link = new PDO("sqlsrv:Server=192.168.96.130;Database=SU_STUDENTDATABASE", 'cards_su', '@123$');
-		$link = new PDO("dblib:version=7.0;charset=UTF-8;host=192.168.96.130;dbname=SU_STUDENTDATABASE", 'sa', '!@SF0220091');
-	} catch (PDOException $e) {
-			echo 'Connection failed: ' . $e->getMessage();
-			exit();
-	}
-	try{
-	$dbh = new PDO('mysql:dbname=cards_uni_sofia_bg;host=192.168.96.112;charset=utf8', 'cards_uni_sofia_bg', 'neI1Ng4jJK3rvMod00Fmr85rs97Tlop2yze22_22');
-	} catch (PDOException $e) {
-			echo 'Connection failed: ' . $e->getMessage();
-			exit();
-	}
+//var_dump("wjfdwrf");
+require_once './confs/conn.php';	
+$year = date('Y');
+$month = date('n');
+if(($month)<7)
+$year = $year -1;
+var_dump($year);
 	$querystr = "SELECT
 			  pd.FullName Name, 
 			pd.PersonalNumber EGN, 
@@ -53,10 +47,10 @@
 	LEFT join [dbo].[Cities]             AS ci         ON ci.[City_ID] = ad.[City_ID]
 
 	WHERE
-		yearcat.[Year] = 2017";
+		yearcat.[Year] =?";
 	$susi_info = array();
 	$query2 = $link->prepare($querystr);
-	$query2->execute(array());//$egn));
+	$query2->execute(array($year));
 	 if ($query2->rowCount()==0) {
 	 	echo "no rows found";
 	 }
@@ -71,10 +65,10 @@ foreach($susi_info as $row){
 	
 		//, `faculty`, `faculty_number`, `email`, `phone_number`, 	
 	 	   // `address_city`, `address_street`, `egn`, `gender_name`)
-	 $statement = $dbh->prepare("INSERT INTO `susi`(`name`, `faculty`,`FAC`,`faculty_number`, `email`, `phone_number`, 	
+	 $statement = $dbh->prepare("INSERT INTO `susi`(`name`, `faculty`,`faculty_number`, `email`, `phone_number`, 	
 	 	    `address_city`, `address_street`, `egn`, `gender_name`, `post_code`, birth_date)
 
-	  VALUES(:name, :faculty, :fac, :facultyNumber, :email, :phoneNumber, :addressCity,  :addressStreet, :egn, :genderName, :postCode, :birthDate)");
+	  VALUES(:name, :faculty,  :facultyNumber, :email, :phoneNumber, :addressCity,  :addressStreet, :egn, :genderName, :postCode, :birthDate)");
     // $name = $row['EGN'];
     // var_dump($name);
     // $statement->bindParam(':name1', $name);
@@ -90,7 +84,7 @@ foreach($susi_info as $row){
     "addressCity" =>$row['cityname'],
     "addressStreet" => $row['AddressStreet'],
     "postCode" => $row['postcode'],
-    "fac" => $row['FAC'],
+    //"fac" => $row['FAC'],
     ));
 echo "\nPDOStatement::errorCode(): ";
 var_dump($statement->errorInfo());
