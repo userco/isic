@@ -20,7 +20,11 @@
             {{ message }}
         </ul>
     {% endif %}
-
+   {% for flashMessage in app.session.flashbag.get('error') %}
+   <div class="alert alert-danger">
+    {{ flashMessage }}
+   </div>
+   {% endfor %}
     <div class="alert alert-info">
         Моля добавете файл, който да качите!
     </div>

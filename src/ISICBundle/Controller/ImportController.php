@@ -8,6 +8,7 @@ use PHPExcel_IOFactory;
 use ISICBundle\Entity\Isic;
 use ISICBundle\Jobs\ImportJob;
 use PHPExcel_Shared_Date;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class ImportController extends Controller
 {
@@ -38,6 +39,14 @@ class ImportController extends Controller
         $form->bind($this->getRequest());
 
         if ($form->get('Submit')->isClicked()) {
+            $records = $this->getDoctrine()->getRepository('ISICBundle:Isic')->findBy(array('isPublished'=>NULL));
+            if($records){
+                $session = new Session();
+                $session->getFlashBag()->add('error', 'В системата има данни за обработване. Моля, генерирайте XML-файл преди да качвате нови.');
+                return $this->render('ISICBundle:Import:Import.html.twig', array(
+                    'uploadForm' => $form->createView(),
+                ));
+            }
 
             $file = $form->get('file');
             $file1 = $form->get('file')->getData();
