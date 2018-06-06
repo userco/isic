@@ -496,7 +496,10 @@ $test = 0;
                 $secondPhone = $susi_phone;
             }
             $postCode = ($susi_record->getPostCode())? $susi_record->getPostCode(): "+";
-
+            $userCode = '01';
+            if($isic->getCardType()->getId()==4){
+                $userCode = '02';
+            }
             if($isic->getStatus()!="ERROR"){
                 //$test++;
                 $xml .= "   <patron-record>"."\r\n";
@@ -555,7 +558,7 @@ $test = 0;
                 $xml .= "           <z305-id>".$VarIdNumber."</z305-id>\r\n";
                 $xml .= "           <z305-sub-library>LSU50</z305-sub-library>\r\n";
                 $xml .= "           <z305-bor-type>+</z305-bor-type>\r\n";
-                $xml .= "           <z305-bor-status>01</z305-bor-status>\r\n";
+                $xml .= "           <z305-bor-status>".$userCode."</z305-bor-status>\r\n";
                 $xml .= "           <z305-registration-date>20171001</z305-registration-date>\r\n";
                 $xml .= "           <z305-expiry-date>20180930</z305-expiry-date>\r\n";
                 $xml .= "           <z305-note>+</z305-note>\r\n";
