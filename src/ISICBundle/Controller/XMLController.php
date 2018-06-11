@@ -358,8 +358,13 @@ $test = 0;
                 
                 $isic->setIsPublished(1);
                 $isic->setStatus("ERROR");
+                if($isic->getCardType()->getId()==4){
+                    $log .= "ERROR: Няма преподавател с ЕГН: ".$egn. ";";
+                }
+                else{
 
-                $log .= "ERROR: Няма студент с ЕГН: ".$egn. ";";
+                    $log .= "ERROR: Няма студент с ЕГН: ".$egn. ";";
+                }    
                     
                     
             }
