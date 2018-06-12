@@ -1,0 +1,19 @@
+ISICBundle\Entity\PersonalNumber:
+    type: entity
+    table: personal_number
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        personalNumber:
+            type: string
+            length: 25
+            nullable: true 
+        status:
+            type: string
+            length: 10
+            nullable: true
+        isPublished:
+            type: boolean
+            nullable: true

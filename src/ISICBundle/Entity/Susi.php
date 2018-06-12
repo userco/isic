@@ -19,6 +19,9 @@ class Susi{
 	protected $addressStreet;
 	protected $birthDate;
 	protected $genderName;
+	protected $course;
+	protected $educationalTypeName;
+	protected $speciality;
 
 
 	public function getId()
@@ -99,5 +102,24 @@ class Susi{
 	}
 	public function setGenderName($genderName){
 		$this->genderName= $genderName;
+	}
+	public function getCourse(){
+		return $this->course;
+	}
+	public function setCourse($course){
+		$this->course = $course;
+	
+	}
+	public function getEducationalTypeName(){
+		return $this->educationalTypeName;
+	}
+	public function setEducationalTypeName($educationalTypeName){
+	       $this->educationalTypeName = $educationalTypeName;
+	}
+	public function getSpeciality(){
+		return $this->speciality;
+	}
+	public function setSpeciality($speciality){
+	        $this->speciality = $speciality;
 	}
 }

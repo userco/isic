@@ -7,7 +7,7 @@ try{
 			exit();
 	}
 	try{
-	$dbh = new PDO('mysql:dbname=isic10;host=localhost;charset=utf8', 'root', 'strongly');
+	$dbh = new PDO('mysql:dbname=isic13;host=localhost;charset=utf8', 'root', 'strongly');
 	} catch (PDOException $e) {
 			echo 'Connection failed: ' . $e->getMessage();
 			exit();

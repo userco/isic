@@ -53,4 +53,16 @@ ISICBundle\Entity\Susi:
         birthDate:
             type: string
             length: 15
-            nullable: true                   
+            nullable: true   
+        course:
+            type: string
+            length: 10
+            nullable: true
+        speciality:
+            type: string
+            length: 255
+            nullable: true  
+        educationalTypeName:
+            type: string
+            length: 20
+            nullable: true                                

@@ -4,3 +4,6 @@ isic_homepage:
 isic_import:
     path: import
     defaults: { _controller: ISICBundle:Import:import }
+egn_import:
+    path: egn_import
+    defaults: { _controller: ISICBundle:PersonalNumber:import }

@@ -1,29 +1,30 @@
 <?php
-//function getSUSIdata($egn){
-//var_dump("wjfdwrf");
 require_once './confs/conn.php';	
 $year = date('Y');
 $month = date('n');
-if(($month)<7)
-$year = $year -1;
+if(($month)<7){
+	$next_year = $year;
+	$year = $year -1;
+
+}
 var_dump($year);
 	$querystr = "SELECT
-			  pd.FullName Name, 
+			pd.FullName Name, 
 			pd.PersonalNumber EGN, 
 			convert(varchar(10), pd.BirthDate, 121) BirthDate, 
 			faccat.CategoryName FAC, 
 			faccat.Abrv Faculty,
-			 
-			 
+			kurscat.CategoryName Course,
+			eduform.EducationalFormName as EducationalFormName,
 			ci.CityName as cityname, 
 			s.FacultyNumber FacultyNumber, 
-			eduplan.EducationPlanName, 
+			eduplan.EducationPlanName Speciality, 
 			com1.Number GSM, 
 			com2.Number Email,
 			ad.PostCode  postcode,
-	    	ad.AddressText AddressStreet,	
-	    	CASE WHEN pd.Sex>0 THEN 'F' ELSE 'M' END GenderName,
-	    	eduplan.BeginYear FirstYear 
+		    	ad.AddressText AddressStreet,	
+		    	CASE WHEN pd.Sex>0 THEN 'F' ELSE 'M' END GenderName,
+		    	eduplan.BeginYear FirstYear 
 
 	FROM       [dbo].[PersonData]         AS pd  
 	INNER JOIN [dbo].[Students]           AS s    ON pd.[PersonData_ID]            = s.[PersonData_ID]
@@ -47,65 +48,48 @@ var_dump($year);
 	LEFT join [dbo].[Cities]             AS ci         ON ci.[City_ID] = ad.[City_ID]
 
 	WHERE
-		yearcat.[Year] =?";
+		yearcat.[Year] =? or yearcat.[Year] =?";
 	$susi_info = array();
 	$query2 = $link->prepare($querystr);
-	$query2->execute(array($year));
+	$query2->execute(array($year,$next_year));
 	 if ($query2->rowCount()==0) {
 	 	echo "no rows found";
 	 }
 	 else {
 		$susi_info = $query2->fetchAll(PDO::FETCH_ASSOC);
- //		return $susi_info;
+ 
  	}
-// //}
-//var_dump($susi_info);
 
-foreach($susi_info as $row){
+
+	foreach($susi_info as $row){
 	
-		//, `faculty`, `faculty_number`, `email`, `phone_number`, 	
-	 	   // `address_city`, `address_street`, `egn`, `gender_name`)
+		
 	 $statement = $dbh->prepare("INSERT INTO `susi`(`name`, `faculty`,`faculty_number`, `email`, `phone_number`, 	
-	 	    `address_city`, `address_street`, `egn`, `gender_name`, `post_code`, birth_date)
+	 	    `address_city`, `address_street`, `egn`, `gender_name`, `post_code`, birth_date, `speciality`,`course`,`educational_type_name`)
 
-	  VALUES(:name, :faculty,  :facultyNumber, :email, :phoneNumber, :addressCity,  :addressStreet, :egn, :genderName, :postCode, :birthDate)");
-    // $name = $row['EGN'];
-    // var_dump($name);
-    // $statement->bindParam(':name1', $name);
+	  VALUES(:name, :faculty,  :facultyNumber, :email, :phoneNumber, :addressCity,  :addressStreet, :egn, :genderName, :postCode, :birthDate, :speciality, :course, :educationalForm)");
+    
 	$statement->execute(array(
-   "name" => $row['Name'],
-    "egn" => $row['EGN'],
-    "birthDate" => $row['BirthDate'],
-     "faculty" => $row['Faculty'],
-    "facultyNumber" => $row['FacultyNumber'],
-    "phoneNumber" => $row['GSM'],
-    "email" => $row['Email'],
-    "genderName" => $row['GenderName'],
-    "addressCity" =>$row['cityname'],
-    "addressStreet" => $row['AddressStreet'],
-    "postCode" => $row['postcode'],
-    //"fac" => $row['FAC'],
+	   "name" => $row['Name'],
+	    "egn" => $row['EGN'],
+	    "birthDate" => $row['BirthDate'],
+	     "faculty" => $row['Faculty'],
+	    "facultyNumber" => $row['FacultyNumber'],
+	    "speciality" => $row['Speciality'],
+	    "course" => $row['Course'],
+	    "educationalForm" => $row['EducationalFormName'],
+	    "phoneNumber" => $row['GSM'],
+	    "email" => $row['Email'],
+	    "genderName" => $row['GenderName'],
+	    "addressCity" =>$row['cityname'],
+	    "addressStreet" => $row['AddressStreet'],
+	    "postCode" => $row['postcode']
+	    
     ));
 echo "\nPDOStatement::errorCode(): ";
 var_dump($statement->errorInfo());
 
-//));
-}/*
-//var_dump(getSUSIdata('8810290702'));
-//var_dump(getSUSIdata('9608083801'));
-   //9711083225    9608083801
-$sql = "select distinct(CategoryName), CategoryType_ID
-from Categories
-WHERE CategoryType_ID = 28
 
-";
-$query2 = $link->prepare($sql);
-$query2->execute(array());//$egn));
-$susi_info = $query2->fetchAll(PDO::FETCH_ASSOC);
-var_dump($susi_info);
-//return $susi_info;
-*/
-// 	}
-// //}
+}
 
 ?>
