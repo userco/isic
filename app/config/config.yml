@@ -10,7 +10,7 @@ parameters:
     locale: en
     path: %kernel.root_dir%/../xmls
     log_path: %kernel.root_dir%/../xml_logs 
-    zip_path: %kernel.root_dir%/../xml_zips\
+    zip_path: %kernel.root_dir%/../xml_zips
     egn_path: %kernel.root_dir%/../egn_zips
     csv_path: %kernel.root_dir%/../csv
     archives: %kernel.root_dir%/../archives

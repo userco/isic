@@ -60,9 +60,9 @@ class ImportController extends Controller
             }
             $date = time();
 
-            $file->getData()->move('./uploads', "export_$date.xls");
+            $file->getData()->move('./uploads', "export_egn_$date.xls");
 
-            $inputFileName = "./uploads/export_$date.xls";
+            $inputFileName = "./uploads/export_egn_$date.xls";
 
             try {
                 $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
@@ -71,7 +71,7 @@ class ImportController extends Controller
             } catch (Exception $e) {
                 die('Error loading file "' . pathinfo($inputFileName, PATHINFO_BASENAME) . '": ' . $e->getMessage());
             }
-
+            
             $sheet = $objPHPExcel->getSheet(0);
             $highestRow = $sheet->getHighestRow();
             $highestColumn = $sheet->getHighestColumn();
@@ -84,49 +84,24 @@ class ImportController extends Controller
                     FALSE);
                 $newIsicCard = new Isic();
 
-                $birthdate = $rowData[0][9];
-                $date_formated = date('Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($birthdate));
-                //$d  = new \DateTime($birthdate);// ($birthdate)?$birthdate->format('Y-m-d'): NULL;
-                // var_dump($date_formated);
-                // die();
+                
                 $newIsicCard->setEGN($rowData[0][0]);
                 $newIsicCard->setNames($rowData[0][1]);
                 
-                $newIsicCard->setBirthdate($date_formated);
+                $newIsicCard->setBirthdate($rowData[0][9]);
                 $newIsicCard->setIDWFacultyBG($rowData[0][4]); 
-                $newIsicCard->setIDWFacultyNumber($rowData[0][5]);
+                $newIsicCard->setIDWFacultyNumber($rowData[0][8]);
                 $newIsicCard->setSpecialty($rowData[0][5]); 
                 $newIsicCard->setPhoneNumber($rowData[0][2]);
                 $newIsicCard->setEmail($rowData[0][3]);
-                $newIsicCard->setChipNumber($rowData[0][8]);
-                $newIsicCard->setIDWLID($rowData[0][9]);
+                $newIsicCard->setCourse($rowData[0][6]);
+                $newIsicCard->setEducationalTypeName($rowData[0][7]);
+                $newIsicCard->setChipNumber($rowData[0][11]);
+                $newIsicCard->setIDWLID($rowData[0][12]);
                 $newIsicCard->setIDWBarCodeInt($rowData[0][10]);
                 $newIsicCard->setImportDate(new \DateTime());
                 $newIsicCard->setCardType($cardType);
-                /*$newIsicCard->setIDWKeyColumn($rowData[0][0]);
-                $newIsicCard->setIDWFirstNameBG($rowData[0][1]);
-                $newIsicCard->setIDWFamilyNameBG($rowData[0][2]);
-                $newIsicCard->setIDWFirstNameEN($rowData[0][3]);
-                $newIsicCard->setIDWFamilyNameEN($rowData[0][4]);
-                $newIsicCard->setIDWFacultyBG($rowData[0][5]);
-                $newIsicCard->setIDWFacultyEN($rowData[0][6]);
-                $newIsicCard->setIDWClass($rowData[0][7]);
-                $newIsicCard->setIDWFacultyNumber($rowData[0][8]);
-                $newIsicCard->setIDWLID($rowData[0][9]);
-                $newIsicCard->setIDWBarCodeInt($rowData[0][10]);
-                $newIsicCard->setIDWBarCodeField($rowData[0][11]);
-                $newIsicCard->setIDWLIDBack($rowData[0][12]);
-                $newIsicCard->setIDWBarCodeIntBack($rowData[0][13]);
-                $newIsicCard->setIDWBarCodeFieldBack($rowData[0][14]);
-                $newIsicCard->setIDWPhoto($rowData[0][15]);
-                $newIsicCard->setEGN($rowData[0][16]);
-                $newIsicCard->setBirthdate($rowData[0][17]);
-                $newIsicCard->setSpecialty($rowData[0][18]);
-                $newIsicCard->setChipNumber($rowData[0][19]);
-                $newIsicCard->setPhoneNumber($rowData[0][20]);
-                $newIsicCard->setEmail($rowData[0][21]);
-                $newIsicCard->setNames($rowData[0][22]);
-                */
+               
                 $em->persist($newIsicCard);
             }
             $em->flush();

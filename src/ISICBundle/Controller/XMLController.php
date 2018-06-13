@@ -1,5 +1,4 @@
 <?php
-// src/Controller/SecurityController.php
 //автор Мария Пенелова
 namespace  ISICBundle\Controller;
 

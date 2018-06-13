@@ -84,10 +84,13 @@ private function getBirthDateFromEGN($egn){
     $year = substr($egn, 0,2);
     $month = substr($egn, 2,2);
     $day = substr($egn, 4, 2);
-    if ($year < 20) $year = '20'.$year;
+    if (strcmp($year, 20)==-1 ) $year = '20'.$year;
     else $year = '19'.$year;
-    $date = $month.".".$day.".".$year;
+    $date = $year."-".$month."-".$day;
+// var_dump($date);
+// die();
     return $date;
+
 
 }
 private function normalize_phone($gsm) {

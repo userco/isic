@@ -32,7 +32,7 @@ class PersonalNumberController extends Controller
             $records = $this->getDoctrine()->getRepository('ISICBundle:PersonalNumber')->findBy(array('isPublished'=>NULL));
             if($records){
                 $session = new Session();
-                $session->getFlashBag()->add('error', 'В системата има данни за обработване. Моля, генерирайте XML-файл преди да качвате нови.');
+                $session->getFlashBag()->add('error', 'В системата има данни за обработване. Моля, генерирайте CSV-файл преди да качвате нови.');
                 return $this->render('ISICBundle:Import:Import.html.twig', array(
                     'uploadForm' => $form->createView(),
                 ));
