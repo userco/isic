@@ -80,7 +80,16 @@ private function getBirthDate($birthdate){
     $date_string = $array[2].$array[1].$array[0];
     return $date_string;
 }
+private function getBirthDateFromEGN($egn){
+    $year = substr($egn, 0,2);
+    $month = substr($egn, 2,2);
+    $day = substr($egn, 4, 2);
+    if ($year < 20) $year = '20'.$year;
+    else $year = '19'.$year;
+    $date = $month.".".$day.".".$year;
+    return $date;
 
+}
 private function normalize_phone($gsm) {
     $gsmSanitized = preg_replace('/\s+|\(|\)/', '', $gsm);
     $gsmSanitized = preg_replace('/^\+359/', '0', $gsmSanitized);
@@ -137,7 +146,7 @@ public function generateFileAction(Request $request)
     $f1 = $directory . "/log-egn" . $generateDate->format('Y-m-d_H:i') . '.csv';
     $handle = fopen($f1, 'w');
 
-    $headers = 'ЕГН, Име, Телефон, Имейл, Факултет, Специалност, Курс, Форма на обучение, Факултетен номер, Чип на картата, Библиотечен номер, Баркод,  Статус'. "\r\n";   
+    $headers = 'ЕГН, Име, Телефон, Имейл, Факултет, Специалност, Курс, Форма на обучение, Факултетен номер, Рождена дата, Чип на картата, Библиотечен номер, Баркод,  Статус'. "\r\n";   
 
     fwrite($handle, $headers);
     $test = 0;
@@ -173,7 +182,7 @@ public function generateFileAction(Request $request)
             $course = "";
             $educationalTypeName = "";
             $VarFacultyNumber = "";      
-            
+            $birthDate = $this->getBirthDateFromEGN($egn);
         if($susi_record){
             
     
@@ -222,7 +231,8 @@ public function generateFileAction(Request $request)
         $speciality,
         $course,
         $educationalTypeName,
-        $VarFacultyNumber
+        $VarFacultyNumber,
+	$birthDate
         );
 
 
@@ -235,8 +245,8 @@ public function generateFileAction(Request $request)
      
     $zip = new \ZipArchive();
    
-    $zipName0 = 'Documents-'.$generateDate->format('Y-m-d_H:i:s').".zip";
-    $zipName = $this->container->getParameter('zip_path').'/'.$zipName0;
+    $zipName0 = 'Documents-egn'.$generateDate->format('Y-m-d_H:i:s').".zip";
+    $zipName = $this->container->getParameter('egn_path').'/'.$zipName0;
     $zip->open($zipName,  \ZipArchive::CREATE);
     
    
@@ -246,7 +256,7 @@ public function generateFileAction(Request $request)
    
     $zip->close();
 
-    $archive = new \ISICBundle\Entity\Archive();
+    $archive = new \ISICBundle\Entity\EGNArchive();
     
     $archive->setGenerateDate($generateDate->format('Y-m-d'));
     $archive->setArchiveName($zipName0);

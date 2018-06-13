@@ -26,7 +26,7 @@ class XMLType extends AbstractType
     {
         $builder
             ->add('generateDateFrom', 'date', array(
-                'label' =>"XML за качените от дата:",
+                'label' =>"Архив за качените от дата:",
 		'data'  => $this->yesterdayDate,
                 ))
             ->add('generateDateTo', 'date', array(

@@ -1,0 +1,15 @@
+# автор Мария Пенелова
+ISICBundle\Entity\EGNArchive:
+    type: entity
+    table: egn_archive
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        generateDate:
+            type: string
+            length: 15
+        archiveName:
+            type: string
+            length: 250

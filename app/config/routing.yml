@@ -42,3 +42,9 @@ search_xml:
 get_xml:
     path:     /get_xml/{archiveId}
     defaults: { _controller: ISICBundle:Archive:resultArchive }    
+search_data:
+    path:     /search_data
+    defaults: { _controller: ISICBundle:EGNArchive:searchData }   
+get_data:
+    path:     /get_data/{archiveId}
+    defaults: { _controller: ISICBundle:EGNArchive:resultData }    

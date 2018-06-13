@@ -15,17 +15,17 @@ use Desperado\XmlBundle\Model\XmlGenerator;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\Response;
-use ISICBundle\Entity\Archive;
+use ISICBundle\Entity\EGNArchive;
 use ISICBundle\Entity\Models\ArchiveModel;
 
 
-class ArchiveController extends Controller
+class EGNArchiveController extends Controller
 {
 
     /**
-     * @Route("/search_xml", name="search_xml")
+     * @Route("/search_data", name="search_data")
      */
-    public function searchXMLAction(Request $request)
+    public function searchDataAction(Request $request)
     { 
 
         $archives = array();
@@ -45,7 +45,7 @@ class ArchiveController extends Controller
             $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
                 'SELECT a
-                FROM ISICBundle:Archive a
+                FROM ISICBundle:EGNArchive a
                 WHERE a.generateDate >= :dateFrom
                    AND  a.generateDate <= :dateTo
                 '
@@ -63,20 +63,20 @@ class ArchiveController extends Controller
         }
 
         return $this->render(
-            'security/xml/search_xml.html.twig',array(
+            'security/data/search_data.html.twig',array(
            'form' => $form->createView(),
            'archives'=>$archives,
         ));
     }
 
     /**
-     * @Route("/get_xml", name="get_xml")
+     * @Route("/get_data", name="get_data")
      */
-    public function resultArchiveAction(Request $request, $archiveId){
-        $archive =$this->getDoctrine()->getRepository('ISICBundle:Archive')->find($archiveId);
+    public function resultDataAction(Request $request, $archiveId){
+        $archive =$this->getDoctrine()->getRepository('ISICBundle:EGNArchive')->find($archiveId);
             $zipName1 = $archive->getArchiveName();
 
-            $zipName = $this->container->getParameter('zip_path').'/'.$zipName1;
+            $zipName = $this->container->getParameter('egn_path').'/'.$zipName1;
            if(file_exists($zipName)){
             $response = new BinaryFileResponse($zipName);
             $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
