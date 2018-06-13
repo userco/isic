@@ -115,5 +115,12 @@ ISICBundle\Entity\Isic:
             nullable: true
         importDate:
             type: datetime
-
+        course:
+            type: string
+            length: 10
+            nullable: true
+        educationalTypeName:
+            type: string
+            length: 20
+            nullable: true                                
                  

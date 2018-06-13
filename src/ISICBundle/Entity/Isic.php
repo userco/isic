@@ -18,7 +18,9 @@ class Isic
     protected $status;
     protected $importDate;
     protected $cardType;
-
+    protected $course;
+    protected $educationalTypeName;
+    
     /**
      * @return mixed
      */
@@ -447,4 +449,17 @@ class Isic
     public function setImportDate($importDate){
         $this->importDate = $importDate;
     }
+    public function getCourse(){
+	return $this->course;
+    }
+    public function setCourse($course){
+	$this->course = $course;
+
+    }
+    public function getEducationalTypeName(){
+	return $this->educationalTypeName;
+    }
+   public function setEducationalTypeName($educationalTypeName){
+       $this->educationalTypeName = $educationalTypeName;
+   }
 }
