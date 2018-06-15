@@ -19,6 +19,7 @@ class AppKernel extends Kernel
             new ISICBundle\ISICBundle(),
             new Desperado\XmlBundle\DesperadoXmlBundle,
             new Liuggio\ExcelBundle\LiuggioExcelBundle(),
+	        new BCC\ResqueBundle\BCCResqueBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {
