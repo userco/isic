@@ -122,9 +122,23 @@ public function generateXMLAction(Request $request)
     $isic_xml = new Isic();
     $form = $this->createForm(new XML1Type(), $isic_xml);
     $request = $this->get('request');
+
+    $em = $this->getDoctrine()->getManager();
+    $isics = $em->getRepository('ISICBundle:Isic')->findBy(array('isPublished'=>NULL));
+    $isics2 = $em->getRepository('ISICBundle:Isic')->findBy(array('isPublished'=>1));
+    if($isics && $isics2){
+            $session = new Session();
+            $session->getFlashBag()->add('error', 'Файлът се генерира...');
+         }
+    if(!$isics){
+    $session = new Session();
+    $session->getFlashBag()->add('error', 'Моля, вземете последния генериран файл от търсачката с XML архивите.');
+}
     if ($request->getMethod() == 'POST'){
-	 $em = $this->getDoctrine()->getManager();
+
+	 
         $isics = $em->getRepository('ISICBundle:Isic')->findBy(array('isPublished'=>NULL));
+
         if(!$isics){
             $session = new Session();
             $session->getFlashBag()->add('error', 'Няма нови данни за обработка.');
@@ -134,15 +148,9 @@ public function generateXMLAction(Request $request)
                 'form' => $form->createView(),
             ));
 
-	    
-
-
-
-
-  
-    // get resque
-
 }
+$session = new Session();
+$session->getFlashBag()->add('error', "Файлът се генерира...");    
 $resque = $this->get('bcc_resque.resque');
 
 
@@ -156,13 +164,8 @@ $job->args = array(
 );
 
 // enqueue your job
-$token = $resque->enqueue($job);
+ $token = $resque->enqueue($job);
 
-    $isics = $em->getRepository('ISICBundle:Isic')->findBy(array('isPublished'=>NULL));
-    if(!$isics){
-    $session = new Session();
-    $session->getFlashBag()->add('error', 'Моля, вземете последния генериран файл от търсачката с XML архивите.');
-    }
 
 }
     return $this->render(
