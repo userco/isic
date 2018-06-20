@@ -132,7 +132,9 @@ $test = 0;
         $erasym_flag = 0;
         $foreigner_flag = 0;
         
-        
+        $faculty= '';
+	$faculty_number = '';
+	$isic_birthdate = '';
         $VarEmail = $isic->getEmail();
         $VarPhoneNumber = $isic->getPhoneNumber();
         $VarPhoneNumber1 = $this->normalize_phone($VarPhoneNumber);
