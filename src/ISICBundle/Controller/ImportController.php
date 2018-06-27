@@ -96,9 +96,9 @@ class ImportController extends Controller
                 $newIsicCard->setEmail($rowData[0][3]);
                 $newIsicCard->setCourse($rowData[0][6]);
                 $newIsicCard->setEducationalTypeName($rowData[0][7]);
-                $newIsicCard->setChipNumber($rowData[0][11]);
-                $newIsicCard->setIDWLID($rowData[0][12]);
-                $newIsicCard->setIDWBarCodeInt($rowData[0][10]);
+                $newIsicCard->setChipNumber($rowData[0][10]);
+                $newIsicCard->setIDWLID($rowData[0][11]);
+                $newIsicCard->setIDWBarCodeInt($rowData[0][12]);
                 $newIsicCard->setImportDate(new \DateTime());
                 $newIsicCard->setCardType($cardType);
                
