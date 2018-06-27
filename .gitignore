@@ -11,3 +11,4 @@
 /bin/
 /composer.phar
 .idea/
+/isic_susi/confs/conn.php
