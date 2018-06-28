@@ -517,7 +517,7 @@ $test = 0;
                 $xml .= "           <z303-note-2>20180930</z303-note-2>\r\n";
                 $xml .= "           <z303-ill-total-limit>0100</z303-ill-total-limit>\r\n";
                 $xml .= "           <z303-ill-active-limit>0100</z303-ill-active-limit>\r\n";
-                $xml .= "           <z303-birth-date>".$birthdate."</z303-birth-date>\r\n";
+                $xml .= "           <z303-birth-date>".$susi_birthdate."</z303-birth-date>\r\n";
                 $xml .= "           <z303-export-consent>N</z303-export-consent>\r\n";
                 $xml .= "           <z303-proxy-id-type>00</z303-proxy-id-type>\r\n";
                 $xml .= "           <z303-send-all-letters>Y</z303-send-all-letters>\r\n";
@@ -601,7 +601,7 @@ $test = 0;
         $isic->getCourse(), 
         $isic->getEducationalTypeName(),
         $faculty_number,
-        $isic_birthdate,
+        $susi_birthdate,
         $isic->getChipNumber(),
         $isic->getIDWLID(),
         $isic->getIDWBarCodeInt(),
