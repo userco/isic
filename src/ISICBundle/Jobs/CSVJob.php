@@ -80,6 +80,18 @@ private function normalizeName($Names){
         return $name;
 
     }
+    else{
+        $name = "";
+        $n = count($name_array);
+        for($i=0; $i<$n; $i++){
+            $part_of_name = $name_array[$i];
+            $name .= $this->my_mb_ucfirst($part_of_name);
+            if($i < ($n-1)){
+                $name .= " ";
+            }
+        }
+        return $name;
+    }
     }
     return;
 }
