@@ -73,8 +73,9 @@ class PersonalNumberController extends Controller
                     TRUE,
                     FALSE);
                 $newIsic = new PersonalNumber();
-               
-                $newIsic->setPersonalNumber($rowData[0][0]);
+                $egnString = $rowData[0][0];
+                $egnString1 = ltrim($egnString, "_");
+                $newIsic->setPersonalNumber($egnString1);
                 $em->persist($newIsic);
             }
             $em->flush();
