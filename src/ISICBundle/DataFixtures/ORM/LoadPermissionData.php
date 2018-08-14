@@ -3,6 +3,7 @@ namespace ISICBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use ISICBundle\Entity\Susi;
 use ISICBundle\Entity\Permission;
 use ISICBundle\Entity\Card;
 use ISICBundle\Entity\User;
