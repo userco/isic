@@ -84,8 +84,9 @@ class ImportController extends Controller
                     FALSE);
                 $newIsicCard = new Isic();
 
-                
-                $newIsicCard->setEGN($rowData[0][0]);
+                $egn = $rowData[0][0];
+		$egnString1 = ltrim($egn, "_");
+                $newIsicCard->setEGN($egnString1);
                 $newIsicCard->setNames($rowData[0][1]);
                 
                 $newIsicCard->setBirthdate($rowData[0][9]);

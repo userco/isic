@@ -44,7 +44,47 @@ class LoadPermissionData extends AbstractFixture implements OrderedFixtureInterf
 
 
         $fileInvoice = new \SplFileObject( $dir."/permission.csv");
+	$fileFreshman = new \SplFileObject( $dir."/susi_freshman.csv");
         $readerInvoice = new CsvReader($fileInvoice, ',');
+	$readerFreshman = new CsvReader($fileFreshman, ',');
+        $i=0;
+	 foreach ($readerFreshman as $row) {
+	    if($i>=2){
+            $susi = new Susi();
+            
+            $susi->setName($row[1]);
+           
+	    $susi->setEgn($row[9]);
+	    $susi->setFaculty($row[0]);
+            $susi->setFacultyNumber($row[2]);
+            $susi->setEmail($row[23]);
+            $susi->setPhoneNumber($row[27]);
+            $susi->setAddressCity($row[30]);
+            //$susi->setPostCode($row[NULL]);
+            $susi->setAddressStreet($row[31]);
+            $birthdate = $row[17];
+            $date_array = explode(".",$birthdate);
+	    $birthdate1 = $date_array[2]."-".$date_array[1]."-".$date_array[0];
+            $susi->setBirthDate($birthdate1);
+            $susi->setGenderName($row[12]);
+            $susi->setCourse($row[6]);
+
+	    $eduplan = $row[4];
+	    $edutype = explode('/', $eduplan);
+	    $edutype1 = $edutype[1];
+            $susi->setEducationalTypeName($edutype1);
+            $susi->setSpeciality($row[3]);
+            $manager->persist($susi);
+
+            //$metadata = $em->getClassMetaData(get_class($permission));
+            //$metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
+
+            $manager->flush();
+	     }
+	    $i++;
+            
+            
+        }
         
         foreach ($readerInvoice as $row) {
 

@@ -52,6 +52,7 @@ private function getBirthDateFromEGN($egn){
     $month = substr($egn, 2,2);
     $day = substr($egn, 4, 2);
     if (strcmp($year, 20)==-1 ) $year = '20'.$year;
+    else if (strcmp($year, 00)==0) $year= '2000';
     else $year = '19'.$year;
     $date = $year."-".$month."-".$day;
 // var_dump($date);
@@ -96,8 +97,8 @@ private function normalizeName($Names){
     return;
 }
 private function getBirthDate($birthdate){
-    $array = explode('/', $birthdate);
-    $date_string = $array[2].$array[1].$array[0];
+    $array = explode('-', $birthdate);
+    $date_string ="";// $array[2].".".$array[1].".".$array[0];
     return $date_string;
 }
 
@@ -165,7 +166,8 @@ private function normalize_date($date) {
                     $log .= "ERROR: Няма студент с ЕГН: ".$egn. ";";
             }    
                     
-            
+           
+	   //$bd1 = $this->getBirthDate($bd);
             $susi_names = "";
             $susi_phone = "";
             $susi_email = "";
@@ -174,7 +176,7 @@ private function normalize_date($date) {
             $course = "";
             $educationalTypeName = "";
             $VarFacultyNumber = "";      
-            $birthDate = $this->getBirthDateFromEGN($egn);
+            //$birthDate = $this->getBirthDateFromEGN($egn);
             if($susi_record){
             
     
@@ -185,8 +187,7 @@ private function normalize_date($date) {
             $susi_names = $this->normalize_name($susi_names);
             $susi_names = $this->normalizeName($susi_names);
             
-
-           
+	    $bd = $susi_record->getBirthDate();
             $susi_faculty_number = $susi_record->getFacultyNumber();
             
             $susi_email = $susi_record->getEmail();
@@ -208,7 +209,7 @@ private function normalize_date($date) {
         }
             
             
-            
+          $egn= "_".$egn;  
             
 
 
@@ -224,7 +225,7 @@ private function normalize_date($date) {
         $course,
         $educationalTypeName,
         $VarFacultyNumber,
-    $birthDate
+    	$bd
         );
 
 
