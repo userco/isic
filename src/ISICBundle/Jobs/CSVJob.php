@@ -167,7 +167,7 @@ private function normalize_date($date) {
             }    
                     
            
-	   //$bd1 = $this->getBirthDate($bd);
+	    $bd= "";
             $susi_names = "";
             $susi_phone = "";
             $susi_email = "";
