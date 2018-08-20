@@ -135,6 +135,7 @@ $test = 0;
         $faculty= '';
 	$faculty_number = '';
 	$isic_birthdate = '';
+	$susi_birthdate = '';
         $VarEmail = $isic->getEmail();
         $VarPhoneNumber = $isic->getPhoneNumber();
         $VarPhoneNumber1 = $this->normalize_phone($VarPhoneNumber);
@@ -592,7 +593,7 @@ $test = 0;
     $out = array(
 
        
-        $egn,
+        "_".$egn,
         $Names,
         $VarPhoneNumber1,
         $VarEmail,
