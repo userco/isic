@@ -341,7 +341,7 @@ $test = 0;
                 
                 $isic->setIsPublished(1);
                 $isic->setStatus("ERROR");
-                if($isic->getCardType()->getId()==4){
+                if($isic->getCardType()->getId()==2){
                     $log .= "ERROR: Няма преподавател с ЕГН: ".$egn. ";";
                 }
                 else{
@@ -391,7 +391,7 @@ $test = 0;
                  
             }
             $susi_faculty_number = $susi_record->getFacultyNumber();
-            if($isic->getCardType()->getId()!=4 && $susi_faculty_number && $susi_faculty_number !=$isic->getIDWFacultyNumber()&& $isic->getCardType()->getId()!=5){
+            if($isic->getCardType()->getId()!=2 && $susi_faculty_number && $susi_faculty_number !=$isic->getIDWFacultyNumber()&& $isic->getCardType()->getId()!=5){
                 
                 $isic->setStatus("ERROR");
                 $log .= " ERROR: Фaкултетен номер - СУСИ е ".$susi_record->getFacultyNumber().";";
@@ -451,7 +451,7 @@ $test = 0;
                 $facultyData = $VarFacultyName.", ".$VarFacultyNumber;
             else if($erasym_flag == 1)
                 $facultyData = $isic->getIDWFacultyBG(). ", ".$isic->getIDWFacultyNumber(). ", Еразъм+";
-            if($isic->getCardType()->getId()==4){
+            if($isic->getCardType()->getId()==2){
 
                     $facultyData = $VarFacultyName;
             }
@@ -489,7 +489,7 @@ $test = 0;
             $postCode = $susi_record->getPostCode();
             $postCode = ($postCode)? $postCode: "+";
             $userCode = '01';
-            if($isic->getCardType()->getId()==4){
+            if($isic->getCardType()->getId()==2){
                 $userCode = '02';
             }
             if($isic->getStatus()!="ERROR"){
