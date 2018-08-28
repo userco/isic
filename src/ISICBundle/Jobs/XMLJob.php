@@ -71,8 +71,8 @@ private function normalizeName($Names){
     return;
 }
 private function getBirthDate($birthdate){
-    $array = explode('/', $birthdate);
-    $date_string = $array[2].$array[1].$array[0];
+    $array = explode('-', $birthdate);
+    $date_string = $array[0].$array[1].$array[2];
     return $date_string;
 }
 
@@ -492,6 +492,7 @@ $test = 0;
             if($isic->getCardType()->getId()==2){
                 $userCode = '02';
             }
+	    $susi_birthdate1 = $this->getBirthDate($susi_birthdate);
             if($isic->getStatus()!="ERROR"){
                 //$test++;
                 $xml .= "   <patron-record>"."\r\n";
@@ -518,7 +519,7 @@ $test = 0;
                 $xml .= "           <z303-note-2>20190930</z303-note-2>\r\n";
                 $xml .= "           <z303-ill-total-limit>0100</z303-ill-total-limit>\r\n";
                 $xml .= "           <z303-ill-active-limit>0100</z303-ill-active-limit>\r\n";
-                $xml .= "           <z303-birth-date>".$susi_birthdate."</z303-birth-date>\r\n";
+                $xml .= "           <z303-birth-date>".$susi_birthdate1."</z303-birth-date>\r\n";
                 $xml .= "           <z303-export-consent>N</z303-export-consent>\r\n";
                 $xml .= "           <z303-proxy-id-type>00</z303-proxy-id-type>\r\n";
                 $xml .= "           <z303-send-all-letters>Y</z303-send-all-letters>\r\n";
