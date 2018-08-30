@@ -53,7 +53,7 @@ public function generateXMLAction(Request $request)
     if(!$isics){
     $session->set('flag', 0);
 
-    $session->getFlashBag()->add('error', 'Моля, вземете последния генериран файл от търсачката с XML архивите.');
+    $session->getFlashBag()->add('error', 'Моля, вземете последния генериран XML файл от търсачката за Aleph файлове.');
 }
     if ($request->getMethod() == 'POST'){
         $isics = $em->getRepository('ISICBundle:Isic')->findBy(array('isPublished'=>NULL));

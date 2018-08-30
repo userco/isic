@@ -3,21 +3,22 @@
     
     <ul class="nav">
       {% if admin_auth.isAllowed(app.user, 'list_users') and  app.user is not empty %}
-    <li><a  class="nav-link" href="{{ path('list_users') }}">Списък на потребителите</a></li>{% endif %}
+    <li><a  class="nav-link" href="{{ path('list_users') }}">Потребители</a></li>{% endif %}
       {% if admin_auth.isAllowed(app.user, 'list_roles') and  app.user is not empty %}
-    <li><a class="nav-link" href="{{ path('list_roles') }}"> Списък на ролите</a></li>{% endif %}
+    <li><a class="nav-link" href="{{ path('list_roles') }}">Роли</a></li>{% endif %}
      {% if admin_auth.isAllowed(app.user, 'egn_import') and  app.user is not empty %}
-    <li><a class="nav-link" href="{{ path('egn_import') }}"> Импорт на Excel файл с ЕГН</a></li>{% endif %}
+    <li><a class="nav-link" href="{{ path('egn_import') }}">Подаване на ЕГН</a></li>{% endif %}
     {% if admin_auth.isAllowed(app.user, 'generate_file') and  app.user is not empty %}
-    <li><a class="nav-link" href="{{ path('generate_file') }}"> Експорт на CSV файл с данни</a></li>{% endif %}
-    {% if admin_auth.isAllowed(app.user, 'isic_import') and  app.user is not empty %}
+    <li><a class="nav-link" href="{{ path('generate_file') }}">Генериране на ЕГН</a></li>{% endif %}
+    
     {% if admin_auth.isAllowed(app.user, 'search_data') and  app.user is not empty %}
-    <li><a class="nav-link" href="{{ path('search_data') }}"> Търсене на CSV файл</a></li>{% endif %}
-    <li><a class="nav-link" href="{{ path('isic_import') }}"> Импорт на Excel файл</a></li>{% endif %}
+    <li><a class="nav-link" href="{{ path('search_data') }}"> Търсене на ЕГН</a></li>{% endif %}
+    {% if admin_auth.isAllowed(app.user, 'isic_import') and  app.user is not empty %}
+    <li><a class="nav-link" href="{{ path('isic_import') }}"> Подаване към Aleph</a></li>{% endif %}
     {% if admin_auth.isAllowed(app.user, 'generate_xml') and  app.user is not empty %}
-    <li><a class="nav-link" href="{{ path('generate_xml') }}"> Генериране на XML файл</a></li>{% endif %}
+    <li><a class="nav-link" href="{{ path('generate_xml') }}"> Генериране към Aleph </a></li>{% endif %}
     {% if admin_auth.isAllowed(app.user, 'search_xml') and  app.user is not empty %}
-    <li><a class="nav-link" href="{{ path('search_xml') }}"> Търсене на XML файл</a></li>{% endif %}
+    <li><a class="nav-link" href="{{ path('search_xml') }}"> Търсене на Aleph</a></li>{% endif %}
    {% if admin_auth.isAllowed(app.user, 'logout') and  app.user is not empty %}
     <li><a class="nav-link" href="{{ path('logout') }}"> Изход</a></li>{% endif %}
     </ul>

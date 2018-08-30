@@ -46,7 +46,7 @@ public function generateFileAction(Request $request)
     if(!$isics){
         $session->set('flag', 0);
 
-        $session->getFlashBag()->add('error', 'Моля, вземете последния генериран файл от търсачката с CSV архивите.');
+        $session->getFlashBag()->add('error', 'Моля, вземете последния генериран CSV файл от търсачката за ЕГН файлове.');
     }
     $em = $this->getDoctrine()->getManager();
     if ($request->getMethod() == 'POST'){
