@@ -477,7 +477,7 @@ $test = 0;
             $month= $array[1];
             $day = $array[2];
             $birthdate = $year.$month.$day;
-            $gender =$susi_record->getGenderName();
+            $gender =($susi_record->getGenderName()=='Ж')? 'F': 'M';
             $address_city = ($susi_record->getAddressCity())?$susi_record->getAddressCity(): "+" ;
             $address_street = ($susi_record->getAddressStreet())?$susi_record->getAddressStreet(): "+";
             $secondPhone = "+";
