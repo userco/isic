@@ -3,7 +3,7 @@ require_once './confs/conn.php';
 $year = date('Y');
 $month = date('n');
 if(($month)<7){
-	$next_year = $year;
+	
 	$year = $year -1;
 
 }
@@ -48,10 +48,10 @@ var_dump($year);
 	LEFT join [dbo].[Cities]             AS ci         ON ci.[City_ID] = ad.[City_ID]
 
 	WHERE
-		yearcat.[Year] =? or yearcat.[Year] =?";
+		yearcat.[Year] =?";
 	$susi_info = array();
 	$query2 = $link->prepare($querystr);
-	$query2->execute(array($year,$next_year));
+	$query2->execute(array($year));
 	 if ($query2->rowCount()==0) {
 	 	echo "no rows found";
 	 }
