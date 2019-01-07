@@ -8,6 +8,9 @@ if(($month)<7){
 
 }
 var_dump($year);
+	$query = "TRUNCATE TABLE `susi`";
+	$queryPre = $link->prepare($query);
+	$queryPre->execute();
 	$querystr = "SELECT
 			pd.FullName Name, 
 			pd.PersonalNumber EGN, 
@@ -60,7 +63,7 @@ var_dump($year);
  
  	}
 
-
+	$counter = 0;
 	foreach($susi_info as $row){
 	
 		
@@ -86,7 +89,12 @@ var_dump($year);
 	    "postCode" => $row['postcode']
 	    
     ));
+	$counter++;
 echo "\nPDOStatement::errorCode(): ";
+if($counter < 5000){
+mail('mpenelova@ucc.uni-sofia.bg', 'ISIC Cards -Error', 'Записите, изтеглени от СУСИ са по-малко от 5000.');
+mail('kneshev@ucc.uni-sofia.bg', 'ISIC Cards -Error', 'Записите, изтеглени от СУСИ са по-малко от 5000.');
+}
 var_dump($statement->errorInfo());
 
 
