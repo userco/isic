@@ -91,13 +91,14 @@ var_dump($year);
     ));
 	$counter++;
 echo "\nPDOStatement::errorCode(): ";
+}
 if($counter < 5000){
-mail('mpenelova@ucc.uni-sofia.bg', 'ISIC Cards -Error', 'Записите, изтеглени от СУСИ са по-малко от 5000.');
-mail('kneshev@ucc.uni-sofia.bg', 'ISIC Cards -Error', 'Записите, изтеглени от СУСИ са по-малко от 5000.');
+mail('mpenelova@ucc.uni-sofia.bg', 'ISIC Cards -Error', 'SUSI Records are less than 5000');
+mail('kneshev@ucc.uni-sofia.bg', 'ISIC Cards -Error', 'SUSI Records are less than 5000');
 }
-var_dump($statement->errorInfo());
+//var_dump($statement->errorInfo());
 
 
-}
+
 
 ?>
